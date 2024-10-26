@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "al22016@shibaura-it.ac.jp"
+  default from: "kawaharasou0216@icloud.com"
   layout "mailer"
 end
