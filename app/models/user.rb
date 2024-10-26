@@ -6,7 +6,7 @@ class User < ApplicationRecord
     validates :name , presence: true , length: { maximum: 50 }
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
     validates :email, presence: true , length: { maximum: 255 },
-                      format: { with: VALID_EMAIL_REGEX} , uniqueness: true
+                      format: { with: VALID_EMAIL_REGEX}
     has_secure_password
     #allow_nil: trueを設定したことでカラムに入力された値がnilだった場合にバリデーションをスキップする。
     #このようにするのはhas_secure_passwordでもnilに対してのバリデーションが適用されるから
