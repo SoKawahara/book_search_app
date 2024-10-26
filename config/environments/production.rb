@@ -21,13 +21,13 @@ Rails.application.configure do
   # config.require_master_key = true
 
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
-  # config.public_file_server.enabled = false
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present? || ENV['RENDER'].present?
 
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
 
   # Do not fall back to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -72,7 +72,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque
-  # config.active_job.queue_name_prefix = "book_search_app_production"
+  # config.active_job.queue_name_prefix = "sample_app_production"
 
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.
@@ -99,17 +99,19 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
-  host = "https://book-search-app-vdrs.onrender.com"
+  host = 'https://book-search-app-vdrs.onrender.com'
   config.action_mailer.default_url_options = { host: host }
   ActionMailer::Base.smtp_settings = {
-    :post => 587,
-    :address => "smtp.mailgun.org",
-    :user_name => ENV["MAILGUN_SMTP_LOGIN"],
-    :password => ENV["MAILGUN_SMTP_PASSWORD"],
-    :domain => host,
-    :authentication => :plain,
+    :port            => 587,
+    :address         => 'smtp.mailgun.org',
+    :user_name       => ENV['MAILGUN_SMTP_LOGIN'],
+    :password        => ENV['MAILGUN_SMTP_PASSWORD'],
+    :domain          => host,
+    :authentication  => :plain,
   }
+
+  #アップロードされたファイルをAWSに保存する
+  config.active_storage.service = :amazon
 end
