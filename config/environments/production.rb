@@ -109,7 +109,7 @@ Rails.application.configure do
     :user_name       => ENV['MAILGUN_SMTP_LOGIN'],
     :password        => ENV['MAILGUN_SMTP_PASSWORD'],
     :domain          => host,
-    :authentication  => :plain,
+    :authentication  => :plain
   }
 
 end
