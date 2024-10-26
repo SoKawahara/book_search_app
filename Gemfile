@@ -70,3 +70,7 @@ group :test do
   gem "guard"
   gem "guard-minitest"
 end
+
+group :production do
+  gem "pg"
+end
