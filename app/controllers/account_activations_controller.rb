@@ -6,7 +6,7 @@ class AccountActivationsController < ApplicationController
         elsif user.activated? 
             flash[:success] = "すでに有効化されています"
         elsif !user.authenticated?(:activation , params[:id])
-             flash[:success] = "有効化トークンとダイジェストが一致しません"
+             flash[:success] = ""
         end
 
         if user && !user.activated? && user.authenticated?(:activation ,params[:id])
