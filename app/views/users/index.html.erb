@@ -1,0 +1,8 @@
+<% provide(:title , "All users") %>
+<h1 class = "new-title">ユーザ一覧</h1>
+
+<%= paginate @users, theme: "bootstrap-5" %>
+<ul class="users">
+    <!-- 下のように書くと@usersの中にある各要素に対して_user.html.erbのテンプレートで結果を出力する -->
+    <%= render @users %>
+</ul>

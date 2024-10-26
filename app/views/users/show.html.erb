@@ -1,0 +1,40 @@
+<% provide(:title , @user.name) %>
+    <section class="profile">
+        <%= image_tag gravatar_for(@user) , class: "gravatar-img" %>
+        <div class = "user-info">
+            <h3 class="account-name">
+                <%= @user.name %>
+            </h3>
+            <ul class="account-info">
+                <li>
+                    <p>フォロー</p>
+                    <p>0</p>
+                </li>
+                <li>
+                    <p>フォロワー</p>
+                    <p>0</p>
+                </li>
+                <li>
+                    <p>投稿</p>
+                    <p>0</p>
+                </li>
+                <li><%= image_tag("setting.svg" , class: "setting-icon" , style: "margin-left: 1rem") if current_user == @user %></li>
+            </ul>
+        </div>
+        
+        
+        <ul class = "setting-container" > 
+            <li><%= link_to "プロフィール変更" , edit_user_path(@user) %></li>
+            <li><%= link_to "ユーザ一覧" , users_path %></li>
+            <li><%= link_to "ログアウト" , logout_path, data: { "turbo-method": :delete } %></li>
+            <li><%= link_to "アカウント切り替え" , logout_path, data: { "turbo-method": :delete } %></li>
+            <li><%= image_tag("close-btn.svg" , class: "close-icon" ) %></li>
+        </ul>
+
+        <% if current_user.admin?  && !current_user?(@user) %>
+          <%= link_to "このユーザを削除する" , user_path(@user) , class: "detele-user" , data: { "turbo-method": :delete , turbo_confirm: "本当に削除しますか?" } %>
+        <% end %>
+        
+        
+    </section>
+    <div class = "border"></div>

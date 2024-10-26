@@ -1,0 +1,17 @@
+<header class="common-header">
+    <div class="logo">
+        <%= link_to "Search Books" , root_path , class: "logo-title" %>
+    </div>
+    <nav class = "header-nav">
+        <%= link_to image_tag("search-logo.svg" , class: "logo-image") , '#' %>
+        <%= link_to image_tag("create-new.svg" , class: "logo-image") , '#' %>
+        <%= link_to image_tag("hearts.svg" , class: "logo-image") , '#' %>
+        <!-- ユーザがログイン中ならユーザのアイコンを表示する -->
+        <% if user = current_user %>
+          <%= link_to image_tag(gravatar_for(user) , class: "logo-image" , style: "border-radius: 50%; border: 2px solid black") , user_path(user) %>
+        <% else %>
+          <%=link_to image_tag("test-account.svg" , class: "logo-image") , login_path %>
+        <% end %>
+        <%= image_tag "humburger-menu.svg" , class: "humburger-image" , id: "humburger-image"  %>
+    </nav>
+</header>

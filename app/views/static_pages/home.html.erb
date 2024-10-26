@@ -1,2 +1,49 @@
-<h1>StaticPages#home</h1>
-<p>Find me in app/views/static_pages/home.html.erb</p>
+<header class="app-header">
+    <nav>
+        <ul class="header-nav">
+            <li><%= link_to "About"  , '#'%></li>
+            <li><%= link_to "Feature" , '#' %></li>
+        </ul>
+    </nav>
+    <h1 class="header-h1">Search Books</h1>
+    <div class="sub-title">
+        <h2 id="header-h2">飛び出そう</h2>
+        <h2 id="header-h2">本の世界へ</h2>
+    </div>
+</header>
+
+<main>
+    <section class="about-container" id="about">
+        <div class="about-text">
+            <h1 class="about-title">～Search Booksとは～</h1>
+            <p class="about-content">
+                Google Books APIを用いた本の検索サイト
+                です。あなたの読書ライフをサポートする
+                機能を提供します。
+            </p>
+        </div>
+        <div class="about-picture">
+            <%= image_tag "search.jpeg" , alt: "" , class: "about-img" %>
+        </div>
+    </section>
+
+    <section class="feature-container" id="feature">
+        <h1 class="feature-h1">Feature</h1>
+        <%= image_tag "search.png" , alt: "" , class: "feature-img" %>
+        <div class="response">高速な<br>Response</div>
+        <div class="information">豊富な情報量</div>
+        <div class="custom">カスタマイズ性</div>
+        <div class="intuitiveness">直観的に使える</div>
+    </section>
+
+    <section class="appStart-container">
+        <p class="appStart-p">サービスを開始するにはこちらをクリック</p>
+        <p class="arrow-p">↓</p>
+        <%= link_to image_tag("start-button.png" , alt: "" , class: "appStart-img") , new_user_path %>
+    </section>
+</main>
+
+<footer>
+    &copy;2024 Kya . All rights reserved.
+</footer>
+

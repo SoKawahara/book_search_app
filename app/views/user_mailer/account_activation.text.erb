@@ -1,0 +1,3 @@
+<%= @user.name %>さん、はじめまして！ 本登録の完了まであと少しです...
+Search Booksへの仮登録が完了しました! 本登録を行うには下記のリンクをクリックしてアカウントの有効化を行ってください
+<%= edit_account_activation_url(@user.activation_token,email: @user.email) %>

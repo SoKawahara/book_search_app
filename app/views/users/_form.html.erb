@@ -1,0 +1,24 @@
+<section class="new-form">
+    <!-- Rails側では渡されたオブジェクトが新規のものなのかを判断して送信するメソッドをPOSTかPATCHかで分けている -->
+    <%= form_with(model: @user) do |f| %>
+      <%= render 'shared/error_messages' %>
+      <%= f.label :name , "氏名:" %>
+      <%= f.text_field :name , placeholder: "name" %>
+
+      <%= f.label :email , "メールアドレス:" %>
+      <%= f.email_field :email , placeholder: "email-address" %>
+
+      <!-- type = "password"のように指定されるフィールドではセキュリティの観点で入力した内容が・・・に置き換えられる -->
+      <%= f.label :password , "パスワード(6文字以上):" %>
+      <%= f.password_field :password , placeholder: "password" %>
+
+      <%= f.label :password_confirmation , "パスワード(確認用):" %>
+      <%= f.password_field :password_confirmation , placeholder: "password for confirmation" %>
+
+      <% if action_name == "new" %>
+        <%= f.submit "登録" , class: "new-btn" %>
+      <% else %>
+        <%= f.submit "変更を登録" , class: "new-btn" %>
+      <% end %>
+    <% end %>
+</section>

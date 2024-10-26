@@ -1,23 +1,47 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= content_for(:title) || "Book Search App" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
+
+<head>
+  <title>
+    <%= full_title(yield(:title))%>
+  </title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
+      <%= yield :head %>
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
+        <link rel="manifest" href="/manifest.json">
+        <%= favicon_link_tag 'favicon-32x32.png' , type: 'image/png' %>
+          <%= stylesheet_link_tag "application" , "data-turbo-track": "reload" %>
+            <%= javascript_importmap_tags%>
+              <link rel="preconnect" href="https://fonts.googleapis.com">
+              <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+              <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+              <link
+                href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Oswald:wght@200..700&display=swap"
+                rel="stylesheet">
+              <link
+                href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Dancing+Script:wght@400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Oswald:wght@200..700&display=swap"
+                rel="stylesheet">
+              <link href="https://fonts.googleapis.com/css2?family=Prociono&display=swap" rel="stylesheet">
+              <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Prociono&display=swap" rel="stylesheet">
+</head>
 
-  <body>
+<body>
+  <% if !now_pages? %>
+    <%= render 'layouts/header' %>
+    <% flash.each do |message_type , message| %>
+      <div class="alert alert-<%= message_type %>"><%= message %></div>
+    <% end %>
+    <%= render 'layouts/sidebar'  %>
     <%= yield %>
-  </body>
+    <%= render 'layouts/footer' %>
+    <%= debug(params) if Rails.env.development? %>
+  <% else %>
+    <%= yield %>
+  <% end %>
+</body>
+
 </html>

@@ -1,0 +1,12 @@
+<% provide(:titel , "新規会員登録") %>
+<h1 class = "new-title">新規会員登録</h1>
+<section class="form">
+    <%= render 'form' %>
+    <section class="info">
+        <p>*ご利用には会員登録が必要です</p>
+        <p>*すでにアカウントをお持ちの方は<%= link_to "こちら" , login_path %>から</p>
+        <p>*入力欄には<span style="color: red">全角スペース</span>は入力しないでください</p>
+        <p>*パスワードには<span style="color: red">日本語</span>は入力しないでください</p>
+        <p>*アイコンを設定するには<%= link_to "Gravatar" , "https://ja.gravatar.com/" %>から設定を行ってください</p>
+    </section>
+</section>
