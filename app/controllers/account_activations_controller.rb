@@ -1,5 +1,6 @@
 class AccountActivationsController < ApplicationController
     def edit
+        user = User.find_by(email: params[:email])
         if !user.authenticated?(:activation, params[:id])
             flash[:success] = "有効化トークンとダイジェストが一致しません"
         elsif user.activated? 
@@ -7,7 +8,6 @@ class AccountActivationsController < ApplicationController
         elsif !user
             flash[:success] = "ユーザが存在しません"
         end
-        user = User.find_by(email: params[:email])
         if user && !user.activated? && user.authenticated?(:activation ,params[:id])
             user.activate
             log_in user
