@@ -30,7 +30,7 @@ class PasswordResetsController < ApplicationController
       reset_session
       log_in @user
       #パスワードの変更が完了すればreset_digestは必要なくなるので削除する。これは安全のためにも働く
-      @user.update(:reset_digest, nil)
+      @user.update_attribute(:reset_digest, nil)
       flash[:success] = "パスワードが変更されました!"
       redirect_to @user
     else
