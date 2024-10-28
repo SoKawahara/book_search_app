@@ -24,7 +24,7 @@ class PasswordResetsController < ApplicationController
 
   def update
     if params[:user][:password].empty?
-      @user.errors.add(:password, "パスワードが空です")
+      flash.now[:danger] = "パスワードが空です"
       render 'edit' , status: :unprocessable_entity
     elsif @user.update(user_params)
       reset_session
