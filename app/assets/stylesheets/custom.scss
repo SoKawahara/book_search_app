@@ -355,6 +355,7 @@ footer {
             li {
                 text-align: center;
                 margin-bottom: 2rem;
+
                 li:not(:last-child) {
                     opacity: 0;
                     visibility: hidden;
@@ -406,6 +407,12 @@ footer {
     text-align: center;
 }
 
+@media(max-width: 800px) {
+    .common-footer {
+        margin-top: 2rem;
+    }
+}
+
 /* 個別ユーザの表示画面 */
 .profile {
     width: 85%;
@@ -413,7 +420,7 @@ footer {
     margin-left: 10rem;
     padding: 5rem;
     display: flex;
-    gap: 10rem;
+    gap: 5rem;
     background-color: #e7e3d8;
     border-radius: 20px;
     position: relative;
@@ -439,14 +446,14 @@ footer {
 }
 
 .user-info {
-    width: 40%;
+    width: 60%;
     display: flex;
     flex-direction: column;
 }
 
 .account-info {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     list-style: none;
 
     li {
@@ -483,10 +490,11 @@ footer {
     width: 18rem;
     height: 18rem;
     border-radius: 20px;
-    border: 1px solid black;
+    background-color: rgb(86, 84, 79);
     opacity: 0;
     visibility: hidden;
     list-style: none;
+    z-index: 200;
 
     li {
         margin-bottom: 1rem;
@@ -500,7 +508,7 @@ footer {
             font-family: "Bodoni Moda SC", serif;
             font-size: 15px;
             font-weight: 500;
-            color: #4b4740;
+            color: rgb(197, 195, 183);
             border-bottom: 1px solid black;
 
             &:hover {
@@ -518,6 +526,7 @@ footer {
     color: red;
     font-family: "Caveat", cursive;
     font-size: 12px;
+
     &:hover {
         color: red;
         font-size: 15px;
@@ -530,16 +539,78 @@ footer {
     display: block;
 }
 
-
-
 .border {
     margin-top: 5rem;
     margin-left: 7.5rem;
     width: 90%;
     height: 3px;
     background-image: linear-gradient(to right, #585a5d, rgb(125, 123, 123), #d8d7ce);
+}
+
+/* ここにタブレット、スマホサイズの個人ページ画面のスタイル */
+@media(max-width: 900px) {
+    .profile {
+        width: 85%;
+        margin: 5rem 3rem 2rem 3rem;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 0;
+        background-color: #e7e3d8;
+        border-radius: 20px;
+        position: relative;
+    }
+
+    .gravatar-img {
+        width: 120px;
+        height: 120px;
+        margin: auto;
+        border-radius: 50%;
+        border: 3px solid black;
+        z-index: 100;
+    }
+
+    .account-name {
+        color: #4b4740;
+        width: 100%;
+        font-family: "Caveat", cursive;
+        font-weight: 600;
+        font-size: 35px;
+        text-align: center;
+    }
+
+    .user-info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .account-info {
+        li {
+            p {
+                font-size: 18px;
+
+                &:nth-child(2) {
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+
+    .setting-container {
+        inset: 30%;
+    }
+
+    .border {
+        margin: auto;
+        width: 90%;
+        height: 3px;
+        background-image: linear-gradient(to right, #585a5d, rgb(125, 123, 123), #d8d7ce);
+    }
 
 }
+
 
 /* 新規会員登録画面 */
 .new-title {
@@ -548,7 +619,6 @@ footer {
     letter-spacing: 8px;
     text-align: center;
     margin-top: 3rem;
-
 }
 
 .form {
@@ -603,11 +673,34 @@ footer {
         font-family: "Bodoni Moda SC", serif;
         margin-bottom: 2rem;
         font-size: 18px;
+        font-weight: 600;
+    }
+}
 
-        a {
-            font-weight: 600;
+
+@media(max-width: 800px) {
+    .form {
+        flex-direction: column;
+        align-items: center;
+    }
+    .new-form {
+        border-bottom: 2px dashed black;
+        padding-bottom: 2rem;
+
+    }
+
+    .info {
+        margin-top: 1.5rem;
+        border-left: none;
+
+        p {
+            font-size: 15px;
+            font-weight: 400;
         }
     }
+
+
+
 }
 
 /* forms */
@@ -629,14 +722,15 @@ footer {
 }
 
 /* ログインフォーム用のスタイル */
+
 .login {
     margin-top: 5rem;
+    margin-left: 20rem;
     display: flex;
-    justify-content: space-around;
+    column-gap: 10rem;
 }
 
 .login-form {
-    margin-left: 15rem;
     width: 450px;
 
     label {
@@ -668,6 +762,83 @@ footer {
     }
 }
 
+.login-btn {
+    width: 150px;
+    background-color: rgb(87, 202, 252);
+    font-family: "Bodoni Moda SC", serif;
+    color: white;
+    border-radius: 20px;
+    margin-top: 2rem;
+    margin-left: 15rem;
+}
+
+
+@media (min-width: 600px) and (max-width: 950px) {
+    .login {
+        flex-direction: column;
+        align-items: center;
+        margin-left: 5rem;
+    }
+    .login-form {
+        border-bottom: 2px dashed black;
+        padding-bottom: 2rem;
+
+    }
+    
+
+    #session_email,
+    #session_password {
+        width: 380px;
+        height: 36px;
+        margin-bottom: 1.5rem;
+    }
+    .info {
+        margin-top: 1.5rem;
+        border-left: none;
+
+        p {
+            font-size: 17px;
+            font-weight: 400;
+        }
+    }
+
+}
+
+@media(max-width: 600px) {
+    .login {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2rem;
+        margin-left: 2rem;
+        
+    }
+
+    .login-form {
+        margin: auto;
+        width: 350px;
+        border-bottom: 2px dashed black;
+        padding-bottom: 2rem;
+
+        #session_email,
+        #session_password {
+            width: 350px;
+            height: 36px;
+        }
+    }
+
+    
+    
+    .info {
+        margin-top: 1.5rem;
+        border-left: none;
+        p {
+            font-size: 15px;
+            font-weight: 400;
+        }
+    }
+
+}
+
 /* ユーザ一覧画面のスタイリング */
 
 /* ページネーションのスタイル */
@@ -675,13 +846,16 @@ nav {
     display: flex;
     justify-content: center;
 }
+
 .page-link {
-    color: #6b6766!important;
+    color: #6b6766 !important;
 }
+
 .page-item.active .page-link {
     background-color: white;
     border: 2px solid black;
 }
+
 /* ここまで*/
 .users {
     border: 8px outset rgb(134, 131, 131);
@@ -691,7 +865,8 @@ nav {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    row-gap: 2rem;;
+    row-gap: 2rem;
+    ;
 
     li {
         margin: auto;
@@ -702,10 +877,11 @@ nav {
         font-family: "Caveat", cursive;
         font-size: 30px;
         color: #4b4740;
+
         &:hover {
             color: #4b4740;
         }
-        
+
     }
 }
 
@@ -716,3 +892,8 @@ nav {
     border: 2px solid rgb(99, 93, 93);
 }
 
+@media(max-width: 800px) {
+    .new-title {
+        font-size: 26px;
+    }
+}

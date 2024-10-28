@@ -3,8 +3,7 @@ document.addEventListener("turbo:load", () => {
     const sideBar = document.querySelector(".sidebar");
     const closeIcon = document.querySelector("aside.sidebar img.close-icon");
     const sideBarItems = document.querySelectorAll(".sidebar ul li:not(:last-child)");
-    console.log(sideBarItems);
-
+    const modal = document.querySelector(".modal");
     //ハンバーガーメニューが押された際にサイドバーを表示する
     humburger.addEventListener("click", () => {
         sideBar.animate(
