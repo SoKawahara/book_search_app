@@ -1,0 +1,23 @@
+<% provide(:title, "パスワードの再設定") %>
+<h1>パスワード再設定</h1>
+<section class="login">
+    <section class="login-form">
+        <!-- POSTメソッドの送信先のURLとその際に使用するスコープを宣言する -->
+        <%= form_with(url: @user) do |f| %>
+          <%= render 'shared/error_messages' %>
+          <%= hidden_field_tag :email, @user.email %>
+          <!-- type = "password"のように指定されるフィールドではセキュリティの観点で入力した内容が・・・に置き換えられる -->
+          <%= f.label :password , "パスワード:" %>
+          <%= f.password_field :password , placeholder: "password" %>
+
+          <%= f.label :password_confirmation, "パスワード確認用" %>
+          <%= f.password_field :password_confirmation %>
+
+          <%= f.submit "再設定" , class: "login-btn" %>
+        <% end %>
+    </section>
+    <section class="info">
+        <p>*新規パスワードを入力してください</p>
+        <p>*パスワードには<span style = "color:red">日本語</span>を使用しないでください</p>
+    </section>
+</section>

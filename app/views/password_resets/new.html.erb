@@ -1,0 +1,20 @@
+<% provide(:title, "パスワード変更" ) %>
+    <h1 class="new-title">パスワード変更</h1>
+    
+    <section class="password_reset">
+        <section class="form">
+            <%= form_with(url: password_resets_path , scope: :password_reset) do |f| %>
+              <%= f.label :email , "メールアドレス:" %>
+              <%= f.email_field :email , placeholder: "email-address" %>
+
+              <%= f.submit "送信" , class: "reset_btn" %>
+            <% end %>
+        </section>
+        <section class="about">
+            <p>*パスワード変更用のメールを送信します</p>
+            <p>*送信先(アカウントに登録済み)のメールアドレスを送信してください</p>
+        </section>
+        
+    </section>
+    
+       

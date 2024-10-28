@@ -231,7 +231,7 @@ body {
 
 /*フッター部分のスタイル*/
 footer {
-    margin-top: 20rem;
+    margin-top: 4rem;
     text-align: center;
     width: 100%;
     height: 100px;
@@ -683,6 +683,7 @@ footer {
         flex-direction: column;
         align-items: center;
     }
+
     .new-form {
         border-bottom: 2px dashed black;
         padding-bottom: 2rem;
@@ -779,12 +780,13 @@ footer {
         align-items: center;
         margin-left: 5rem;
     }
+
     .login-form {
         border-bottom: 2px dashed black;
         padding-bottom: 2rem;
 
     }
-    
+
 
     #session_email,
     #session_password {
@@ -792,6 +794,7 @@ footer {
         height: 36px;
         margin-bottom: 1.5rem;
     }
+
     .info {
         margin-top: 1.5rem;
         border-left: none;
@@ -810,7 +813,7 @@ footer {
         align-items: center;
         margin-top: 2rem;
         margin-left: 2rem;
-        
+
     }
 
     .login-form {
@@ -826,11 +829,12 @@ footer {
         }
     }
 
-    
-    
+
+
     .info {
         margin-top: 1.5rem;
         border-left: none;
+
         p {
             font-size: 15px;
             font-weight: 400;
@@ -896,4 +900,49 @@ nav {
     .new-title {
         font-size: 26px;
     }
+}
+
+/* パスワード変更用のメールアドレスを送信するためのページ */
+.password_reset {
+    width: 500px;
+    margin: 5rem auto 0 auto;
+
+    label {
+        font-family: "Bodoni Moda SC", serif;
+        font-weight: 600;
+        font-size: 25px;
+        display: block;
+        margin-bottom: 2rem;
+    }
+
+    #password_reset_email {
+        width: 500px;
+        height: 35px;
+        border: 2px solid black;
+        display: block;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .reset_btn {
+        width: 150px;
+        background-color: rgb(87, 202, 252);
+        font-family: "Bodoni Moda SC", serif;
+        color: white;
+        display: block;
+        margin: 3rem auto 0 auto ;
+        border-radius: 20px;
+    }
+
+}
+
+.about {
+    margin-top: 4rem;
+    font-family: "Bodoni Moda SC", serif;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 2rem;
+    border-top: 2px dashed black;
 }

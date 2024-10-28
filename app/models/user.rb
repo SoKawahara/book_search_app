@@ -1,6 +1,6 @@
 class User < ApplicationRecord
     #記憶トークンを保持する仮想の属性を定義する,このように実装するのは生の記憶トークンはデータベースに保存したくないから
-    attr_accessor :remember_token , :activation_token
+    attr_accessor :remember_token , :activation_token, :reset_token
     before_save :downcase_email
     before_create :create_activation_digest
     validates :name , presence: true , length: { maximum: 50 }
@@ -23,6 +23,18 @@ class User < ApplicationRecord
     def self.new_token
         #ランダムな22文字の文字列を生成する。一文字の種類が64種類あることからBase64と呼ばれている
         SecureRandom.urlsafe_base64
+    end
+
+    #パスワード再設定の属性を設定する
+    def create_reset_digest
+        self.reset_token = User.new_token
+        update_attribute(:reset_digest, User.digest(reset_token))
+        update_attribute(:reset_sent_at, Time.zone.now)
+    end
+
+    #パスワード再設定のメールを送信する
+    def send_password_reset_email
+        UserMailer.password_reset(self).deliver_now
     end
 
     #永続的セッションのためにユーザをデータベースに記憶する
@@ -62,6 +74,11 @@ class User < ApplicationRecord
     #有効化用のメールを送信する
     def send_activation_email
         UserMailer.account_activation(self).deliver_now
+    end
+
+    #パスワード再設定の期限が切れている場合はtrueを返す
+    def password_reset_expired?
+        reset_sent_at < 2.hours.ago
     end
 
     private 
