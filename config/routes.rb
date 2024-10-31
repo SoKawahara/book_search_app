@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
-  get "password_resets/new"
-  get "password_resets/edit"
-  get "sessions/new"
-  get "/login" , to: "sessions#new"
-  post "/login" , to: "sessions#create"
+  get "searches/top" ,   to: "searches#top"
+  post "searches/index" , to: "searches#index"
+  get "searches/show" ,  to: "searches#show"
+  
+  get "/login" ,     to: "sessions#new"
+  post "/login" ,    to: "sessions#create"
   delete "/logout" , to: "sessions#destroy"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -21,4 +22,5 @@ Rails.application.routes.draw do
   resources :users
   resources :account_activations , only: [:edit]
   resources :password_resets,      only: [:new, :create, :edit, :update]
+
 end

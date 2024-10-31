@@ -1,0 +1,108 @@
+<% provide(:title, "検索" ) %>
+<section class="app_header">
+    <%= form_with url: "/searches/index", scope: :search , method: :get do |f| %>
+      <%= f.select :condition, 
+            options_for_select([["検索条件", ""], ["タイトル", "タイトル"], ["著者", "著者"], ["出版社", "出版社"]]), 
+            { include_blank: false }, 
+            { id: "searchCondition" } %>
+      <%= f.text_field :number , class: "search-number" , placeholder: "件数" %>
+      <%= f.search_field :content , class: "search-word" , placeholder: "検索ワードを入力してください" %>
+      <%= f.submit "検索" , class: "search-btn" %>
+    <% end %>
+</section>
+
+<div class="view-container">
+  <div class="view-style-container">
+    <p>表示方法:</p>
+    <input id="vertical" type="radio" name="view-style" value="縦方向一覧" checked>
+    <label for="vertical">縦方向一覧</label>
+    <input id="tile" type="radio" name="view-style" value="タイル式">
+    <label for="tile">タイル式</label>
+  </div>
+  <div class="view-condition">
+    <p>並び条件:</p>
+    <input id="publisher" type="radio" name="view-condition" value="出版日" checked>
+    <label for="publisher">出版日</label>
+    <input id="page" type="radio" name="view-condition" value="ページ数">
+    <label for="page">ページ数</label>
+    <input id="value" type="radio" name="view-condition" value="価格">
+    <label for="value">価格</label>
+  </div>
+  <div class="view-order">
+    <p>並び順:</p>
+    <input id="asce" type="radio" name="view-order" value="昇順" checked>
+    <label for="asce">昇順</label>
+    <input id="desc" type="radio" name="view-order" value="降順">
+    <label for="desc">降順</label>
+  </div>
+  
+  <div class="decision">
+    <button id="decision-btn">変更を確定</button>
+  </div>
+</div>
+<main>
+  <h1 class="result-h1">～検索結果～</h1>
+  <p class="change-result"></p>
+  <section class="result-container">
+  </section>
+</main>
+  
+  
+  
+<div class="modal"></div>
+    
+
+      
+    <!--<select name="condition" id="searchCondition">
+        <option value="" id="search">検索条件</option>
+        <option value="タイトル">タイトル</option>
+        <option value="著者">著者</option>
+        <option value="出版社">出版社</option>
+    </select>
+    <input type="text" class="search-number" placeholder="件数">
+    <input type="search" class="search-word" placeholder="検索ワードを入力してください">
+    <input type="submit" value="検索" class="search-btn">-->
+
+<!--縦方向一覧のためのtemplate-->
+<template id="vertical-publish-day">
+  <section class="result-item">
+      <img class="publish-day-img" src="" alt="">
+      <div class="content">
+          <p class="title"></p>
+          <p class="author"></p>
+          <p class="publisher"></p>
+          <p class="page-count"></p>
+          <p class="value"></p>
+          <p class="publish-day focus"></p>
+          <h4 class="publish-day-about">詳細:</h4>
+          <p class="publish-day-description"></p>
+      </div>
+  </section>
+</template>
+
+<!--グリッドの一つのよそのためのtemplate-->
+<template id="grid-layout">
+  <section class="grid-container">
+      <img class="grid-img" src="" alt="">
+      <div class="grid-content">
+          <p class="grid-title">僕のヒーローアカデミア</p>
+          <p class="grid-author">堀越耕平</p>
+          <button class="grid-about">詳細</button>
+      </div>
+  </section>
+</template>
+
+<!--グリッドで詳細を押された際のモーダル画面のためのtemplate-->
+<template id="grid-modal">
+  <section class="modal-container">
+      <img src="" alt="" class="modal-img">
+      <div class="modal-content">
+          <p class="modal-publisher"></p>
+          <p class="modal-page-count"></p>
+          <p class="modal-value"></p>
+          <p class="modal-about">詳細:</p>
+          <p class="modal-description"></p>
+          <button class="modal-close">閉じる</button>
+      </div>
+  </section>
+</template>

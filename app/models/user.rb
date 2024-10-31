@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+    has_many :goods , dependent: :destroy
     #記憶トークンを保持する仮想の属性を定義する,このように実装するのは生の記憶トークンはデータベースに保存したくないから
     attr_accessor :remember_token , :activation_token, :reset_token
     before_save :downcase_email

@@ -932,7 +932,7 @@ nav {
         font-family: "Bodoni Moda SC", serif;
         color: white;
         display: block;
-        margin: 3rem auto 0 auto ;
+        margin: 3rem auto 0 auto;
         border-radius: 20px;
     }
 
@@ -948,6 +948,389 @@ nav {
 }
 
 /* パスワード　*/
-#user_password, #user_password_confirmation {
+#user_password,
+#user_password_confirmation {
     width: 100%;
+}
+
+/* ここから下は検索画面 */
+/*header部分のスタイル*/
+.app_header {
+    width: 100%;
+    height: 492px;
+    background-image: url("bookshelves.jpg");
+    background-size: cover;
+    position: relative;
+}
+
+
+#searchCondition {
+    width: 120px;
+    height: 45px;
+    border: 5px solid grey;
+    border-radius: 10px;
+    position: absolute;
+    top: 20rem;
+    left: 15rem;
+    font-size: 20px;
+    text-align: center;
+    color: rgb(130, 130, 130);
+    font-family: "Bodoni Moda SC", serif;
+    font-weight: 500;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+option {
+    text-align: center;
+    font-size: 23px;
+    color: black;
+    font-family: "Bodoni Moda SC", serif;
+}
+
+option:first-child {
+    display: none;
+}
+
+.search-number {
+    width: 60px;
+    height: 45px;
+    border: 5px solid grey;
+    border-radius: 10px;
+    font-size: 20px;
+    font-family: "Bodoni Moda SC", serif;
+    font-weight: 500;
+    color: rgb(130, 130, 130);
+    text-align: center;
+    position: absolute;
+    top: 20rem;
+    left: 27rem;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.search-word {
+    width: 600px;
+    height: 45px;
+    border: 5px solid grey;
+    border-radius: 10px;
+    font-size: 20px;
+    font-family: "Bodoni Moda SC", serif;
+    font-weight: 500;
+    color: rgb(130, 130, 130);
+    text-align: center;
+    position: absolute;
+    top: 20rem;
+    left: 35rem;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.search-btn {
+    width: 60px;
+    height: 45px;
+    border: 5px solid rgb(181, 181, 181);
+    border-radius: 10px;
+    font-size: 20px;
+    font-family: "Bodoni Moda SC", serif;
+    font-weight: 500;
+    color: rgb(130, 130, 130);
+    text-align: center;
+    position: absolute;
+    top: 20rem;
+    right: 15rem;
+}
+
+.search-btn:hover {
+    filter: brightness(150%);
+}
+
+/*ここから下は検索結果を表示するためのスタイルを充てる場所*/
+.result-h1 {
+    margin-left: 48rem;
+    padding: 1rem;
+    color: rgb(202, 202, 202);
+    font-size: 3rem;
+    font-family: "Bodoni Moda SC", serif;
+    font-weight: 600;
+    text-align: center;
+    background-color: rgb(87, 87, 87);
+    width: 300px;
+    border-radius: 2.2rem;
+}
+
+.view-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: .5rem;
+    margin-top: 3rem;
+    border: 1px solid grey;
+    font-family: "Bodoni Moda SC", serif;
+}
+
+.view-style-container,
+.view-condition,
+.view-order {
+    padding-top: 1rem;
+}
+
+
+.view-style-container p,
+.view-condition p,
+.view-order p {
+    font-weight: bolder;
+    font-size: 20px;
+    display: inline-block;
+}
+
+.view-style-container label,
+.view-condition label,
+.view-order label {
+    color: rgb(98, 98, 98);
+    font-weight: lighter;
+}
+
+#decision-btn {
+    color: rgb(98, 98, 98);
+    font-weight: bold;
+    transition: .7s;
+
+    &:hover {
+        filter: brightness(120%);
+        scale: 1.1;
+
+    }
+}
+
+
+.change-result {
+    text-align: center;
+    color: rgba(253, 0, 0, 0.777);
+    font-family: "Noto Serif JP", serif;
+    margin-top: 1rem;
+
+}
+
+/*ここから下は検索結果の表示画面*/
+.result-container {
+    width: 95%;
+    padding: 2rem;
+    margin-top: .5rem;
+    margin-left: 2rem;
+    background-color: rgb(109, 109, 109);
+}
+
+/*ここから下はtemplateタグのスタイル*/
+.result-item {
+    width: 100%;
+    height: 450px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    background-color: white;
+    border: 2px dotted black;
+    display: flex;
+    gap: 2rem;
+    overflow-y: auto;
+}
+
+.content {
+    margin-left: 3rem;
+    margin-top: 1rem;
+}
+
+.title,
+.author,
+.publisher,
+.page-count,
+.value,
+.publish-day,
+.publish-day-about,
+.publish-day-description {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: "Bodoni Moda SC", serif;
+    margin-bottom: .6rem;
+}
+
+.focus {
+    font-size: 25px;
+    color: red;
+    font-weight: 700;
+}
+
+.publish-day-description {
+    margin-left: 2.7rem;
+}
+
+.publish-day-img {
+    width: 260px;
+    height: 360px;
+    border: 3px solid black;
+    margin-left: .6rem;
+    margin-top: 1rem;
+    object-fit: cover;
+}
+
+
+.publish-day-buy {
+    background-color: #6f6f6f;
+    color: white;
+    border-radius: 20px;
+    width: 100px;
+    height: 40px;
+    font-family: "Bodoni Moda SC", serif;
+    position: absolute;
+    top: 24.3rem;
+    left: 6.0rem;
+    transition: 1.0;
+}
+
+.publish-day-buy:hover {
+    scale: 1.2;
+}
+
+/*ここから下はグリッド式のためのスタイル*/
+
+/*これはグリッドレイアウトの指定をresult-container対して施すためのクラス*/
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.grid-container {
+    width: 250px;
+    height: 400px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1.5rem;
+    overflow-y: scroll;
+    padding: 1.5rem;
+}
+
+.grid-img {
+    width: 200px;
+    height: 250px;
+    border: 3px solid black;
+    object-fit: cover;
+}
+
+.grid-content {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.grid-title,
+.grid-author {
+    font-size: 15px;
+    font-family: "Bodoni Moda SC", serif;
+    text-align: center;
+    font-weight: 500;
+}
+
+.grid-about {
+    background-color: rgb(172, 172, 172);
+    font-size: 10px;
+    font-weight: 500;
+    font-family: "Bodoni Moda SC", serif;
+    text-align: center;
+    border-radius: 20px;
+    width: 50px;
+    height: 20px;
+}
+
+/*ここから下はモーダル画面のスタイル*/
+.add-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background-color: rgba(78, 77, 77, 0.916);
+}
+
+.add-modal-container {
+    position: fixed;
+    top: 5rem;
+    left: 17rem;
+    width: 1000px;
+    height: 430px;
+    background-color: white;
+    border: 5px solid black;
+    z-index: 200;
+}
+
+.modal-container {
+    overflow-y: scroll;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.modal-content {
+    margin-top: 2.5rem;
+    width: 600px;
+}
+
+
+
+.modal-img {
+    width: 280px;
+    height: 380px;
+    object-fit: cover;
+}
+
+.modal-publisher,
+.modal-page-count,
+.modal-value,
+.modal-about {
+    font-size: 20px;
+    font-family: "Bodoni Moda SC", serif;
+    text-align: start;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.modal-description {
+    font-size: 18px;
+    font-family: "Bodoni Moda SC", serif;
+    line-height: 1.5;
+    font-weight: lighter;
+}
+
+.modal-close {
+    margin-top: 2rem;
+    margin-left: 8rem;
+    width: 70px;
+    height: 30px;
+    border: 2px solid black;
+    border-radius: 20px;
+    font-family: "Bodoni Moda SC", serif;
+}
+
+
+
+
+
+
+/*ここから下はフッター部分のスタイル*/
+footer {
+    margin-top: 20rem;
+    text-align: center;
+    width: 100%;
+    height: 100px;
+    background-color: #7C7C7C;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: white;
+    padding-top: 2rem;
 }

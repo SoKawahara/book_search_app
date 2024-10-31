@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_28_022534) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_29_114615) do
+  create_table "goods", force: :cascade do |t|
+    t.json "book_data"
+    t.integer "good_count", default: 0
+    t.integer "evaluation_count", default: 0
+    t.text "content"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "created_at"], name: "index_goods_on_user_id_and_created_at"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -25,4 +36,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_022534) do
     t.string "reset_digest"
     t.datetime "reset_sent_at"
   end
+
+  add_foreign_key "goods", "users"
 end

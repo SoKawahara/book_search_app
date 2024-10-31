@@ -8,6 +8,8 @@ gem "bcrypt"
 gem "faker"
 gem 'kaminari'
 gem 'bootstrap5-kaminari-views'
+gem 'faraday'
+gem 'dotenv-rails'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use sqlite3 as the database for Active Record

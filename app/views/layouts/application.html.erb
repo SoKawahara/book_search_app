@@ -26,16 +26,29 @@
                 href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Dancing+Script:wght@400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Oswald:wght@200..700&display=swap"
                 rel="stylesheet">
               <link href="https://fonts.googleapis.com/css2?family=Prociono&display=swap" rel="stylesheet">
-              <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Prociono&display=swap" rel="stylesheet">
+              <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Prociono&display=swap"
+                rel="stylesheet">
+              <link rel="preconnect" href="https://fonts.googleapis.com">
+              <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+              <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+              <link
+                href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Oswald:wght@200..700&display=swap"
+                rel="stylesheet">
+              <link
+                href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Dancing+Script:wght@400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Oswald:wght@200..700&display=swap"
+                rel="stylesheet">
+
 </head>
 
 <body>
   <% if !now_pages? %>
     <%= render 'layouts/header' %>
     <% flash.each do |message_type , message| %>
-      <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <div class="alert alert-<%= message_type %>">
+        <%= message %>
+      </div>
     <% end %>
-    <%= render 'layouts/sidebar'  %>
+    <%= render 'layouts/sidebar' %>
     <%= yield %>
     <%= render 'layouts/footer' %>
     <%= debug(params) if Rails.env.development? %>
