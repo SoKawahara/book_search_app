@@ -1,0 +1,21 @@
+<% provide(:title, "投稿編集") %>
+<h1 class = "new-title">投稿編集</h1>
+<section class="post-item">
+    <section class="book-info">
+        <%= image_tag eval(@user_post.book_data)["imageLink"] , class: "publish-day-img" %>
+        <div class="content">
+          <p class="title"><%= eval(@user_post.book_data)["title"] %></p>
+          <p class="author"><%= eval(@user_post.book_data)["author"] %></p>
+        </div>
+    </section>
+    <section class="post-form">
+        <%= form_with url: "/posts/update/#{@user_post.id}" , method: :post , scope: :info do |f| %>
+          <%= f.label :post_name , "投稿名" , class: "content" %>
+          <%= f.text_field :post_name , placeholder: "投稿名を入力してください", class: "post-name" %>
+          <%= f.label :content , "感想:" , class: "content" %>
+          <%= f.text_area :content  , class: "text"%>
+          <%= f.submit  "変更" , class: "edit-post-btn" %>
+        <% end %>
+        <%= link_to "投稿一覧に戻る" , "/users/#{current_user.id}" , class: "back-btn" %>
+    </section>
+</section>

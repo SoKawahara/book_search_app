@@ -1,4 +1,5 @@
 <% provide(:title, "検索" ) %>
+<div id="result"></div>
 <section class="app_header">
     <%= form_with url: "/searches/index", scope: :search , method: :get do |f| %>
       <%= f.select :condition, 
@@ -11,37 +12,37 @@
     <% end %>
 </section>
 
-<div class="view-container">
-  <div class="view-style-container">
-    <p>表示方法:</p>
-    <input id="vertical" type="radio" name="view-style" value="縦方向一覧" checked>
-    <label for="vertical">縦方向一覧</label>
-    <input id="tile" type="radio" name="view-style" value="タイル式">
-    <label for="tile">タイル式</label>
-  </div>
-  <div class="view-condition">
-    <p>並び条件:</p>
-    <input id="publisher" type="radio" name="view-condition" value="出版日" checked>
-    <label for="publisher">出版日</label>
-    <input id="page" type="radio" name="view-condition" value="ページ数">
-    <label for="page">ページ数</label>
-    <input id="value" type="radio" name="view-condition" value="価格">
-    <label for="value">価格</label>
-  </div>
-  <div class="view-order">
-    <p>並び順:</p>
-    <input id="asce" type="radio" name="view-order" value="昇順" checked>
-    <label for="asce">昇順</label>
-    <input id="desc" type="radio" name="view-order" value="降順">
-    <label for="desc">降順</label>
-  </div>
-  
-  <div class="decision">
-    <button id="decision-btn">変更を確定</button>
-  </div>
-</div>
 <main>
   <h1 class="result-h1">～検索結果～</h1>
+  <div class="view-container">
+    <div class="view-style-container">
+      <p>表示方法:</p>
+      <input id="vertical" type="radio" name="view-style" value="縦方向一覧" checked>
+      <label for="vertical">縦方向一覧</label>
+      <input id="tile" type="radio" name="view-style" value="タイル式">
+      <label for="tile">タイル式</label>
+    </div>
+    <div class="view-condition">
+      <p>並び条件:</p>
+      <input id="publisher" type="radio" name="view-condition" value="出版日" checked>
+      <label for="publisher">出版日</label>
+      <input id="page" type="radio" name="view-condition" value="ページ数">
+      <label for="page">ページ数</label>
+      <input id="value" type="radio" name="view-condition" value="価格">
+      <label for="value">価格</label>
+    </div>
+    <div class="view-order">
+      <p>並び順:</p>
+      <input id="asce" type="radio" name="view-order" value="昇順" checked>
+      <label for="asce">昇順</label>
+      <input id="desc" type="radio" name="view-order" value="降順">
+      <label for="desc">降順</label>
+    </div>
+    
+    <div class="decision">
+      <button id="decision-btn">変更を確定</button>
+    </div>
+  </div>
   <p class="change-result"></p>
   <section class="result-container">
   </section>
@@ -66,6 +67,7 @@
 <!--縦方向一覧のためのtemplate-->
 <template id="vertical-publish-day">
   <section class="result-item">
+      <p class = "post">☞感想を投稿する</p>
       <img class="publish-day-img" src="" alt="">
       <div class="content">
           <p class="title"></p>
@@ -97,6 +99,7 @@
   <section class="modal-container">
       <img src="" alt="" class="modal-img">
       <div class="modal-content">
+        <p class = "post">☞感想を投稿する</p>
           <p class="modal-publisher"></p>
           <p class="modal-page-count"></p>
           <p class="modal-value"></p>

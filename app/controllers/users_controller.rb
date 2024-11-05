@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  require 'json'
   #edit,updateアクションが実行される前にlogged_in_userというメソッドを実行する
   #ログインしていないユーザはアクセスできないようにする
   before_action :logged_in_user , only: [:index, :edit , :update, :destroy]
@@ -12,6 +13,8 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    #ユーザに紐づいている投稿を6件分取得して返す
+    @posts = @user.goods.all.page(params[:page]).per(6)
   end
 
   def new
@@ -64,15 +67,6 @@ class UsersController < ApplicationController
     end
 
     #beforeフィルタ
-
-    #ログイン済みユーザかどうかを確認
-    def logged_in_user
-      unless logged_in?
-        store_location
-        flash[:danger] = "ログインしてください"
-        redirect_to login_url , status: :see_other
-      end
-    end
 
     #正しいユーザかどうか確認
     def correct_user

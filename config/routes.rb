@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
-  get "searches/top" ,   to: "searches#top"
-  post "searches/index" , to: "searches#index"
-  get "searches/show" ,  to: "searches#show"
+  post "/posts/new"   ,   to: "posts#new"
+  post "/posts/create" ,  to: "posts#create"
+  get "/posts/good_counter/:id"     , to: "posts#good_counter"
+  delete "/posts/destroy/:id"       , to: "posts#destroy"
+  get "/posts/edit/:id"             , to: "posts#edit"
+  post "/posts/update/:id"        , to: "posts#update"
+
+  get "/searches/top" ,   to: "searches#top"
+  post "/searches/index" , to: "searches#index"
+  get "/searches/show" ,  to: "searches#show"
   
   get "/login" ,     to: "sessions#new"
   post "/login" ,    to: "sessions#create"
@@ -22,5 +29,4 @@ Rails.application.routes.draw do
   resources :users
   resources :account_activations , only: [:edit]
   resources :password_resets,      only: [:new, :create, :edit, :update]
-
 end

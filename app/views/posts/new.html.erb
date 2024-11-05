@@ -1,0 +1,28 @@
+<%= provide(:title, "新規投稿作成") %>
+<h1 class="new-title">新規投稿作成</h1>
+<% if defined?(book_info) %>
+  <section class="post-item">
+      <section class="book-info">
+          <%= image_tag book_info[:imageLink] , class: "publish-day-img" %>
+          <div class="content">
+            <p class="title"><%= book_info[:title] %></p>
+            <p class="author"><%= book_info[:author] %></p>
+          </div>
+      </section>
+      <section class="post-form">
+          <%= form_with url: "/posts/create" , scope: :info do |f| %>
+            <!-- 隠しフィールドを用いて本のデータを送信 -->
+            <%= hidden_field_tag :book_data, book_info %>
+            <%= f.label :post_name , "投稿名" , class: "content" %>
+            <%= f.text_field :post_name , placeholder: "投稿名を入力してください", class: "post-name" %>
+            <%= f.label :content , "感想:" , class: "content" %>
+            <%= f.text_area :content  , class: "text"%>
+            <%= f.submit  "投稿" , class: "post-btn" %>
+          <% end %>
+      </section>
+  </section>
+<% else %>
+  <section>
+    <p>要素が存在しません</p>
+  </section>
+<% end %>

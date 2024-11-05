@@ -1,0 +1,10 @@
+<section class="post-container">
+    <div class="book_data">
+        <%= image_tag(eval(item.book_data)["imageLink"]) %>
+    </div>
+    <div class="content">
+        <p><%= eval(item.book_data)["title"] %></p>
+        <p><%= eval(item.book_data)["author"] %></p>
+        <p><%= item.content %></p>
+    </div>
+</section>

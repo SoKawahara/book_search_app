@@ -3,14 +3,18 @@ import { get_book_data } from "./function";
 import { views } from "./function";
 import { changeDisabledValue } from "./function";
 import { makeDate } from "./function";
+import { post } from "./function";
+import { getBookInfo } from "./function";
+import { getClickBookInfo } from "./function";
+
+//APIをたたいて取得したデータを保存するための配列
+export let api_result_array = [];
 document.addEventListener("turbo:load", () => {
     const condition = document.querySelector("#searchCondition");
     const searchNumber = document.querySelector(".search-number");
     const searchWord = document.querySelector(".search-word");
     const searchBtn = document.querySelector(".search-btn");
 
-    //APIをたたいて取得したデータを保存するための配列
-    let api_result_array = [];
 
     if (searchNumber) {
         searchNumber.addEventListener("input", () => {
@@ -57,7 +61,17 @@ document.addEventListener("turbo:load", () => {
                 if (api_result_array.length > 0) {
                   views(api_result_array , style.value, condition.value, order.value);
                 }
-            });
+
+                //感想を投稿するという文字をクリックした際にそのクリックされた要素に対応する本の情報を取得する
+                //addEventListenerは非同期処理を行うので非同期的に結果を受け取る
+                getBookInfo().then(index => {
+                    //本の情報を受け取ったらposts/newに対して本の情報と共にPOSTメソッドを送信する
+                    post(api_result_array[index]);
+                })
+                .catch(error => {
+                    console.log("本の情報を取得できませんでした");
+                })
+            })
             //検索結果を表示している場所までスクロールする
             document.querySelector(".result-h1").scrollIntoView({
                 behavior: 'smooth', // スムーズにスクロール
@@ -89,4 +103,6 @@ document.addEventListener("turbo:load", () => {
             changeDisabledValue(item.value , viewConditions , viewOrder);
         });
     });
+    
+
 });

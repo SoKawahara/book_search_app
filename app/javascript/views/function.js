@@ -1,5 +1,5 @@
 //このファイル内では使用する関数を定義する
-export async function get_book_data({ type, number, content } , api_result_array) {
+export async function get_book_data({ type, number, content }, api_result_array) {
     //配列に要素がある場合には削除して配列を空にする
     if (api_result_array.length > 0) {
         api_result_array.length = 0;
@@ -10,7 +10,7 @@ export async function get_book_data({ type, number, content } , api_result_array
     //これはCSRFの認証トークンを取得している
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     try {
-        const response = await fetch('/searches/index' , {
+        const response = await fetch('/searches/index', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export async function get_book_data({ type, number, content } , api_result_array
             }
             //画像リンク取得のエラーハンドリング
             try {
-                const imageLink = item.volumeInfo.imageLinks.thumbnail.replace("&zoom=1" , "&zoom=5");
+                const imageLink = item.volumeInfo.imageLinks.thumbnail.replace("&zoom=1", "&zoom=5");
                 tmp.imageLink = imageLink;
             } catch {
                 console.log("画像リンクの取得に失敗しました");
@@ -104,11 +104,50 @@ export async function get_book_data({ type, number, content } , api_result_array
         return api_result_array;
     } catch (e) {
         return [];
-    }    
+    }
+}
+
+export function getBookInfo() {
+    const resultContainers = document.querySelectorAll(".result-container .result-item");
+    return new Promise((resolve) => {
+        resultContainers.forEach((item , index) => {
+            item.addEventListener("click" , () => {
+                resolve(index)
+            })
+        })
+    })
+
+
+}
+
+//感想を投稿するを押されたら本の情報と共にPOSTメソッドを送信する処理
+export function post(bookInfo) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    try {
+        fetch("/posts/new", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({ bookInfo: bookInfo })
+        })
+            //レスポンスとして返ってきたHTMLファイルを文字列に変換する
+            .then(response => response.text())
+            .then(html => {
+                //変換されたHTMLファイルを画面に描画する。その際に一度画面の内容をdocument.openでリセットする
+                document.open();
+                document.write(html);
+                document.close();
+            })
+            .catch(error => console.error("Error:", error));
+    } catch {
+        console.log("送信に失敗しました");
+    }
 }
 
 //データの配列からビューを構築する
-export function views(api_result_array , style, condition, order) {
+export function views(api_result_array, style, condition, order) {
     //検索結果を入れるコンテナを取得して現在の要素を全て削除する
     const container = document.querySelector(".result-container");
     while (container.firstChild) {
@@ -124,18 +163,18 @@ export function views(api_result_array , style, condition, order) {
         api_result_array.forEach((item) => {
             const templateVertical = document.querySelector("#vertical-publish-day");
             const template = templateVertical.content.cloneNode(true);
-    
+
             template.querySelector(".title").textContent = `タイトル: ${item.title}`;
             template.querySelector(".author").textContent = `著者: ${item.author}`;
             template.querySelector(".publisher").textContent = `出版社: ${item.publisher}`;
-            template.querySelector(".page-count").textContent =  (item.pageCount === ("0" || undefined) ) ? `ページ数:0ページ` : `ページ数: ${item.pageCount}ページ`;
+            template.querySelector(".page-count").textContent = (item.pageCount === ("0" || undefined)) ? `ページ数:0ページ` : `ページ数: ${item.pageCount}ページ`;
             template.querySelector(".value").textContent = (item.value === ("不明" || undefined)) ? `価格:${0}円` : `価格: ${item.value}円`;
             template.querySelector(".publish-day").textContent = `出版日: ${item.publishedDate}`;
             template.querySelector(".publish-day-img").src = `${item.imageLink}`;
             template.querySelector(".publish-day-description").textContent = `${item.description}`;
-            
+
             container.append(template);
-        });    
+        });
     } else {
         container.classList.add("grid");
         api_result_array.forEach((item) => {
@@ -152,9 +191,9 @@ export function views(api_result_array , style, condition, order) {
 
         const modal = document.querySelector(".modal");
         const sections = container.querySelectorAll("section");
-        sections.forEach((item , index) => {
+        sections.forEach((item, index) => {
             const gridAbout = item.querySelector(".grid-about");
-            gridAbout.addEventListener("click" , () => {
+            gridAbout.addEventListener("click", () => {
                 const template = document.querySelector("#grid-modal");
                 const targetNewElement = template.content.cloneNode(true);
 
@@ -168,15 +207,26 @@ export function views(api_result_array , style, condition, order) {
                 modalContainer.querySelector(".modal-description").textContent = `${description}`;
                 modalContainer.querySelector(".modal-img").src = `${imageLink}`;
 
-                
-                modalContainer.classList.add("add-modal-container");                           
-                container.append(modalContainer);                        
+
+                modalContainer.classList.add("add-modal-container");
+                container.append(modalContainer);
 
                 modal.classList.remove("modal");
                 modal.classList.add("add-modal");
 
+                //感想を投稿するボタンが押された際に本の情報と共にPOSTメソッドを送信する
+                const postModal = modalContainer.querySelector(".post");
+                const eventIndex = new Promise((resolve) => {
+                    postModal.addEventListener("click", () => {
+                        resolve(index);
+                    });
+                });
+                eventIndex.then((i) => {
+                    post(api_result_array[i]);
+                });
+
                 const modalClose = modalContainer.querySelector(".modal-close");
-                modalClose.addEventListener("click" , () => {
+                modalClose.addEventListener("click", () => {
                     modal.classList.add("modal");
                     modal.classList.remove("add-modal");
                     modalContainer.remove();
@@ -187,7 +237,7 @@ export function views(api_result_array , style, condition, order) {
 }
 
 //要素の並べ替えを行う
-export function sort(condition , order , api_result_array) {
+export function sort(condition, order, api_result_array) {
     if (condition === "出版日") {
         (order === "昇順") ? api_result_array.sort(arrangeAscendingPublisher) : api_result_array.sort(arrangeDescendingPublisher);
     } else if (condition === "ページ数") {
@@ -198,12 +248,12 @@ export function sort(condition , order , api_result_array) {
 }
 
 //指定された要素のdisabled属性を変更する
-export function changeDisabledValue(value , elements1 , elements2) {
+export function changeDisabledValue(value, elements1, elements2) {
     elements1.forEach((item) => {
         item.disabled = (value === "縦方向一覧") ? false : true;
     });
     elements2.forEach((item) => {
-        item.disabled = (value === "縦方向一覧") ? false : TextTrackCue; 
+        item.disabled = (value === "縦方向一覧") ? false : TextTrackCue;
     })
 }
 
@@ -290,5 +340,14 @@ export function makeDate(array) {
     }
     return array;
 }
+
+
+export function getClickBookInfo() {
+    const targets = document.querySelectorAll(".posts-container .post-container");
+    targets.forEach((item) => {
+        console.log(item);
+    })
+}
+
 
 

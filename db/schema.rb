@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_29_114615) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_02_064542) do
   create_table "goods", force: :cascade do |t|
     t.json "book_data"
     t.integer "good_count", default: 0
@@ -19,6 +19,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_29_114615) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "post_name"
+    t.text "good_users", default: "-1"
     t.index ["user_id", "created_at"], name: "index_goods_on_user_id_and_created_at"
   end
 
