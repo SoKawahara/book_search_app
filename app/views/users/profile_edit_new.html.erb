@@ -1,0 +1,72 @@
+<% provide(:title, "プロフィール変更") %>
+<h1 class = "new-title">プロフィール変更</h1>
+<section class="setting-profile">
+    <%= form_with url: "/users/profile_edit/:#{@user.id}" , method: :post, data: { turbo: false }, scope: :profile_info do |f| %>
+      <%= f.label :reading_history , "本を読み始めた年月を選択してください:" , class: "content" %>
+      <%= f.month_field :reading_history , class: "year-month", value: @year_month %>
+      <%= f.label :favorite_genre , "好きな本のジャンルを入力してください:" , class: "content"  %>
+      <%= f.text_field :favorite_genre , placeholder: "複数入力する際は半角スペースで区切ってください" , class: "favorite-genre" , value: @favorite_genre%>
+      <p class = "profile-save-btn">読書開始年月と好きなジャンルを適用する</p>
+      <%= f.label :recommendation_3 , "これまで読んだおすすめの本TOP3" , class: "content" %>
+      <div id="recommendation_3">
+        <div class = "top1">
+            <h3>No.1</h3>
+            <% if @post["top_1"] == "未設定" %>
+              <%= link_to "設定する" , "/users/profile/#{@user.id}/top/1" , class: "setting" , id: "setting-1" %>
+            <% else %> 
+              <% post = @user.goods.find(@post["top_1"]) %>
+              <section class="profile-new-post-container">
+                <%= image_tag(eval(post.book_data)["imageLink"]) %>
+                <div class="content">
+                  <!-- 感想をdata属性としてタグの中に含ませておく -->
+                  <p class = "post-name" data-post-content = <%= post.content %> data-post-id = <%= post.id %> data-user-id = <%= post.user_id %>><%= post.post_name %></p>
+                  <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
+                  <p>作成日時:<%= (post.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
+                </div>
+                <%= link_to "詳細を見る" , "/posts/#{post.user_id}/#{post.id}" , class: "view-post-btn"%>
+              </section>
+            <% end %>
+        </div>
+        <div class = "top2">
+            <h3>No.2</h3>
+            <% if @post["top_2"] == "未設定" %>
+              <%= link_to "設定する" , "/users/profile/#{@user.id}/top/2" , class: "setting" , id: "setting-2"%>
+              <% else %> 
+              <% post = @user.goods.find(@post["top_2"]) %>
+              <section class="profile-new-post-container">
+                <%= image_tag(eval(post.book_data)["imageLink"]) %>
+                <div class="content">
+                  <!-- 感想をdata属性としてタグの中に含ませておく -->
+                  <p class = "post-name" data-post-content = <%= post.content %> data-post-id = <%= post.id %> data-user-id = <%= post.user_id %>><%= post.post_name %></p>
+                  <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
+                  <p>作成日時:<%= (post.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
+                </div>
+                <%= link_to "詳細を見る" , "/posts/#{post.user_id}/#{post.id}" , class: "view-post-btn"%>
+              </section>
+            <% end %>
+        </div>
+        <div class = "top3">
+            <h3>No.3</h3>
+            <% if @post["top_3"] == "未設定" %>
+              <%= link_to "設定する" , "/users/profile/#{@user.id}/top/3" , class: "setting" , id: "setting-3"%>
+              <% else %> 
+              <% post = @user.goods.find(@post["top_3"]) %>
+              <section class="profile-new-post-container">
+                <%= image_tag(eval(post.book_data)["imageLink"]) %>
+                <div class="content">
+                  <!-- 感想をdata属性としてタグの中に含ませておく -->
+                  <p class = "post-name" data-post-content = <%= post.content %> data-post-id = <%= post.id %> data-user-id = <%= post.user_id %>><%= post.post_name %></p>
+                  <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
+                  <p>作成日時:<%= (post.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
+                </div>
+                <%= link_to "詳細を見る" , "/posts/#{post.user_id}/#{post.id}" , class: "view-post-btn"%>
+              </section>
+            <% end %>
+        </div>
+      </div>
+      <%= hidden_field_tag :top_1 , @post["top_1"] %>
+      <%= hidden_field_tag :top_2 , @post["top_2"] %>
+      <%= hidden_field_tag :top_3 , @post["top_3"] %>
+      <%= f.submit "プロフィールを変更する" , class: "profile-submit-btn"  %>
+    <% end %>
+</section>

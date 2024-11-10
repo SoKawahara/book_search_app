@@ -1,0 +1,62 @@
+<section class="view-profile-container">
+    <%= image_tag gravatar_for(@user), class: "profile-img" %>
+    <div class="profile-container">
+        <% if current_user?(@user) %>
+          <%= link_to image_tag("edit.svg") , "/users/profile_edit/#{@user.id}" , class: "edit-profile-btn" %>
+        <% end %>
+        <h3><%= @user.name %></h3>
+        <% if @year == 0 %>
+          <p>読書歴: <%= "#{@month}か月" %> | 好きなジャンル: <%= @favorite_genre %></p>
+        <% else %>
+          <p>読書歴: <%= "#{@year}年#{@month}か月" %> | 好きなジャンル: <%= @favorite_genre %></p>
+        <% end %>
+        <p>個人的おすすめTop3の本:</p>
+        <div class="top3">
+            <section class="profile-view-container">
+                <% if @top3["top_1"] != "未設定" %>
+                  <% post = @user.goods.find(@top3["top_1"]) %>
+                  <%= image_tag(eval(post.book_data)["imageLink"]) %>
+                  <div class="content">
+                    <!-- 感想をdata属性としてタグの中に含ませておく -->
+                    <p class = "post-name" data-post-content = <%= post.content %> data-post-id = <%= post.id %> data-user-id = <%= post.user_id %>><%= post.post_name %></p>
+                    <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
+                    <p>作成日時:<%= (post.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
+                  </div>
+                  <%= link_to "詳細を見る" , "/posts/#{post.user_id}/#{post.id}" , class: "view-post-btn"%>
+                <% else %>
+                  <p>未設定</p>
+                <% end %>   
+            </section>
+            <section class="profile-view-container">
+                <% if @top3["top_2"] != "未設定" %>
+                  <% post = @user.goods.find(@top3["top_2"]) %>
+                  <%= image_tag(eval(post.book_data)["imageLink"]) %>
+                  <div class="content">
+                  <!-- 感想をdata属性としてタグの中に含ませておく -->
+                  <p class = "post-name" data-post-content = <%= post.content %> data-post-id = <%= post.id %> data-user-id = <%= post.user_id %>><%= post.post_name %></p>
+                  <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
+                  <p>作成日時:<%= (post.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
+                  </div>
+                  <%= link_to "詳細を見る" , "/posts/#{post.user_id}/#{post.id}" , class: "view-post-btn"%>
+                <% else %>
+                  <p>未設定</p>
+                <% end %>
+            </section>
+            <section class="profile-view-container">
+                <% if @top3["top_3"] != "未設定"%>
+                  <% post = @user.goods.find(@top3["top_3"]) %>
+                  <%= image_tag(eval(post.book_data)["imageLink"]) %>
+                  <div class="content">
+                    <!-- 感想をdata属性としてタグの中に含ませておく -->
+                    <p class = "post-name" data-post-content = <%= post.content %> data-post-id = <%= post.id %> data-user-id = <%= post.user_id %>><%= post.post_name %></p>
+                    <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
+                    <p>作成日時:<%= (post.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
+                  </div>
+                  <%= link_to "詳細を見る" , "/posts/#{post.user_id}/#{post.id}" , class: "view-post-btn"%>
+                <% else %>
+                  <p>未設定</p>
+                <% end %>
+            </section>
+        </div>
+    </div>
+</section>

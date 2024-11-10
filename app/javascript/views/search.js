@@ -10,6 +10,26 @@ import { getClickBookInfo } from "./function";
 //APIをたたいて取得したデータを保存するための配列
 export let api_result_array = [];
 document.addEventListener("turbo:load", () => {
+
+    // /searches/topに対してリクエストが飛んでいてかつ、api_result_arrayが空でない時にはviews関数を実行する
+    if (window.location.pathname === "/searches/top") {
+        //もしセッションストレージに本のデータが格納されていたら取得してviewsメソッドを実行する
+        if (api_result_array = JSON.parse(sessionStorage.getItem("book_data"))) {
+            const style = document.querySelector("input[name='view-style']:checked").value;
+            const condition = document.querySelector("input[name='view-condition']:checked").value;
+            const order = document.querySelector("input[name='view-order']:checked").value;
+            views(api_result_array , style, condition, order);
+
+            getBookInfo().then(index => {
+                //本の情報を受け取ったらposts/newに対して本の情報と共にPOSTメソッドを送信する
+                post(api_result_array[index], style.value, condition.value, order.value);
+            })
+            .catch(error => {
+                console.log("本の情報を取得できませんでした");
+            })
+
+        }
+    }
     const condition = document.querySelector("#searchCondition");
     const searchNumber = document.querySelector(".search-number");
     const searchWord = document.querySelector(".search-word");
@@ -45,7 +65,7 @@ document.addEventListener("turbo:load", () => {
             e.preventDefault();
             //APIをたたいてデータの取得を行う
             //async関数の戻り値はPromiseオブジェクトになるのでawait or thenで受けることで簡単にデータを取り出せる
-            get_book_data({ type: condition.value , number: searchNumber.value , content: searchWord.value } , api_result_array) 
+            get_book_data({ type: condition.value , number: searchNumber.value , content: searchWord.value } , api_result_array = []) 
             .then(result => {
                 api_result_array = result;
 
@@ -66,7 +86,7 @@ document.addEventListener("turbo:load", () => {
                 //addEventListenerは非同期処理を行うので非同期的に結果を受け取る
                 getBookInfo().then(index => {
                     //本の情報を受け取ったらposts/newに対して本の情報と共にPOSTメソッドを送信する
-                    post(api_result_array[index]);
+                    post(api_result_array[index], style.value, condition.value, order.value);
                 })
                 .catch(error => {
                     console.log("本の情報を取得できませんでした");

@@ -1,0 +1,18 @@
+<%= provide(:title, "詳細ページ") %>
+<h1 class = "new-title">詳細ページ</h1>
+<!-- この本の詳細ページへを選択された際に結果を表示する -->
+<section class="result-item" style = "margin-top: 5rem">
+    <img class="publish-day-img" src=<%= @data["imageLink"] %> alt="">
+    <div class="content">
+        <p class="title">タイトル: <%= @data["title"] %></p>
+        <p class="author">著者: <%= @data["author"].to_s.gsub(/[\[\]"]/ , "") %></p>
+        <p class="publisher">出版社: <%= @data["publisher"] %></p>
+        <p class="page-count">ページ数: <%= @data["pageCount"] %>ページ</p>
+        <p class="value">価格: <%= @data["value"] %>円</p>
+        <p class="publish-day focus">出版日: <%= @data["publishedDate"] %></p>
+        <h4 class="publish-day-about">詳細:</h4>
+        <p class="publish-day-description"><%= @data["description"] %></p>
+        <%= link_to "投稿へ戻る" , "/posts/feed/1" , class: "back-btn" %>
+        
+    </div>
+</section>

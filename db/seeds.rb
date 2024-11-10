@@ -19,3 +19,4 @@ User.create!(name: "So Kawahara" , email: "kawaharasou0216@icloud.com" , passwor
     password = "password"
     User.create!(name: name, email: email, password: password , password_confirmation: password, activated: true, activated_at: Time.zone.now)
 end
+

@@ -3,10 +3,14 @@
 <% if defined?(book_info) %>
   <section class="post-item">
       <section class="book-info">
-          <%= image_tag book_info[:imageLink] , class: "publish-day-img" %>
+          <% if book_info[:imageLink] === "不明" %>
+            <%= image_tag "error.jpg" , class: "publish-day-img" %>
+          <% else %>
+            <%= image_tag book_info[:imageLink] , class: "publish-day-img" %>
+          <% end %>
           <div class="content">
-            <p class="title"><%= book_info[:title] %></p>
-            <p class="author"><%= book_info[:author] %></p>
+            <p class="title">～<%= book_info[:title] %>～</p>
+            <p class="author"><%= book_info[:author].to_s.gsub(/[\[\]"]/ , "") %></p>
           </div>
       </section>
       <section class="post-form">
@@ -14,13 +18,52 @@
             <!-- 隠しフィールドを用いて本のデータを送信 -->
             <%= hidden_field_tag :book_data, book_info %>
             <%= f.label :post_name , "投稿名" , class: "content" %>
-            <%= f.text_field :post_name , placeholder: "投稿名を入力してください", class: "post-name" %>
+            <%= f.text_field :post_name , placeholder: "投稿のキャッチコピーを一言で入力してください", class: "post-name" %>
             <%= f.label :content , "感想:" , class: "content" %>
             <%= f.text_area :content  , class: "text"%>
+            <%= f.label :genre, "ジャンル:", class: "content" %>
+            <%= f.text_field :genre , class: "post-name", placeholder: "ジャンル名を入力してください" %>
+
+            <%= f.label :readability,  "読みやすさ(難易度 1:難 , 5:易):", class: "content" %><br>
+            <div class="post-radio">
+                <%= f.label :readability_1 , "1" %>
+                <%= f.radio_button :readability, "1" %>
+                <%= f.radio_button :readability, "2" %>
+                <%= f.radio_button :readability, "3" %>
+                <%= f.radio_button :readability, "4" %>
+                <%= f.radio_button :readability, "5" %>
+                <%= f.label :readability_5 , "5" %>
+            </div>
+
+            <%= f.label :convenience,  "手軽さ(1:低 , 5:高):", class: "content" %><br>
+            <div class="post-radio">
+                <%= f.label :convenience_1 , "1" %>
+                <%= f.radio_button :convenience, "1" %>
+                <%= f.radio_button :convenience, "2" %>
+                <%= f.radio_button :convenience, "3" %>
+                <%= f.radio_button :convenience, "4" %>
+                <%= f.radio_button :convenience, "5" %>
+                <%= f.label :convenience_5 , "5" %>
+            </div>
+
+            <%= f.label :recommendation,  "初心者へのおすすめ度(1:低, 5:高):", class: "content" %><br>
+            <div class="post-radio">
+                <%= f.label :recommendation_1 , "1" %>
+                <%= f.radio_button :recommendation, "1" %>
+                <%= f.radio_button :recommendation, "2" %>
+                <%= f.radio_button :recommendation, "3" %>
+                <%= f.radio_button :recommendation, "4" %>
+                <%= f.radio_button :recommendation, "5" %>
+                <%= f.label :recommendation_5 , "5" %>
+            </div>
+            
+
+            
             <%= f.submit  "投稿" , class: "post-btn" %>
           <% end %>
       </section>
   </section>
+  <%= link_to "検索結果に戻る" , "/searches/top" , class: "back-btn" , id: "back-btn-id" %>
 <% else %>
   <section>
     <p>要素が存在しません</p>

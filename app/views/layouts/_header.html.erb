@@ -8,7 +8,7 @@
         <%= link_to image_tag("hearts.svg" , class: "logo-image") , '#' %>
         <!-- ユーザがログイン中ならユーザのアイコンを表示する -->
         <% if user = current_user %>
-          <%= link_to image_tag(gravatar_for(user) , class: "logo-image" , style: "border-radius: 50%; border: 2px solid black") , user_path(user) %>
+          <%= link_to image_tag(gravatar_for(user) , class: "logo-image" , style: "border-radius: 50%; border: 2px solid black") , "/users/#{user.id}/1" %>
         <% else %>
           <%=link_to image_tag("test-account.svg" , class: "logo-image") , login_path %>
         <% end %>

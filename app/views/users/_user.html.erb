@@ -1,4 +1,4 @@
 <li>
     <%= image_tag(gravatar_for(user) , class: "users-image") %>
-    <%= link_to user.name , user %>
+    <%= link_to user.name , "/users/#{user.id}/1" %>
 </li>

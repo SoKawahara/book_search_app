@@ -1,0 +1,37 @@
+<% provide(:title, "投稿一覧") %>
+<h1 class = "new-title">投稿一覧</h1>
+<div class="btn-group dropup">
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <% if @type == "1" %>
+          作成日順(降順)
+        <% elsif @type == "2" %>
+          作成日順(昇順)
+        <% else %>
+          いいね順
+        <% end %>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href= <%= "/posts/feed/1" %>>作成日順(昇順)</a></li>
+      <li><a class="dropdown-item" href= <%= "/posts/feed/2" %>>作成日順(降順)</a></li>
+      <li><a class="dropdown-item" href= <%= "/posts/feed/3" %>>いいね順</a></li>
+    </ul>
+</div>
+<section class = "posts-container">
+    <% @posts.each do |item| %>
+        <section class="post-container">
+          <%= image_tag(eval(item.book_data)["imageLink"]) %>
+          <div class="content">
+            <!-- 感想をdata属性としてタグの中に含ませておく -->
+            <p class = "post-name" data-post-content = <%= item.content %> data-post-id = <%= item.id %> data-user-id = <%= item.user_id %>><%= item.post_name %></p>
+            <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
+            <p>作成日時:<%= (item.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
+          </div>
+          <p class = "good-content"><%= link_to image_tag("good.svg" , class: "good-img") , "/posts/good_counter/#{item.user_id}/#{item.id}" %><%= item.good_count %></p>
+          <% if current_user?(@user) %>
+            <%= link_to image_tag("edit.svg") , "/posts/edit/#{item.id}" , class: "edit-btn" %>
+          <% end %>
+          <%= link_to "詳細を見る" , "/posts/#{item.user_id}/#{item.id}" , class: "view-post-btn"%>
+        </section>
+    <% end %>
+</section>
+<%= paginate @posts, theme: "bootstrap-5" %>

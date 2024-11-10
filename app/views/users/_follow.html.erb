@@ -1,0 +1,6 @@
+<!-- current_userと紐づけて能動的関係を作成する -->
+<%= form_with(model: current_user.active_relationships.build) do |f| %>
+  <!-- 隠しフィールドを用いて今からフォローするユーザのidを保持している -->
+  <div><%= hidden_field_tag :followed_id , @user.id %></div>
+  <%= f.submit "フォローする" , class: "btn btn-primary" %>
+<% end %>

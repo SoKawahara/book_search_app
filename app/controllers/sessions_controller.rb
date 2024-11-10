@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
         params[:session][:remember_me] == '1' ? remember(user) : forget(user)
         log_in user   #ユーザのセッションを作成する
         flash[:success] = "ログインしました"
-        redirect_to forwarding_url || user  #ログインしたユーザページに遷移する
+        redirect_to forwarding_url || "/users/#{user.id}/1"  #ログインしたユーザページに遷移する
         #ユーザログイン後にユーザ情報のページにリダイレクトする
       else
         message = "アカウントが有効化されていません。送信されたメールからアカウントの有効化を行ってください"

@@ -11,5 +11,9 @@ class Good < ApplicationRecord
   validates :good_count, presence: true
   validates :evaluation_count , presence: true , length: { maximum: 5 }
   validates :content , presence: true
+  validates :genre , presence: true
+  validates :readability, presence: true
+  validates :convenience, presence: true
+  validates :recommendation, presence: true
 
 end

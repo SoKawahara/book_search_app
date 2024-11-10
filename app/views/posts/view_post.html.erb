@@ -1,0 +1,31 @@
+<% provide(:title, "#{User.find(@user_id).name}さんの投稿") %>
+<h1 class = "new-title"><%= "#{User.find(@user_id).name}さんの投稿" %></h1>
+<section class="view-post-container">
+    <div class="post-image">
+        <%= image_tag eval(@post.book_data)["imageLink"] %>
+        <p><%= eval(@post.book_data)["title"] %></p>
+        <p><%= eval(@post.book_data)["author"].to_s.gsub(/[\[\]"]/ , "") %></p>
+        <p>ジャンル: <%= @post.genre %></p>
+
+    </div>
+    <div class="post-main-content">
+        <h2>📖<%= @post.post_name %></h2>
+        <div class = "content">
+            <p><%= @post.content %></p>
+        </div>
+        <div class="evaluations">
+            <div>
+                <label for="readability">読みやすさ(1～5)</label>
+                <p id = "readability"><%= @post.readability %></p>
+            </div>
+            <div>
+                <label for="convenience">手軽さ(1～5)</label>
+                <p id = "convenience"><%= @post.convenience %></p>
+            </div>
+            <div>
+                <label for="recommendation">初心者へのおすすめ度(1～5)</label>
+                <p id = "recommendation"><%= @post.recommendation %></p>
+            </div>
+        </div>
+    </div>
+</section>

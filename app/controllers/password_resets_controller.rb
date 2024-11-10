@@ -32,7 +32,7 @@ class PasswordResetsController < ApplicationController
       #パスワードの変更が完了すればreset_digestは必要なくなるので削除する。これは安全のためにも働く
       @user.update_attribute(:reset_digest, nil)
       flash[:success] = "パスワードが変更されました!"
-      redirect_to @user
+      redirect_to "/users/#{@user.id}/1"
     else
       flash.now[:danger] = "失敗しました"
       render 'edit' , status: :unprocessable_entity

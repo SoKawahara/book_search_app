@@ -1,0 +1,7 @@
+<!-- このファイルではturbo_streamでリクエストが送信された際に表示するテンプレートを作成している -->
+<%= turbo_stream.update "follow_form" do %>
+  <%= render partial: "users/unfollow" %>
+<% end %>
+<%= turbo_stream.update "followers" do %>
+  <%= @user.followers.count %>
+<% end %>

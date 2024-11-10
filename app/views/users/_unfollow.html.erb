@@ -1,0 +1,5 @@
+<!-- すでに作成してあるリレーションを持ってきてそのリレーションを削除する -->
+ <!-- ここで取得しているのはフォロー、フォロワー関係にあるrelationshipモデルのid -->
+<%= form_with(model: current_user.active_relationships.find_by(followed: @user) , html: { method: :delete }) do |f| %>
+  <%= f.submit "フォローを解除する" , class: "btn" %>
+<% end %>

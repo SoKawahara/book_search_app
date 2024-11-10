@@ -1,8 +1,13 @@
+import { api_result_array } from "./search";
 //このファイル内では使用する関数を定義する
-export async function get_book_data({ type, number, content }, api_result_array) {
+export async function get_book_data({ type, number, content }, array = []) {
+    //sessionStorageにデータがあった場合にはクリアする
+    if (sessionStorage.getItem("book_data")) {
+        sessionStorage.removeItem("book_data");
+    }
     //配列に要素がある場合には削除して配列を空にする
-    if (api_result_array.length > 0) {
-        api_result_array.length = 0;
+    if (array.length > 0) {
+        array.length = 0;
     }
     //ここでRailsで指定したエンドポイントに対してリクエストを送信する
     //RailsではGET以外のリクエストにはCSRFの認証トークンを用いてリクエストの正当性を保証する
@@ -99,9 +104,12 @@ export async function get_book_data({ type, number, content }, api_result_array)
                 console.log("価格の読み込みに失敗しました。");
                 tmp.value = "0";
             }
-            api_result_array.push(tmp);
+            array.push(tmp);
         });
-        return api_result_array;
+
+        //本のデータを取得出来たら一時的にブラウザのsessionStorageに保存する。これはセッションごとにデータを管理する
+        sessionStorage.setItem("book_data" , JSON.stringify(array));
+        return array;
     } catch (e) {
         return [];
     }
@@ -110,8 +118,8 @@ export async function get_book_data({ type, number, content }, api_result_array)
 export function getBookInfo() {
     const resultContainers = document.querySelectorAll(".result-container .result-item");
     return new Promise((resolve) => {
-        resultContainers.forEach((item , index) => {
-            item.addEventListener("click" , () => {
+        resultContainers.forEach((item, index) => {
+            item.addEventListener("click", () => {
                 resolve(index)
             })
         })
@@ -139,6 +147,10 @@ export function post(bookInfo) {
                 document.open();
                 document.write(html);
                 document.close();
+
+                //検索結果に戻るが押されたらブラウザのsessionStorageにapi_result_arrayを保存する
+
+
             })
             .catch(error => console.error("Error:", error));
     } catch {
@@ -165,7 +177,7 @@ export function views(api_result_array, style, condition, order) {
             const template = templateVertical.content.cloneNode(true);
 
             template.querySelector(".title").textContent = `タイトル: ${item.title}`;
-            template.querySelector(".author").textContent = `著者: ${item.author}`;
+            template.querySelector(".author").textContent = `著者: ${item.author.toString().replace(/[\[\]"]/, "")}`;
             template.querySelector(".publisher").textContent = `出版社: ${item.publisher}`;
             template.querySelector(".page-count").textContent = (item.pageCount === ("0" || undefined)) ? `ページ数:0ページ` : `ページ数: ${item.pageCount}ページ`;
             template.querySelector(".value").textContent = (item.value === ("不明" || undefined)) ? `価格:${0}円` : `価格: ${item.value}円`;
