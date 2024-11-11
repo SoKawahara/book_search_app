@@ -88,7 +88,6 @@ class PostsController < ApplicationController
     def view_about
         @user = User.find(params[:user_id])
         post = @user.goods.find(params[:id])
-        @id = post.user_id
         @data = eval(post.book_data)
     end
 
