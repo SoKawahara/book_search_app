@@ -109,7 +109,8 @@ class PostsController < ApplicationController
         #取得してきたuser_idとpost_idから対象となる投稿を取得
         @user_id = params[:user_id]
         @post_id = params[:post_id]
-        @post = User.find_by(@user_id).goods.find(@post_id)
+        user = User.find(@user_id)
+        @post = user.goods.find(@post_id)
     end
 
     private
