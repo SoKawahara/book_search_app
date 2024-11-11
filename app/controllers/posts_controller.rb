@@ -1,6 +1,8 @@
 class PostsController < ApplicationController
     before_action :logged_in_user , only: [:new , :create, :good_counter, :view_about, :feed, :view_post]
     before_action :current_user ,    only: [:destroy]
+
+    require "uri"
     #ここに対して本の情報とセットでPOSTメソッドが送信されてくる
     def new
         #画面が再レンダリングされた際に@bookInfoがないことでエラーが発生するのを防ぐ
@@ -9,7 +11,23 @@ class PostsController < ApplicationController
     end
 
     def create
-        @good = current_user.goods.build(info_params.merge("book_data" => params[:book_data]))
+        #画像のURLが正規のものではない時エラー用の画像を指定する
+        book_data = eval(params[:book_data])
+        new_book_data = {}
+        begin
+            uri = URI.parse(book_data["imageLink"])
+            new_book_data = nil
+        rescue URI::InvalidURIError => e
+            book_data["imageLink"] = "error.jpg"
+            new_book_data = book_data.to_s
+        end
+    
+        if new_book_data == nil
+          @good = current_user.goods.build(info_params.merge("book_data" => params[:book_data]))
+        else
+          @good = current_user.goods.build(info_params.merge("book_data" => new_book_data))
+        end
+
         if @good.save 
             flash[:success] = "投稿を作成しました"
             redirect_to "/users/#{current_user.id}/1"

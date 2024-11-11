@@ -132,6 +132,9 @@ class UsersController < ApplicationController
     @top_id = params[:top_id]
     #一時的に結果をセッションに加える
     session[:tmp_recommendation_books]["top_#{@top_id}"] = @post.id
+
+    #どのページから遷移してきたかによってリダイレクト先を変える
+    previous_request = request.referer#これで遷移元のURLを取得する
     redirect_to "/users/profile_new/#{user.id}"
   end
 
