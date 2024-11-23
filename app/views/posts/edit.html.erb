@@ -1,6 +1,8 @@
 <% provide(:title, "投稿編集") %>
-<h1 class = "new-title">投稿編集</h1>
+<h1 class = "new-title">投稿編集,削除
+</h1>
 <p class = "caution" style = "font-size: 15px;">(*変更したい要素のみ入力して変更ボタンを押してください)</p>
+<p class = "caution" style = "font-size: 15px;">(*投稿を削除する場合には一番下の「投稿を削除する」ボタンを押してください)</p>
 <section class="post-item">
     <section class="book-info">
         <%= image_tag eval(@user_post.book_data)["imageLink"] , class: "publish-day-img" %>
@@ -52,6 +54,7 @@
             </div>
 
             <%= f.submit  "変更" , class: "edit-post-btn" %>
+            <%= link_to "投稿を削除する" , post_path(@user_post) , data: { "turbo-method": :delete, turbo_confirm: "本当にこの投稿を削除しますか?" } , class: "delete-post-btn" %>
         <% end %>
     </section>
 </section>

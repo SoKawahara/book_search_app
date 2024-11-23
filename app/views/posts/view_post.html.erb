@@ -1,11 +1,12 @@
 <% provide(:title, "#{User.find(@user_id).name}さんの投稿") %>
-<h1 class = "new-title"><%= "#{User.find(@user_id).name}さんの投稿" %></h1>
 <section class="view-post-container">
     <div class="post-image">
         <%= image_tag eval(@post.book_data)["imageLink"] %>
-        <p><%= eval(@post.book_data)["title"] %></p>
-        <p><%= eval(@post.book_data)["author"].to_s.gsub(/[\[\]"]/ , "") %></p>
-        <p>ジャンル: <%= @post.genre %></p>
+        <div>
+          <p>～<%= eval(@post.book_data)["title"] %>～</p>
+          <p><%= eval(@post.book_data)["author"].to_s.gsub(/[\[\]"]/ , "") %></p>
+          <p>ジャンル: <%= @post.genre %></p>
+        </div>
 
     </div>
     <div class="post-main-content">
@@ -29,3 +30,9 @@
         </div>
     </div>
 </section>
+<% redirect_path = request.referer %>
+<% if redirect_path.nil? %>
+  <%= link_to "戻る" , "/users/#{@user_id}/1" , class: "back-btn" %>
+<% else %>
+  <%= link_to "戻る" , redirect_path , class: "back-btn" %>
+<% end %>

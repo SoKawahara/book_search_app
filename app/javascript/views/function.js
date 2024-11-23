@@ -2,8 +2,8 @@ import { api_result_array } from "./search";
 //このファイル内では使用する関数を定義する
 export async function get_book_data({ type, number, content }, array = []) {
     //sessionStorageにデータがあった場合にはクリアする
-    if (sessionStorage.getItem("book_data")) {
-        sessionStorage.removeItem("book_data");
+    if (localStorage.getItem("book_data")) {
+        localStorage.removeItem("book_data");
     }
     //配列に要素がある場合には削除して配列を空にする
     if (array.length > 0) {
@@ -30,12 +30,11 @@ export async function get_book_data({ type, number, content }, array = []) {
         const data = await response.json();
         data.items.forEach((item) => {
             const tmp = {};
-            const tmpObj = {};
             // この下で表示する要素を取得する
             //タイトル取得のエラーハンドリング
             try {
                 const title = item.volumeInfo.title;
-                tmp.title = title;
+                tmp.title = title === undefined ? "不明" : title
             } catch {
                 console.log("タイトルの読み込みに失敗しました");
                 tmp.title = "不明";
@@ -43,7 +42,7 @@ export async function get_book_data({ type, number, content }, array = []) {
             //著者取得のエラーハンドリング
             try {
                 const author = item.volumeInfo.authors;
-                tmp.author = author;
+                tmp.author = author === undefined ? "不明" : author;
             } catch {
                 console.log("著者の読み込みに失敗しました");
                 tmp.author = "不明";
@@ -51,7 +50,7 @@ export async function get_book_data({ type, number, content }, array = []) {
             //画像リンク取得のエラーハンドリング
             try {
                 const imageLink = item.volumeInfo.imageLinks.thumbnail.replace("&zoom=1", "&zoom=5");
-                tmp.imageLink = imageLink;
+                tmp.imageLink = imageLink === undefined ? "error.jpg" : imageLink;
             } catch {
                 console.log("画像リンクの取得に失敗しました");
                 tmp.imageLink = "不明";
@@ -59,7 +58,7 @@ export async function get_book_data({ type, number, content }, array = []) {
             //詳細文取得のエラーハンドリング
             try {
                 const description = item.volumeInfo.description;
-                tmp.description = description;
+                tmp.description = description === undefined ? "不明" : description
             } catch {
                 console.log("詳細文の取得に失敗しました");
                 tmp.description = "不明";
@@ -67,7 +66,7 @@ export async function get_book_data({ type, number, content }, array = []) {
             //出版社取得のエラーハンドリング
             try {
                 const publisher = item.volumeInfo.publisher;
-                tmp.publisher = publisher;
+                tmp.publisher = publisher === undefined ? "不明" : publisher;
             } catch {
                 console.log("出版社の取得に失敗しました");
                 tmp.publisher = "不明";
@@ -75,7 +74,7 @@ export async function get_book_data({ type, number, content }, array = []) {
             //出版日取得のエラーハンドリング
             try {
                 const publishedDate = item.volumeInfo.publishedDate;
-                tmp.publishedDate = publishedDate;
+                tmp.publishedDate = publishedDate === undefined ? "不明" : publishedDate
             } catch {
                 console.log("出版日の取得に失敗しました");
                 tmp.publishedDate = "不明";
@@ -83,7 +82,7 @@ export async function get_book_data({ type, number, content }, array = []) {
             //ページ数取得のエラーハンドリング
             try {
                 const pageCount = item.volumeInfo.pageCount;
-                tmp.pageCount = pageCount;
+                tmp.pageCount = pageCount === undefined ? "0" : pageCount
             } catch {
                 console.log("ページ数の取得に失敗しました");
                 tmp.pageCount = "0";
@@ -91,7 +90,7 @@ export async function get_book_data({ type, number, content }, array = []) {
             //購入リンク取得のエラーハンドリング
             try {
                 const buyLink = item.saleInfo.buyLink;
-                tmp.buyLink = buyLink;
+                tmp.buyLink= buyLink === undefined ? "不明" : buyLink
             } catch {
                 console.log("購入リンクの取得に失敗しました");
                 tmp.buyLink = "不明";
@@ -99,7 +98,7 @@ export async function get_book_data({ type, number, content }, array = []) {
             //価格取得のエラーハンドリング
             try {
                 const value = item.saleInfo.listPrice.amount;
-                tmp.value = value;
+                tmp.value = value === undefined ? "0" : value
             } catch {
                 console.log("価格の読み込みに失敗しました。");
                 tmp.value = "0";
@@ -108,7 +107,7 @@ export async function get_book_data({ type, number, content }, array = []) {
         });
 
         //本のデータを取得出来たら一時的にブラウザのsessionStorageに保存する。これはセッションごとにデータを管理する
-        sessionStorage.setItem("book_data" , JSON.stringify(array));
+        localStorage.setItem("book_data" , JSON.stringify(array));
         return array;
     } catch (e) {
         return [];

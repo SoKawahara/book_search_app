@@ -14,19 +14,27 @@ Rails.application.routes.draw do
   get "/users/profile_edit/:id"    , to: "users#profile_edit_new"
   post "/users/profile_edit/:id"   , to: "users#profile_edit"
   get "/users/profile/view_top_edit/:id/:top_id" , to: "users#view_top_edit"
+  get "/users/view_episodes/:type"               , to: "users#view_episodes"
+
+  #ここではTurbo Streamを用いて投稿一覧画面で表示形式が変更された際にページ全体をリロードすることなくDOMだけを差し替えるためのルーティングを行う
+  get "/users/:id/turbo_stream_show/:type" , to: "users#turbo_stream_show"
+  get "/posts/turbo_stream_feed/:type"     , to: "posts#turbo_stream_feed"
+  get "/posts/:id/turbo_stream_my_goods/:type" , to: "posts#turbo_stream_my_goods"
 
 
+  
+  get "/posts/:id/my_goods"        , to: "posts#my_goods" , as: :posts_my_goods
   get "/posts/feed/:type"          , to: "posts#feed"
   post "/posts/new"   ,   to: "posts#new"
   post "/posts/create" ,  to: "posts#create"
   get "/posts/good_counter/:user_id/:id"     , to: "posts#good_counter"
-  delete "/posts/destroy/:id"       , to: "posts#destroy"
   get "/posts/edit/:id"             , to: "posts#edit"
-  get "/posts/:user_id/:post_id" ,  to: "posts#view_post"
   post "/posts/update/:id"        , to: "posts#update"
   get "/posts/:user_id/view_about/:id"     , to: "posts#view_about"
+  get "/posts/sort_episodes"              , to: "posts#sort_episodes"
+  get "/posts/:user_id/:post_id" ,  to: "posts#view_post"
 
-  get "/searches/top" ,   to: "searches#top"
+  get "/searches" ,   to: "searches#top"
   post "/searches/index" , to: "searches#index"
   get "/searches/show" ,  to: "searches#show"
   
@@ -52,6 +60,7 @@ Rails.application.routes.draw do
   resources :account_activations , only: [:edit]
   resources :password_resets,      only: [:new, :create, :edit, :update]
   resources :relationships,        only: [:create , :destroy]
+  resources :posts ,               only: [:destroy]
 
   get "/users/:id/:type" , to: "users#show"
 end

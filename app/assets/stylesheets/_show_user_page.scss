@@ -1,0 +1,1390 @@
+/* 個別ユーザの表示画面 */
+.profile {
+    width: 85%;
+    margin: 5rem auto 0 auto;
+    padding: 5rem;
+    display: flex;
+    gap: 5rem;
+    background-color: #e7e3d8;
+    border-radius: 20px;
+    position: relative;
+
+    .delete-user {
+        position: absolute;
+        right: 2rem;
+        bottom: 2rem;
+        color: red;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 15px;
+        font-weight: 500;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+    }
+}
+
+.btn-group {
+    position: absolute;
+    top: 57rem;
+    right: 2rem;
+
+    button {
+        border-radius: 30px !important;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    .dropdown-menu {
+        .dropdown-item {
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 16px;
+            font-weight: 350;
+        }
+    }
+}
+
+#btn-group {
+    position: absolute;
+    top: 13rem;
+    right: 2rem;
+
+    button {
+        border-radius: 30px !important;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    .dropdown-menu {
+        .dropdown-item {
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 16px;
+            font-weight: 350;
+        }
+    }
+}
+
+
+.gravatar-img {
+    width: 250px;
+    height: 250px;
+    margin-left: 3rem;
+    border-radius: 50%;
+    border: 3px solid black;
+    z-index: 100;
+}
+
+.account-name {
+    color: #4b4740;
+    font-family: "Caveat", cursive;
+    font-weight: 600;
+    font-size: 50px;
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.user-info {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+.account-profile {
+    display: block;
+    margin: auto;
+    width: 150px;
+    height: 30px;
+    text-align: center;
+    border-radius: 20px;
+    background-color: #8daac7;
+    border: 2px solid #cdcfd2;
+    color: white;
+    font-family: "Bodoni Moda SC", serif;
+    font-size: 18px;
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: none;
+        color: white;
+    }
+}
+
+.account-info {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+
+    li {
+        p {
+            font-size: 18px;
+            font-weight: 500;
+            font-family: "Bodoni Moda SC", serif;
+
+            &:nth-child(2) {
+                text-align: center;
+                font-family: "Caveat", cursive;
+                font-size: 30px;
+
+                a {
+                    color: black;
+                    text-decoration: none;
+
+                    &:hover {
+                        color: black;
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.setting-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.close-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.setting-container {
+    margin: 0;
+    padding: 1rem;
+    position: absolute;
+    top: 3rem;
+    right: 3rem;
+    width: 18rem;
+    height: 18rem;
+    border-radius: 20px;
+    background-color: rgb(86, 84, 79);
+    opacity: 0;
+    visibility: hidden;
+    list-style: none;
+    z-index: 200;
+
+
+
+    li {
+        margin-bottom: 1rem;
+        text-align: center;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        a {
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 15px;
+            font-weight: 500;
+            color: rgb(197, 195, 183);
+            border-bottom: 1px solid black;
+
+            &:hover {
+                text-decoration: none;
+                font-size: 17px;
+            }
+        }
+    }
+}
+
+.back-btn {
+    display: block;
+    margin: 3rem auto 2rem auto;
+    width: 180px;
+    background-color: grey;
+    border-radius: 20px;
+    font-family: "Bodoni Moda SC", serif;
+    font-size: 18px;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+
+    &:hover {
+        color: white;
+        text-decoration: none;
+    }
+}
+
+/* 各投稿を表示するための画面を作成する */
+.view-post-container {
+    width: 95%;
+    margin: 4rem auto;
+    display: flex;
+    justify-content: space-around;
+    background-color: #e6e7e5;
+    border: 6.5px outset #bbc5c8;
+
+    .post-image {
+        width: 25%;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        img {
+            width: 160px;
+            height: 200px;
+            border: 5px solid #bec2c3;
+        }
+
+        p {
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            color: #747575;
+
+            &:first-of-type {
+                margin-top: 2rem;
+            }
+        }
+    }
+
+    .post-main-content {
+        overflow-y: scroll;
+        width: 80%;
+        scrollbar-width: none;
+
+        /* Firefox */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        h2 {
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 23px;
+            font-weight: 700px;
+            text-align: center;
+            color: #747575;
+        }
+
+        .content {
+            border: 2px outset rgb(143, 170, 178);
+            border-radius: 20px;
+            width: 90%;
+            height: 55%;
+            margin: 0 auto;
+            padding: 1rem;
+            display: grid;
+            place-items: center;
+            overflow-y: scroll;
+            scrollbar-width: none;
+
+            /* Firefox */
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            p {
+                font-family: "Bodoni Moda SC", serif;
+                font-weight: 500;
+                font-size: 15px;
+                line-height: 1.7;
+            }
+        }
+
+        .evaluations {
+            width: 90%;
+            height: 25%;
+            border: 1.5px inset rgb(143, 170, 178);
+            border-radius: 20px;
+            margin: 1rem auto;
+            padding: .6rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+
+            label,
+            p {
+                font-family: "Bodoni Moda SC", serif;
+                font-size: 15px;
+                font-weight: 500;
+                text-align: center;
+
+            }
+        }
+    }
+}
+
+/* ここに画面幅が900以下の時の投稿内容のスタイルを定義する */
+@media(max-width: 900px) {
+    .view-post-container {
+        flex-direction: column;
+        align-items: center;
+        border: 4px outset #bbc5c8;
+    
+        .post-image {
+            width: 90%;
+            padding: 1rem;
+    
+            img {
+                width: 150px;
+                height: 200px;
+                border: 5px solid #bec2c3;
+            }
+    
+        }
+    
+        .post-main-content {
+            width: 95%;
+            border-top: 2px dashed black;
+    
+            h2 {
+                font-size: 18px;
+            }
+    
+            .content {
+                width: 95%;
+                height:200px;
+                margin: 0 auto;
+                padding: .6rem;
+    
+                p {
+                    font-size: 14px;
+                    line-height: 1.5;
+                }
+            }
+    
+            .evaluations {
+                width: 95%;
+                height: 25%;
+    
+                label,
+                p {
+                    font-family: "Bodoni Moda SC", serif;
+                    font-size: 12px;
+                    font-weight: 500;
+                    text-align: center;
+    
+                }
+            }
+        }
+    }
+    
+}
+
+
+
+/* 完成したプロフィールを表示する */
+.view-profile-container {
+    width: 90%;
+    margin: 3rem auto;
+    padding: 3rem;
+    border: 5px inset #d7e7ff;
+    border-radius: 40px;
+    background-color: #e7e3d8;
+    display: flex;
+    gap: 0;
+    position: relative;
+
+    .edit-profile-btn {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 1rem;
+        right: 6rem;
+        transition: .8s;
+
+        &:hover {
+            scale: 1.25;
+        }
+    }
+
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 3px outset #727171;
+    }
+
+    .profile-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90%;
+        position: relative;
+
+        .episode {
+            width: 90%;
+            height: 350px;
+            margin: 2rem auto;
+            padding: 1.5rem 2rem;
+            border: 6px inset rgb(201, 196, 196);
+            overflow-y: scroll;
+            scrollbar-width: none;
+
+            /* Firefox */
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            h4 {
+                font-family: "Bodoni Moda SC", serif;
+                font-size: 25px;
+                font-weight: 500;
+                color: #4b4740;
+                letter-spacing: .5rem;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .episode-container {
+                display: grid;
+                place-items: center;
+                width: 100%;
+                height: 70%;
+
+                p {
+                    font-family: "Bodoni Moda SC", serif;
+                    font-size: 18px;
+                    font-weight: 400;
+                    letter-spacing: .13rem;
+                    color: #4b4740;
+                    text-align: center;
+                    line-height: 1.7;
+                    margin-bottom: 2rem;
+
+                }
+
+            }
+
+
+        }
+
+        .user-info {
+            padding: 1rem;
+
+            h4 {
+                font-family: "Bodoni Moda SC", serif;
+                font-size: 25px;
+                font-weight: 500;
+                color: #4b4740;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            margin: 1.5rem auto;
+            border: 8px groove rgb(201, 196, 196);
+        }
+
+
+        h3 {
+            color: #4b4740;
+            font-family: "Caveat", cursive;
+            font-weight: 600;
+            font-size: 55px;
+            text-shadow: -10px 10px 4px rgb(204, 200, 200);
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        p {
+            color: #4b4740;
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 2rem;
+
+            &.favorite-p {
+                font-size: 25px;
+                margin-top: 2rem;
+            }
+        }
+    }
+
+    .top3 {
+        width: 95%;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        justify-items: center;
+        row-gap: 1.5rem;
+
+        .profile-view-container {
+            width: 250px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 40px;
+            border: 2px groove #70b7d3;
+            transition: 1s;
+            position: relative;
+
+            .top3_number {
+                width: 30px;
+                height: 30px;
+                padding: 2px;
+                border-radius: 50%;
+                background-color: grey;
+                display: grid;
+                place-items: center;
+                position: absolute;
+                top: 1.5rem;
+                left: 2rem;
+
+                p {
+                    color: white;
+                    font-size: 18px;
+                    font-weight: 500;
+                    font-family: "Bodoni Moda SC", serif;
+                    text-align: center;
+                }
+
+            }
+
+            p {
+                text-align: center;
+                font-family: "Bodoni Moda SC", serif;
+                font-size: 13px;
+                font-weight: 400;
+
+                &.post-name {
+                    font-size: 14.5px;
+                    font-weight: 500;
+                }
+            }
+
+            img {
+                width: 122px;
+                height: 188px;
+            }
+
+            .content {
+                margin: 1rem auto 0 auto;
+            }
+
+            .view-post-btn {
+                width: 100px;
+                height: 30px;
+                font-family: "Bodoni Moda SC", serif;
+                background-color: #9c9d9d;
+                color: #ececec;
+                border-radius: 30px;
+                display: block;
+                text-align: center;
+                z-index: 9999;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+
+/* ここから下に画面サイズが900px以下の時のスタイルを定義する */
+@media (max-width: 900px) {
+
+    #btn-group {
+        position: static; //position: absoluteの値を打ち消すためにデフォルト値のstaticを指定する
+        display: block;
+        margin: auto;
+        width: 100px;
+        //margin: autoを使用するには要素がブロック用であり更に要素の大して幅が指定されている必要がある
+
+        button {
+            border-radius: 15px !important;
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 12px;
+            font-weight: 400;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+    }
+
+    .view-profile-container {
+        flex-direction: column;
+        align-items: center;
+        width: 96%;
+        padding: 1.5rem 1rem;
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border: 2px outset #727171;
+        }
+
+        .edit-profile-btn {
+            width: 12px;
+            height: 12px;
+            right: 6rem;
+
+            &:hover {
+                scale: 1.1;
+            }
+        }
+
+        .profile-container {
+            .episode {
+                width: 100%;
+                height: 300px;
+                padding: 1rem 1.5rem;
+                border: 3.5px inset rgb(201, 196, 196);
+
+                h4 {
+                    font-size: 20px;
+                    color: #4b4740;
+                    letter-spacing: .2rem;
+                    text-align: center;
+                    margin-bottom: 1.6rem;
+                }
+
+                .episode-container {
+                    p {
+                        font-size: 16px;
+                        letter-spacing: .1rem;
+                        line-height: 1.55;
+                        margin-bottom: 1.5rem;
+                    }
+                }
+            }
+
+            .user-info {
+                padding: .7rem;
+
+                p {
+                    font-size: 16px;
+                    font-weight: 400;
+                }
+
+                h4 {
+                    font-size: 20px;
+                    margin-bottom: 1.2rem;
+                }
+
+                margin: 1.25rem auto;
+                border: 6px groove rgb(201, 196, 196);
+            }
+
+            h3 {
+                font-weight: 600;
+                font-size: 48px;
+                text-shadow: -8px 8px 3.5px rgb(204, 200, 200);
+                letter-spacing: 2.8px;
+                margin-bottom: 1.5rem;
+            }
+
+            p {
+                &.favorite-p {
+                    font-size: 20px;
+                    margin-top: 1.6rem;
+                }
+            }
+        }
+
+        .top3 {
+            width: 100%;
+            padding: 1rem;
+            row-gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+            .profile-view-container {
+                width: 280px;
+                padding: .6rem;
+
+                .top3_number {
+                    width: 30px;
+                    height: 30px;
+                    padding: 2px;
+                    border-radius: 50%;
+                    background-color: grey;
+                    display: grid;
+                    place-items: center;
+                    position: absolute;
+                    top: 1.5rem;
+                    left: 2rem;
+
+                    p {
+                        color: white;
+                        font-size: 18px;
+                        font-weight: 500;
+                        font-family: "Bodoni Moda SC", serif;
+                        text-align: center;
+                    }
+
+                }
+
+                p {
+                    font-size: 12px;
+                    font-weight: 400;
+
+                    &.post-name {
+                        font-size: 16.5px;
+                    }
+                }
+
+                .content {
+                    margin: 1rem auto 0 auto;
+                }
+
+                .view-post-btn {
+                    width: 100px;
+                    padding: .3rem;
+                }
+            }
+        }
+    }
+
+}
+
+/* プロフィール編集用のスタイル */
+.caution {
+    font-family: "Bodoni Moda SC", serif;
+    font-weight: lighter;
+    font-size: 20px;
+    text-align: center;
+}
+
+.setting-profile {
+    width: 90%;
+    margin: 3rem auto;
+    padding: 1.5rem;
+    border: 2px solid black;
+    border-radius: 30px;
+    background-color: #d7dde1;
+
+    .episode {
+        width: 75%;
+        height: 300px;
+        display: block;
+        margin: 2rem auto;
+        padding: 1rem;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: start;
+        border-radius: 18px;
+        border: 2px inset black;
+
+        &:focus {
+            outline: none;
+        }
+
+    }
+
+    .birthday {
+        width: 20%;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+        display: block;
+        margin: 1.5rem auto;
+        border-radius: 18px;
+    }
+
+    .occupations {
+        width: 70%;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+        display: block;
+        margin: 1.5rem auto;
+        border-radius: 18px;
+
+        &:focus {
+            outline: none;
+        }
+
+    }
+
+    #gender {
+        width: 35%;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+        display: block;
+        margin: 1.5rem auto;
+        border-radius: 18px;
+        border: 2px inset black;
+
+        &:focus {
+            outline: none;
+        }
+
+    }
+
+    .save-btn-container {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+
+        .profile-save-btn {
+            width: 250px;
+            border-radius: 20px;
+            background-color: rgb(87, 202, 252);
+            border: 2px solid rgb(207, 227, 232);
+            color: white;
+            font-family: "Bodoni Moda SC", serif;
+            font-weight: 400;
+            font-size: 12px;
+            text-align: center;
+            display: block;
+        }
+    }
+
+
+
+    .content {
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 20px;
+        font-weight: 500;
+        display: block;
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+    }
+
+    .year-month {
+        width: 20%;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+        display: block;
+        margin: 1.5rem auto;
+        border-radius: 18px;
+    }
+
+    .favorite-genre {
+        width: 70%;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+        display: block;
+        margin: 1.5rem auto;
+        border-radius: 18px;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    #recommendation_3 {
+        width: 90%;
+        margin: 1rem auto;
+        display: flex;
+        justify-content: space-around;
+
+        .top1,
+        .top2,
+        .top3 {
+            width: 300px;
+            height: 450px;
+            border-radius: 20px;
+            border: 2.5px  inset grey;
+
+            img {
+                width: 140px;
+                height: 200px;
+            }
+
+            h3 {
+                font-family: "Roboto Condensed", sans-serif;
+                font-size: 30px;
+                font-weight: 550;
+                color: #d7e7ff;
+                text-align: center;
+            }
+
+            .setting {
+                font-family: "Bodoni Moda SC", serif;
+                font-size: 25px;
+                font-weight: 500;
+                text-align: center;
+                display: block;
+                width: 200px;
+                margin: auto;
+                border-radius: 20px;
+                background-color: grey;
+                color: white;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: none;
+                }
+
+            }
+        }
+    }
+
+    .profile-submit-btn {
+        width: 250px;
+        background-color: rgb(87, 202, 252);
+        border-radius: 20px;
+        border: 2px solid rgb(207, 227, 232);
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 20px;
+        color: white;
+        display: block;
+        margin: 5rem auto 2rem auto;
+    }
+
+    .profile-new-post-container {
+        width: 280px;
+        height: 350px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 40px;
+        transition: 1s;
+        position: relative;
+
+        p {
+            text-align: center;
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 13px;
+            font-weight: 400;
+
+            &.post-name {
+                font-size: 16px;
+                font-weight: 500;
+            }
+        }
+
+        .content {
+            margin: 1rem auto 0 auto;
+        }
+
+        .view-post-btn {
+            width: 100px;
+            height: 30px;
+            font-family: "Bodoni Moda SC", serif;
+            background-color: #9c9d9d;
+            color: #ececec;
+            border-radius: 30px;
+            display: block;
+            text-align: center;
+            z-index: 9999;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+}
+
+/* ここから下に画面幅が900px以下の時のプロフィール設定画面のスタイルを作成する */
+@media(max-width: 900px) {
+    .setting-profile {
+        width: 95%;
+        padding: 1rem;
+
+        .episode {
+            width: 95%;
+        }
+
+        .birthday {
+            width: 30%;
+        }
+
+        .occupations {
+            width: 95%;
+            height: 30px;
+            font-size: 15px;
+        }
+
+        #gender {
+            width: 45%;
+            height: 30px;
+            font-size: 15px;
+        }
+
+        .save-btn-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content {
+            font-size: 16px;
+        }
+
+        .year-month {
+            width: 200px;
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            display: block;
+            margin: 1.5rem auto;
+            border-radius: 18px;
+        }
+
+        .favorite-genre {
+            width: 95%;
+            height: 30px;
+            font-size: 15px;
+        }
+
+        #recommendation_3 {
+            width: 95%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            row-gap: 1rem;
+
+            .top1,
+            .top2,
+            .top3 {
+                width: 250px;
+                height: 350px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border: 2px outset grey;
+
+                h3 {
+                    margin-bottom: 0;
+                }
+
+                img {
+                    width: 120px;
+                    height: 160px;
+                }
+
+                .setting {
+                    font-family: "Bodoni Moda SC", serif;
+                    font-size: 20px;
+                    width: 40%;
+                }
+
+                .profile-new-post-container {
+                    width: 90%;
+                    padding: 1rem;
+
+                    p {
+                        font-size: 10px;
+                        &.post-name {
+                            font-size: 13px;
+                        }
+                    }
+
+                    .content {
+                        margin: 1rem auto 0 auto;
+                    }
+
+                    .view-post-btn {
+                        width: 40%;
+                        height: 20px;
+                        font-size: 13px;
+                        padding: .2rem;
+                    }
+                }
+            }
+        }
+
+        .profile-submit-btn {
+            width: 45%;
+            font-size: 15px;
+        }
+
+
+
+    }
+}
+
+/* 要素を表示させるためのクラス */
+.active-setting {
+    display: block;
+}
+
+.border {
+    margin-top: 5rem;
+    margin-left: 7.5rem;
+    width: 90%;
+    height: 3px;
+    background-image: linear-gradient(to right, #585a5d, rgb(125, 123, 123), #d8d7ce);
+}
+
+/* ここにタブレット、スマホサイズの個人ページ画面のスタイル */
+@media(max-width: 900px) {
+    .profile {
+        width: 85%;
+        padding: 2rem;
+        margin-top: 2.5rem;
+        margin-bottom: 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 0;
+        background-color: #e7e3d8;
+        border-radius: 20px;
+        position: relative;
+
+        .account-profile {
+            width: 120px;
+            height: 25px;
+            font-size: 13px;
+            font-weight: 400;
+        }
+    }
+
+    .gravatar-img {
+        width: 120px;
+        height: 120px;
+        margin: auto;
+        border-radius: 50%;
+        border: 3px solid black;
+        z-index: 100;
+    }
+
+    .account-name {
+        color: #4b4740;
+        width: 100%;
+        font-family: "Caveat", cursive;
+        font-weight: 600;
+        font-size: 35px;
+        text-align: center;
+    }
+
+    .user-info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .account-info {
+        li {
+            p {
+                font-size: 18px;
+
+                &:nth-child(2) {
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+
+    .setting-container {
+        inset: 30%;
+    }
+
+    .border {
+        margin: auto;
+        width: 90%;
+        height: 3px;
+        background-image: linear-gradient(to right, #585a5d, rgb(125, 123, 123), #d8d7ce);
+    }
+
+    .btn-group {
+        top: 54rem;
+
+        button {
+            font-size: 12px;
+            font-weight: 300;
+        }
+
+        .dropdown-menu {
+            .dropdown-item {
+                font-size: 14px;
+                font-weight: 300;
+            }
+        }
+    }
+
+}
+
+
+/* これはユーザの投稿一覧を表示するためのスタイル*/
+.posts-container {
+    border: 3.5px inset rgb(118, 114, 114);
+    border-radius: 30px;
+    width: 90%;
+    height: 764;
+    background: rgb(193, 187, 187);
+    margin: 3rem auto 0 auto;
+    padding: 2rem 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    justify-items: center; //justify-itemsを使用することでgridアイテムが常にコンテナの中央に配置される
+    row-gap: 2rem;
+
+    .post-container {
+        width: 280px;
+        height: 380px;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 4px ridge rgb(227, 207, 172);
+        border-radius: 40px;
+        transition: 1s;
+        position: relative;
+
+        &:hover {
+            scale: 1.1;
+        }
+
+        img {
+            width: 128px;
+            height: 188px;
+        }
+
+        p {
+            text-align: center;
+            font-family: "Bodoni Moda SC", serif;
+
+            &.post-name {
+                font-size: 16px;
+                font-weight: 500;
+            }
+
+            &.good-content {
+                font-size: 20px;
+                position: absolute;
+                left: 2rem;
+                top: 1rem;
+            }
+        }
+
+        .content {
+            margin: 1rem auto 0 auto;
+        }
+
+        .good-img {
+            width: 20px;
+            height: 20px;
+            margin-bottom: .5rem;
+        }
+
+        .feed-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px groove grey;
+        }
+
+        .edit-btn {
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+
+            img {
+                width: 30px;
+                height: 30px;
+                z-index: 9999;
+
+                &:hover {
+                    width: 33px;
+                    height: 33px;
+                }
+            }
+        }
+
+        .view-post-btn {
+            width: 100px;
+            height: 30px;
+            padding: .5rem;
+            font-family: "Bodoni Moda SC", serif;
+            background-color: #9c9d9d;
+            color: #ececec;
+            border-radius: 30px;
+            display: block;
+            text-align: center;
+            z-index: 9999;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+/* ここから下で画面サイズが900px以下になった時の投稿一覧のスタイルを定義する */
+@media(max-width: 900px) {
+    .posts-container {
+        width: 90%;
+        margin: 2rem auto;
+        padding: 2rem;
+        border: 2px inset rgb(118, 114, 114);
+
+        .post-container {
+            width: 260px;
+            height: 320px;
+            padding: 1.5rem;
+
+            img {
+                width: 115px;
+                height: 160px;
+            }
+
+            p {
+                font-size: 11px;
+
+                &.post-name {
+                    font-size: 13px;
+                }
+
+                &.good-content {
+                    font-size: 16px;
+                    left: 1.7rem;
+                }
+            }
+
+            .content {
+                margin: 1rem auto 0 auto;
+            }
+
+            .good-img {
+                width: 19.5px;
+                height: 19.5px;
+            }
+
+
+
+            .view-post-btn {
+                width: 90px;
+                height: 25px;
+                font-size: 12px;
+                padding: .2rem;
+            }
+        }
+    }
+
+
+
+}
+
+
+.create-post-btn {
+    width: 180px;
+    height: 30px;
+    font-family: "Bodoni Moda SC", serif;
+    font-size: 20px;
+    background-color: #9c9d9d;
+    color: #ececec;
+    border-radius: 30px;
+    display: block;
+    margin: 2rem auto;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: none;
+        color: white;
+    }
+}

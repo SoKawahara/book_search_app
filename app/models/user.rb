@@ -7,6 +7,9 @@ class User < ApplicationRecord
 
     has_many :following , through: :active_relationships, source: :followed
     has_many :followers,  through: :passive_relationships, source: :follower
+
+    has_many :likes, dependent: :destroy
+    has_many :what_goods , through: :likes , source: :good
     # has_many :followeds , through: :active_relationshipsのようにすればactive_relationshipsのfollowed_idに一致する
     #記憶トークンを保持する仮想の属性を定義する,このように実装するのは生の記憶トークンはデータベースに保存したくないから
     attr_accessor :remember_token , :activation_token, :reset_token
@@ -26,6 +29,10 @@ class User < ApplicationRecord
     validates :reading_history , presence: true
     validates :favorite_genre , presence: true
     validates :recommendation_books , presence: true
+    validates :birthday, presence: true
+    validates :occupations , presence: true
+    validates :gender , presence: true
+    validates :episode , presence: true , length: { maximum: 1000 }#保存できる最大の文字数を1000文字に設定する
 
     #渡された文字列のハッシュを返す
     def self.digest(string)

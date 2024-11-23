@@ -12,4 +12,11 @@ class ApplicationController < ActionController::Base
       redirect_to login_url , status: :see_other
     end
   end
+
+  def valid_user(user)
+    if !current_user?(user)
+      flash[:danger] = "このページにはアクセスできません"
+      redirect_to "/users/#{user.id}/1"
+    end
+  end
 end

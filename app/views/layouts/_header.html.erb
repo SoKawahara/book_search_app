@@ -3,9 +3,14 @@
         <%= link_to "Search Books" , root_path , class: "logo-title" %>
     </div>
     <nav class = "header-nav">
-        <%= link_to image_tag("search-logo.svg" , class: "logo-image") , '/searches/top' %>
-        <%= link_to image_tag("create-new.svg" , class: "logo-image") , '#' %>
-        <%= link_to image_tag("hearts.svg" , class: "logo-image") , '#' %>
+        <%= link_to image_tag("search-logo.svg" , class: "logo-image") , '/searches' %>
+        <%= link_to image_tag("text.svg" , class: "logo-image") , "/users/view_episodes/1" %>
+        <% if current_user.nil? %>
+          <%= link_to image_tag("hearts.svg" , class: "logo-image") , posts_my_goods_path(id: 0)  %>
+        <% else %>
+          <%= link_to image_tag("hearts.svg" , class: "logo-image") ,  posts_my_goods_path(id: current_user.id) %>
+        <% end %>
+        <%= link_to image_tag("home.svg" , class: "logo-image") , "/posts/feed/1" %>
         <!-- ユーザがログイン中ならユーザのアイコンを表示する -->
         <% if user = current_user %>
           <%= link_to image_tag(gravatar_for(user) , class: "logo-image" , style: "border-radius: 50%; border: 2px solid black") , "/users/#{user.id}/1" %>

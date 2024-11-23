@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   require "date"
   #edit,updateアクションが実行される前にlogged_in_userというメソッドを実行する
   #ログインしていないユーザはアクセスできないようにする
-  before_action :logged_in_user , only: [:index, :edit , :update, :destroy , :following, :followers]
+  before_action :logged_in_user , only: [:index, :edit , :update, :destroy , :following, :profile_new, :setting_top, :view_top , :setting_profile , :profile_tmp_save , :profile_edit_new , :profile_edit , :profile_edit]
   before_action :correct_user   , only: [:edit , :update]
   before_action :admin_user     , only: :destroy
 
@@ -23,7 +23,46 @@ class UsersController < ApplicationController
         @user.goods.created_at_asc.page(params[:page]).per(6)
       else
         @user.goods.good_desc.page(params[:page]).per(6)
-      end
+      end 
+  end
+
+  #ここではTurboStreamを用いて各ユーザの投稿一覧の画面のリロードを行うための処理を書く
+  def turbo_stream_show
+    @user = User.find(params[:id])
+    @type = params[:type]
+    @posts = 
+      if @type == "1"
+        @user.goods.created_at_desc.page(params[:page]).per(6)
+      elsif @type == "2"
+        @user.goods.created_at_asc.page(params[:page]).per(6)
+      else
+        @user.goods.good_desc.page(params[:page]).per(6)
+      end 
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to "/users/#{@user.id}/#{@type}" }
+    end
+  end
+
+  #いいね一覧でTurboStreamを用いて１部分だけリロードする
+  def turbo_stream_my_goods
+    @user = User.find(params[:id])
+    @type = params[:type]
+    @posts = 
+      if @type == "1"
+        @user.what_goods.created_at_desc.page(params[:page]).per(6)
+      elsif @type == "2"
+        @user.what_goods.created_at_asc.page(params[:page]).per(6)
+      else
+        @user.what_goods.good_desc.page(params[:page]).per(6)
+      end 
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to "/posts/my_goods/#{@user.id}" }
+    end
+
   end
 
   def new
@@ -87,11 +126,27 @@ class UsersController < ApplicationController
     #プロフィール設定が終わっている場合にのみ読書歴、好きなジャンル、おすすめtop3の情報をビューファイルに送信する
     if @user.profile_completed
       #読書歴を動的に変更するためにデータを整形している
-      differences = (Date.today - Date.parse(@user.reading_history + "-01")).to_i 
-      @year = differences / 365
-      @month = (differences % 365) / 30
+      if @user.reading_history != "未設定"
+        differences = (Date.today - Date.parse(@user.reading_history + "-01")).to_i 
+        @year = differences / 365
+        @month = (differences % 365) / 30
+      else
+        @year = "0"
+        @month = "0"
+      end
+      
       @favorite_genre = @user.favorite_genre
       @top3 = @user.recommendation_books
+      #年齢を計算する
+      if @user.birthday != "未設定"
+        @age = (Date.today - Date.parse(@user.birthday)).to_i / 365
+      else
+        @age = "0"
+      end
+      
+      @gender = @user.gender
+      @occupations = @user.occupations
+      @episode = @user.episode
     else
       @year = "0"
       @month = "0"
@@ -109,21 +164,30 @@ class UsersController < ApplicationController
       redirect_to "/users/#{@user.id}/1"
     end
     
-    if !session[:tmp_recommendation_books]
+    #tmp_reccomendation_booksというキーをセッションが持たない時にはセッションを新たに作成する
+    #session.key?メソッドは引数に指定されたキーを持つセッションが存在するかどうかを調べる
+    if !session.key?(:tmp_recommendation_books)
       session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
       @post = session[:tmp_recommendation_books]
     else
       @post = session[:tmp_recommendation_books]
     end
-    @year_month = session[:year_month]
-    @favorite_genre = session[:favorite_genre]
+    @year_month = session[:year_month] || ""
+    @favorite_genre = session[:favorite_genre] || ""
+    @birthday = session[:birthday] || ""
+    @gender = session[:gender] != "" ? session[:gender] : ""
+    @occupations = session[:occupations] || ""
+    @episode = session[:episode] || ""
+
+    #プロフィール作成を開始してセッションに/users/profile_new/:idがなかったらURLを取得して格納する
+    session[:profile_new_url] ||= request.fullpath
   end
 
   #プロフィールでおすすめの本を設定する
   def setting_top
     @user = User.find(params[:user_id])
     @id = params[:id]
-    @posts = @user.goods.page(params[:page]).per(6)
+    @posts = @user.goods.page(params[:page]).per(6)#何も取得するものがなかった際にはからの配列[]が返る
   end
 
   def view_top
@@ -133,19 +197,15 @@ class UsersController < ApplicationController
     #一時的に結果をセッションに加える
     session[:tmp_recommendation_books]["top_#{@top_id}"] = @post.id
 
-    #どのページから遷移してきたかによってリダイレクト先を変える
-    previous_request = request.referer#これで遷移元のURLを取得する
-    redirect_to "/users/profile_new/#{user.id}"
-  end
-
-  def view_top_edit
-    user = current_user
-    @post = user.goods.find(params[:id])
-    @top_id = params[:top_id]
-    #一時的に結果をセッションに加える
-    session[:tmp_recommendation_books]["top_#{@top_id}"] = @post.id
-    redirect_to "/users/profile_edit/#{user.id}"
-
+    #セッション情報からリダイレクト先を決める
+    if session[:profile_new_url] 
+      redirect_to session[:profile_new_url]
+    elsif session[:profile_edit_url]
+      redirect_to session[:profile_edit_url]
+    else
+      flash[:danger] = "不正なアクセスです"
+      redirect_to "/users/profile/#{user.id}"
+    end
   end
 
   #送信されたデータをプロフィールに保存してレコードを更新する
@@ -154,18 +214,32 @@ class UsersController < ApplicationController
     recommendation_books = { top_1: params[:top_1] , top_2: params[:top_2] , top_3: params[:top_3] }
     #データベースに保存するハッシュを作成する
     result = profile_params.merge(recommendation_books: recommendation_books)
+
+    #エピソードが入力されたときのみエピソードの作成日時を更新する
+    #Time.currentはRailsで提供する機能でアプリケーションで設定されたタイムゾーンをもとに時刻を設定する
+    #Time.nowはRubyで提供される機能でサーバーのタイムゾーンに依存する時刻を設定する
+    result = result.merge(episode_updated_time: Time.current) if result[:episode] != ""
+
     if user.update(result)
       flash[:success] = "プロフィールを作成しました!"
       user.update(profile_completed:  true)
     else
+      puts "--------------------------------------------"
+      puts user.errors.full_messages
+      puts "--------------------------------------------"
       flash[:danger] = "プロフィールを作成できませんでした"
     end
 
 
     #投稿内容を保存する一時セッションとして使用した情報をリセットする
-    session[:year_month] = "" if session[:year_month]
-    session[:favorite_genre] = "" if session[:favorite_genre]
+    session.delete(:year_month) if session[:year_month]
+    session.delete(:favorite_genre) if session[:favorite_genre]
+    session.delete(:birthday) if session[:birthday]
+    session.delete(:gender) if session[:gender]
+    session.delete(:occupations) if session[:occupations]
+    # session.delete(:episode) if session[:episode]
     session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
+    session.delete(:profile_new_url)
 
     redirect_to "/users/profile/#{user.id}"
   end
@@ -173,15 +247,17 @@ class UsersController < ApplicationController
   #読書開始年月と好きなジャンルが選択された際に一時セッションの保存するための処理
   #フロント側からfetch関数を用いてリクエストを送信するので何らかの戻り値を期待している
   def profile_tmp_save 
-    year_month = params[:yearMonth]
-    favorite_genre = params[:favoriteGenre]
-    
     #ここで実際に一時セッションを作成して保存する処理を書く
-    session[:year_month] = year_month
-    session[:favorite_genre] = favorite_genre
+    session[:year_month] = params[:yearMonth]
+    session[:favorite_genre] = params[:favoriteGenre]
+    session[:birthday] = params[:birthday]
+    session[:gender] = params[:gender]
+    session[:occupations] = params[:occupations]
+    # session[:episode]に対して入力された内容を保存するには容量が足りなくなることがあるので現状では使用しない
+    # session[:episode] = params[:episode]
     head :ok#戻り値としてHTTPステータスコードを返す
   end
-
+  
   #プロフィール変更のためのフォームを表示する
   def profile_edit_new
     @user = User.find(params[:id])
@@ -191,13 +267,21 @@ class UsersController < ApplicationController
       redirect_to "/users/#{@user.id}/1"
     end
     
-    if !session[:tmp_recommendation_books]
+    if !session.key?(:tmp_recommendation_books)
       session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
+      @post = session[:tmp_recommendation_books]  
     else
-      @post = session[:tmp_recommendation_books]
+      @post = session[:tmp_recommendation_books] 
     end
-    @year_month = session[:year_month]
-    @favorite_genre = session[:favorite_genre]
+    @year_month = session[:year_month] || ""
+    @favorite_genre = session[:favorite_genre] || ""
+    @birthday = session[:birthday] || ""
+    @genre = session[:genre] || ""
+    @gender = session[:gender] || ""
+    @occupations  = session[:occupations] || ""
+    @episode = session[:episode] || ""
+    #プロフィール変更を開始してセッションに/users/profile_edit/:idがなかったらURLを取得して格納する
+    session[:profile_edit_url] ||= request.fullpath
   end
 
   #送信されたデータを実際にデータベースに保存する
@@ -212,8 +296,16 @@ class UsersController < ApplicationController
 
     #ストロングパラメータに関しても上と同様の操作を行う
     new_profile_params = profile_params.select { |key , value| value != "" }
+    #エピソードが再設定されない限り更新日時は更新しない
+    if new_profile_params.has_key?(:episode)
+      #更新された内容にepisodeが含まれていれば更新するハッシュに対してエピソードの更新時間を含める
+      #mergeメソッドはハッシュの結合を行った新しいハッシュをか返すので元のハッシュに対して変更を加えることはできない
+      new_profile_params = new_profile_params.merge(episode_updated_time: Time.current)
+    end
+  
     #データベースに保存するハッシュを作成する
     result = new_profile_params.merge( recommendation_books: new_recommendation_books )
+    puts result
     if user.update(result)
       flash[:success] = "プロフィールを変更しました!"
       user.update(profile_completed:  true)
@@ -222,11 +314,34 @@ class UsersController < ApplicationController
     end
 
     #投稿内容を保存する一時セッションとして使用した情報をリセットする
-    session[:year_month] = "" if session[:year_month]
-    session[:favorite_genre] = "" if session[:favorite_genre]
-    session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定"}
+    session.delete(:year_month) if session[:year_month]
+    session.delete(:favorite_genre) if session[:favorite_genre]
+    session.delete(:birthday) if session[:birthday]
+    session.delete(:gender) if session[:gender]
+    session.delete(:occupations) if session[:occupations]
+    # session.delete(:episode) if session[:episode]
+    session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
+    session.delete(:profile_edit_url)
 
     redirect_to "/users/profile/#{user.id}"
+  end
+
+  #ここではエピソード画面で使用する処理を書く,この画面は登録しているユーザのエピソード一覧を表示する
+  #その際にログインなどは必要としないがそのほかの機能に写る際にはログインを要求する
+  def view_episodes
+    #where句で指定を加えることでカラムに対して条件を設定するクエリを作成することができる
+    #クエリの?の部分にそれぞれ"未設定" , current_user.idが対応している
+    if !current_user.nil?
+      @users = User.where("episode != ? AND id != ? " , "未設定" , current_user.id).page(params[:page]).per(10)
+    else
+      #ログインしていない状態では登録しているユーザの中でエピソードを投稿している人のみ表示する
+      @users = User.where("episode != ?" , "未設定").page(params[:page]).per(10)
+    end
+  end
+
+  #ここではDOM操作をTurbo Streamを用いて行うための処理を書く
+  def turbo_stream_view_episodes
+
   end
 
   private 
@@ -237,7 +352,7 @@ class UsersController < ApplicationController
     end
 
     def profile_params
-      params.require(:profile_info).permit(:reading_history, :favorite_genre)
+      params.require(:profile_info).permit(:reading_history, :favorite_genre, :occupations , :gender, :birthday, :episode)
     end
 
     #beforeフィルタ

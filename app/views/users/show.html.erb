@@ -1,85 +1,86 @@
 <% provide(:title , @user.name) %>
-    <%= render 'follow_form' if logged_in? %>
-    <section class="profile">
-        <%= image_tag gravatar_for(@user) , class: "gravatar-img" %>
-        <div class = "user-info">
-            <h3 class="account-name">
-                <%= @user.name %>
-            </h3>
-            <ul class="account-info">
-                <li>
-                    <p>フォロー</p>
-                    <p><%= link_to @user.following.count , "/users/#{@user.id}/following" , id: "following" %></p>
-                </li>
-                <li>
-                    <p>フォロワー</p>
-                    <p><%= link_to @user.followers.count , "/users/#{@user.id}/followers" , id: "followers"  %></p>
-                </li>
-                <li>
-                    <p>投稿</p>
-                    <p><%= @user.goods.count %></p>
-                </li>
-                <li><%= image_tag("setting.svg" , class: "setting-icon" , style: "margin-left: 1rem") if current_user == @user %></li>
-            </ul>
-            <%= link_to "プロフィール" , "/users/profile/#{@user.id}" , class: "account-profile" %>
-        </div>
-        
-        
-        <ul class = "setting-container" > 
-            <li><%= link_to "アカウント設定" , edit_user_path(@user) %></li>
-            <li><%= link_to "ユーザ一覧" , users_path %></li>
-            <li><%= link_to "タイムライン" , "/posts/feed/1" %></li>
-            <li><%= link_to "ログアウト" , logout_path, data: { "turbo-method": :delete } %></li>
-            <li><%= image_tag("close-btn.svg" , class: "close-icon" ) %></li>
+<%= render 'follow_form' if logged_in? %>
+<section class="profile">
+    <%= image_tag gravatar_for(@user) , class: "gravatar-img" %>
+    <div class = "user-info">
+        <h3 class="account-name">
+            <%= @user.name %>
+        </h3>
+        <ul class="account-info">
+            <li>
+                <p>フォロー</p>
+                <p><%= link_to @user.following.count , "/users/#{@user.id}/following" , id: "following" %></p>
+            </li>
+            <li>
+                <p>フォロワー</p>
+                <p><%= link_to @user.followers.count , "/users/#{@user.id}/followers" , id: "followers"  %></p>
+            </li>
+            <li>
+                <p>投稿</p>
+                <p><%= @user.goods.count %></p>
+            </li>
+            <li><%= image_tag("setting.svg" , class: "setting-icon" , style: "margin-left: 1rem") if current_user == @user %></li>
         </ul>
-
-        <% if current_user.admin?  && !current_user?(@user) %>
-          <%= link_to "このユーザを削除する" , user_path(@user) , class: "delete-user" , data: { "turbo-method": :delete , turbo_confirm: "本当に削除しますか?" } %>
-        <% end %>
-        
-        
-    </section>
-    <div class = "border"></div>
-    <!-- ここにユーザの投稿一覧を表示する -->
-    <h1 class = "new-title">投稿一覧</h1>
-    <div class="btn-group dropup">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <% if @type == "1" %>
-              作成日順(降順)
-            <% elsif @type == "2" %>
-              作成日順(昇順)
-            <% else %>
-              いいね順
-            <% end %>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href= <%= "/users/#{@user.id}/1" %>>作成日順(昇順)</a></li>
-          <li><a class="dropdown-item" href= <%= "/users/#{@user.id}/2" %>>作成日順(降順)</a></li>
-          <li><a class="dropdown-item" href= <%= "/users/#{@user.id}/3" %>>いいね順</a></li>
-        </ul>
+        <%= link_to "プロフィール" , "/users/profile/#{@user.id}" , class: "account-profile" %>
     </div>
-    <section class = "posts-container">
-        <% if @posts %>
-          <% @posts.each do |item| %>
-              <section class="post-container">
-                <%= image_tag(eval(item.book_data)["imageLink"]) %>
-                <div class="content">
-                  <!-- 感想をdata属性としてタグの中に含ませておく -->
-                  <p class = "post-name" data-post-content = <%= item.content %> data-post-id = <%= item.id %> data-user-id = <%= item.user_id %>><%= item.post_name %></p>
-                  <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
-                  <p>作成日時:<%= (item.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
-                </div>
-                <p class = "good-content"><%= link_to image_tag("good.svg" , class: "good-img") , "/posts/good_counter/#{item.user_id}/#{item.id}" %><%= item.good_count %></p>
-                <% if current_user?(@user) %>
-                  <%= link_to image_tag("edit.svg") , "/posts/edit/#{item.id}" , class: "edit-btn" %>
-                <% end %>
-                <%= link_to "詳細を見る" , "/posts/#{item.user_id}/#{item.id}" , class: "view-post-btn"%>
-              </section>
-          <% end %>
+        
+        
+    <ul class = "setting-container" > 
+        <li><%= link_to "アカウント設定" , edit_user_path(@user) %></li>
+        <li><%= link_to "ユーザ一覧" , users_path %></li>
+        <li><%= link_to "タイムライン" , "/posts/feed/1" %></li>
+        <li><%= link_to "ログアウト" , logout_path, data: { "turbo-method": :delete } %></li>
+        <li><%= image_tag("close-btn.svg" , class: "close-icon" ) %></li>
+    </ul>
+
+
+    <% if !current_user.nil? && current_user.admin?  && !current_user?(@user) %>
+        <%= link_to "このユーザを削除する" , user_path(@user) , class: "delete-user" , data: { "turbo-method": :delete , turbo_confirm: "本当に削除しますか?" } %>
+    <% end %>
+        
+        
+</section>
+<div class = "border"></div>
+<!-- ここにユーザの投稿一覧を表示する -->
+<h1 class = "new-title">投稿一覧</h1>
+<div class="btn-group dropup">
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id = "view-style-btn">
+        <% if @type == "1" %>
+            作成日順(降順)
+        <% elsif @type == "2" %>
+            作成日順(昇順)
+        <% else %>
+            いいね順
         <% end %>
-      </section>
-      <%= paginate @posts, theme: "bootstrap-5" %>
-      <div class="modal"></div>
+    </button>
+    <!-- この部分はTurbo Streamを用いてページ全体のリロードを避ける -->
+    <ul class="dropdown-menu" id = "view-style">
+        <li><%= link_to "作成日順(昇順)" , "/users/#{@user.id}/turbo_stream_show/2" , data: {turbo_stream: true } , class: "dropdown-item" %></li>
+        <li><%= link_to "作成日順(降順)" , "/users/#{@user.id}/turbo_stream_show/1" , data: {turbo_stream: true } , class: "dropdown-item" %></li>
+        <li><%= link_to "いいね順" , "/users/#{@user.id}/turbo_stream_show/3" , data: {turbo_stream: true } , class: "dropdown-item" %></li>
+    </ul>
+</div>
+<section class = "posts-container" id = "posts-container">
+    <% if @posts %>
+        <% @posts.each do |item| %>
+            <section class="post-container">
+            <%= image_tag(eval(item.book_data)["imageLink"]) %>
+            <div class="content">
+                <!-- 感想をdata属性としてタグの中に含ませておく -->
+                <p class = "post-name" data-post-content = <%= item.content %> data-post-id = <%= item.id %> data-user-id = <%= item.user_id %>><%= item.post_name %></p>
+                <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
+                <p>作成日時:<%= (item.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
+            </div>
+            <p class = "good-content"><%= link_to image_tag("good.svg" , class: "good-img") , "/posts/good_counter/#{item.user_id}/#{item.id}" %><%= item.who_goods.count %></p>
+            <% if current_user?(@user) %>
+                <%= link_to image_tag("edit.svg") , "/posts/edit/#{item.id}" , class: "edit-btn" %>
+            <% end %>
+            <%= link_to "詳細を見る" , "/posts/#{item.user_id}/#{item.id}" , class: "view-post-btn"%>
+            </section>
+        <% end %>
+    <% end %>
+</section>
+<%= paginate @posts, theme: "bootstrap-5" %>
 
       
 

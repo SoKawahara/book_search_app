@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       if user.activated?
         #reset_sessionの前に記述しないと遷移先URLを取得した後でもすべてリセットされてしまう
-        forwarding_url = session[:forwarding_url]
+        forwarding_url = session[:forwarding_url]#これはフレンドリーフォワーディングを実装する為の記述
         reset_session #これはセッション固定攻撃への対策
         params[:session][:remember_me] == '1' ? remember(user) : forget(user)
         log_in user   #ユーザのセッションを作成する

@@ -2,12 +2,31 @@
 <h1 class = "new-title">プロフィール変更</h1>
 <section class="setting-profile">
     <%= form_with url: "/users/profile_edit/:#{@user.id}" , method: :post, data: { turbo: false }, scope: :profile_info do |f| %>
+      <%= f.label :birthday , "生年月日を選択してください:" , class: "content" %>
+      <%= f.date_field :birthday , class: "birthday" , value: @birthday %>
+      <div class = "gender">
+        <%= f.label :gender, "性別:" , class: "content" %>
+        <%= f.select :gender, 
+                      [["男性", "男性"], 
+                       ["女性", "女性"], 
+                       ["ノンバイナリー", "ノンバイナリー"], 
+                       ["その他", "その他"], 
+                       ["回答しない", "回答しない"]], 
+                      { prompt: "性別を入力してください", selected: @gender }, 
+                      { id: "gender" } %>
+      </div>
+      <%= f.label :occupations , "職業" , class: "content" %>
+      <%= f.text_field :occupations , class: "occupations" , placeholder: "複数入力する際には半角スペースで区切ってください", value: @occupations %>
       <%= f.label :reading_history , "本を読み始めた年月を選択してください:" , class: "content" %>
       <%= f.month_field :reading_history , class: "year-month", value: @year_month %>
       <%= f.label :favorite_genre , "好きな本のジャンルを入力してください:" , class: "content"  %>
       <%= f.text_field :favorite_genre , placeholder: "複数入力する際は半角スペースで区切ってください" , class: "favorite-genre" , value: @favorite_genre%>
-      <p class = "profile-save-btn">読書開始年月と好きなジャンルを適用する</p>
-      <%= f.label :recommendation_3 , "これまで読んだおすすめの本TOP3" , class: "content" %>
+      <div class="save-btn-container">
+        <p class = "profile-save-btn">読書開始年月と好きなジャンルを適用する</p>
+      </div>
+      <%= f.label :episode , "本の読み始めたきっかけ(1000文字以内でより具体的に記述してください):" , class: "content"  %><span id = "word-counter"></span>
+      <%= f.text_area :episode , class: "episode" , value: @episode , placeholder: "*エピソードを入力する際にはすべての要素を入力した後にエピソードの入力を行ってください"%>
+      <%= f.label :recommendation_3 , "これまで読んだおすすめの本TOP3:" , class: "content" %>
       <div id="recommendation_3">
         <div class = "top1">
             <h3>No.1</h3>

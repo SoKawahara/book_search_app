@@ -1,0 +1,211 @@
+/*---------------header部分のスタイル-----------*/
+.app-header {
+    width: 100%;
+    height: 950px;
+    background-image: url("header.jpg");
+    background-size: cover;
+    position: relative;
+}
+
+.header-nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    list-style: none;
+    margin-top: 1rem;
+    margin-right: 1rem;
+
+    li {
+        display: inline;
+
+        &:first-child {
+            margin-right: 1rem
+        }
+    }
+
+    a {
+        color: white;
+        font-size: 2.8rem;
+        font-weight: bold;
+        font-family: "Oswald", sans-serif;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.header-h1 {
+    position: absolute;
+    top: 18rem;
+    right: 3.5rem;
+    color: white;
+    font-size: 10rem;
+    font-family: "Oswald", sans-serif;
+    text-shadow: -8px 12px 8px rgb(62, 59, 59);
+}
+
+.sub-title {
+    position: absolute;
+    top: 60rem;
+    right: 15rem;
+    width: 20rem;
+}
+
+#header-h2 {
+    color: white;
+    font-size: 2.5rem;
+    font-family: "Lora", serif;
+    opacity: 0;
+
+    &:nth-child(2) {
+        margin-top: 6rem;
+        margin-left: 7rem;
+    }
+}
+
+
+/*-------------------------------main部分のスタイル------------------------------------*/
+
+/*search booksについてのスタイル*/
+.about-container {
+    width: 100%;
+    height: 300px;
+    margin-top: 15rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.about-text {
+    width: 500px;
+    padding: 1rem;
+    position: relative;
+    opacity: 0;
+    translate: 0 -5rem;
+    filter: blur(20px);
+}
+
+.about-title {
+    text-align: center;
+    font-family: "Oswald", sans-serif;
+    font-size: 3rem;
+    margin-top: 2rem;
+}
+
+.about-content {
+    text-align: center;
+    font-family: "Bodoni Moda SC", serif;
+    font-size: 2.5rem;
+    margin-top: 3rem;
+    line-height: 1.7;
+}
+
+.about-picture {
+    width: 500px;
+    translate: 0 5rem;
+    opacity: 0;
+    filter: blur(25px);
+
+}
+
+.about-img {
+    width: 500px;
+    box-shadow: 10px 6px 6px rgb(181, 179, 179);
+}
+
+/*featureについてのスタイル*/
+.feature-container {
+    width: 100%;
+    height: 700px;
+    margin-top: 20rem;
+    padding-top: 2rem;
+    background-image: url("feature.jpg");
+    background-size: cover;
+    position: relative;
+}
+
+.feature-h1 {
+    text-align: center;
+    font-family: "Baskervville SC", serif;
+    font-size: 6rem;
+}
+
+.feature-img {
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    top: 20rem;
+    left: 50rem;
+}
+
+.response,
+.information,
+.custom,
+.intuitiveness {
+    width: 270px;
+    height: 270px;
+    font-family: "Bodoni Moda SC", serif;
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    position: absolute;
+}
+
+.response {
+    background-color: #f16b6b;
+    top: 7rem;
+    right: 10rem
+}
+
+.information {
+    background-color: rgb(73, 123, 224);
+    top: 30rem;
+    right: 13rem
+}
+
+.custom {
+    background-color: rgb(222, 222, 79);
+    top: 12rem;
+    left: 9rem;
+}
+
+.intuitiveness {
+    background-color: rgb(51, 160, 51);
+    top: 36rem;
+    left: 20rem;
+}
+
+/*ここから下はアプリ開始の画面のスタイル*/
+.appStart-container {
+    margin-top: 10rem;
+    position: relative;
+}
+
+.appStart-p,
+.arrow-p {
+    text-align: center;
+    font-family: "Bodoni Moda SC", serif;
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+.appStart-img {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 11rem;
+    left: 55.5rem;
+    translate: 100vw 0;
+    opacity: 0;
+    transition: 1;
+
+    &:hover {
+        scale: 1.2;
+        background-color: rgb(97, 97, 97);
+        border-radius: 50%;
+    }
+}

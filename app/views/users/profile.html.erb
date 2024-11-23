@@ -1,5 +1,4 @@
 <% provide(:title, "プロフィール") %>
-<h1 class="new-title">プロフィール</h1>
 <% if !@user.profile_completed && current_user?(@user)%>
   <p>プロフィールが未設定です。以下のボタンからプロフィールの設定を行ってください</p>
   <p>プロフィールを表示するにはすべての設定を完了する必要があります</p>

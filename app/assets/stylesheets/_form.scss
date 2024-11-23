@@ -1,0 +1,503 @@
+/* 新規会員登録画面 */
+.new-title {
+    font-family: "Bodoni Moda SC", serif;
+    font-weight: 600;
+    letter-spacing: 8px;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.form {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 3rem;
+}
+
+.new-form {
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+
+    label {
+        font-family: "Bodoni Moda SC", serif;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    #user_name,
+    #user_email,
+    #user_password,
+    #user_password_confirmation {
+        &:focus {
+            outline: none;
+        }
+
+        width: 450px;
+    }
+}
+
+.new-btn {
+    width: 150px;
+    background-color: rgb(87, 202, 252);
+    font-family: "Bodoni Moda SC", serif;
+    color: white;
+    border-radius: 20px;
+    margin-top: 2rem;
+    margin-left: 15rem;
+}
+
+.info {
+    border-left: 2px dashed black;
+    padding: 3rem;
+
+    p {
+        font-family: "Bodoni Moda SC", serif;
+        margin-bottom: 2rem;
+        font-size: 18px;
+        font-weight: 600;
+    }
+}
+
+
+@media(max-width: 800px) {
+    .form {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .new-form {
+        border-bottom: 2px dashed black;
+        padding-bottom: 2rem;
+
+    }
+
+    .info {
+        margin-top: 1.5rem;
+        border-left: none;
+
+        p {
+            font-size: 15px;
+            font-weight: 400;
+        }
+    }
+
+
+
+}
+
+/* forms */
+#error_explanation {
+    color: red;
+
+    ul {
+        color: red;
+        margin: 0 0 30px 0;
+    }
+}
+
+/* ログインフォーム用のスタイル */
+
+.login {
+    margin-top: 5rem;
+    margin-left: 20rem;
+    display: flex;
+    column-gap: 10rem;
+}
+
+.login-form {
+    width: 450px;
+
+    label {
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 20px;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        display: block;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        &.checkbox_label {
+            display: inline !important;
+            font-size: 15px;
+        }
+    }
+
+    #session_email,
+    #session_password {
+        width: 450px;
+        height: 40px;
+        margin-bottom: 1.5rem;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.login-btn {
+    width: 150px;
+    background-color: rgb(87, 202, 252);
+    font-family: "Bodoni Moda SC", serif;
+    color: white;
+    border-radius: 20px;
+    margin-top: 2rem;
+    margin-left: 15rem;
+}
+
+
+@media (min-width: 600px) and (max-width: 950px) {
+    .login {
+        flex-direction: column;
+        align-items: center;
+        margin-left: 5rem;
+    }
+
+    .login-form {
+        border-bottom: 2px dashed black;
+        padding-bottom: 2rem;
+
+    }
+
+
+    #session_email,
+    #session_password {
+        width: 380px;
+        height: 36px;
+        margin-bottom: 1.5rem;
+    }
+
+    .info {
+        margin-top: 1.5rem;
+        border-left: none;
+
+        p {
+            font-size: 17px;
+            font-weight: 400;
+        }
+    }
+
+}
+
+@media(max-width: 600px) {
+    .login {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2rem;
+        margin-left: 2rem;
+
+    }
+
+    .login-form {
+        margin: auto;
+        width: 350px;
+        border-bottom: 2px dashed black;
+        padding-bottom: 2rem;
+
+        #session_email,
+        #session_password {
+            width: 350px;
+            height: 36px;
+        }
+    }
+
+
+
+    .info {
+        margin-top: 1.5rem;
+        border-left: none;
+
+        p {
+            font-size: 15px;
+            font-weight: 400;
+        }
+    }
+
+}
+
+/* パスワード変更用のメールアドレスを送信するためのページ */
+.password_reset {
+    width: 500px;
+    margin: 5rem auto 0 auto;
+
+    label {
+        font-family: "Bodoni Moda SC", serif;
+        font-weight: 600;
+        font-size: 25px;
+        display: block;
+        margin-bottom: 2rem;
+    }
+
+    #password_reset_email {
+        width: 500px;
+        height: 35px;
+        border: 2px solid black;
+        display: block;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .reset_btn {
+        width: 150px;
+        background-color: rgb(87, 202, 252);
+        font-family: "Bodoni Moda SC", serif;
+        color: white;
+        display: block;
+        margin: 3rem auto 0 auto;
+        border-radius: 20px;
+    }
+
+}
+
+.about {
+    margin-top: 4rem;
+    font-family: "Bodoni Moda SC", serif;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 2rem;
+    border-top: 2px dashed black;
+}
+
+/* パスワード　*/
+#user_password,
+#user_password_confirmation {
+    width: 100%;
+}
+
+/* ここから下は新規投稿作成画面 */
+.post-item {
+    width: 80%;
+    height: 460px;
+    padding: 1rem;
+    margin: 5rem auto 0 auto;
+    background-color: white;
+    border: 3px dashed rgba(78, 77, 77, 0.916);
+    display: flex;
+    justify-content: space-around;
+    overflow-y: auto;
+    position: relative;
+
+    .title {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .author {
+        font-size: 15px;
+        text-align: center;
+    }
+
+    .book-info {
+        width: 30%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .publish-day-img {
+            width: 260px;
+            height: 360px;
+            border: 3px solid black;
+            margin-left: .6rem;
+            margin-top: 1rem;
+            object-fit: cover;
+        }
+    }
+
+    .post-form {
+        border: 4px groove rgb(79, 73, 73);
+        border-radius: 20px;
+        padding: 2rem;
+        width: 60%;
+        position: relative;
+        overflow-y: scroll;
+
+        input {
+            font-family: "Bodoni Moda SC", serif;
+            text-align: center;
+        }
+
+        .content {
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .post-name {
+            width: 60%;
+            height: 30px;
+            display: block;
+            margin: 2rem auto 2rem auto;
+        }
+
+        .text {
+            width: 70%;
+            height: 100px;
+            display: block;
+            margin: 2rem auto 2rem auto;
+        }
+
+        .post-btn {
+            width: 150px;
+            background-color: rgb(87, 202, 252);
+            border-radius: 20px;
+            font-family: "Bodoni Moda SC", serif;
+            color: white;
+            display: block;
+            margin: 3rem auto;
+        }
+
+        .back-btn {
+            display: block;
+            margin: 3rem auto 2rem auto;
+            width: 120px;
+            background-color: grey;
+            border-radius: 20px;
+            font-family: "Bodoni Moda SC", serif;
+            font-size: 14px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+
+            &:hover {
+                color: white;
+                text-decoration: none;
+            }
+        }
+
+        .post-radio {
+            width: 70%;
+            margin: 2rem auto;
+            display: flex;
+            justify-content: space-around;
+
+            input {
+                transform: scale(1.5);
+                margin-right: 1rem;
+            }
+
+            label {
+                font-family: "Bodoni Moda SC", serif;
+                font-size: 18px;
+                font-weight: 300px;
+                text-align: center;
+                margin-right: 1rem;
+                margin-top: 1rem;
+            }
+        }
+
+        .edit-post-btn {
+            width: 140px;
+            background-color: rgb(87, 202, 252);
+            border-radius: 20px;
+            font-family: "Bodoni Moda SC", serif;
+            color: white;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .delete-post-btn {
+            width: 180px;
+            background-color: rgb(252, 87, 87);
+            border-radius: 20px;
+            font-family: "Bodoni Moda SC", serif;
+            color: white;
+            display: block;
+            margin: 2rem auto;
+            text-align: center;
+            border: 2px solid black;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: none;
+                color: white;
+            }
+
+        }
+    }
+}
+
+/* ここから下では画面幅が900px以下の時の投稿編集画面のスタイルを定義する */
+@media(max-width: 900px) {
+    .post-item {
+        width: 95%;
+        height: 700px;
+        padding: .5rem;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        overflow-y: scroll;
+        scrollbar-width: none;
+
+        /* Firefox */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .title {
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .author {
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .book-info {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .publish-day-img {
+                width: 200px;
+                height: 280px;
+                border: 3px solid black;
+                margin-left: .6rem;
+                margin-top: 1rem;
+                object-fit: cover;
+            }
+        }
+
+        .post-form {
+            padding: .8rem;
+            width: 95%;
+            position: relative;
+            overflow-y: scroll;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .text {
+                width: 85%;
+            }
+
+            .post-btn {
+                width: 120px;
+            }
+
+            .back-btn {
+                width: 100px;
+            }
+
+            .edit-post-btn {
+                width: 120px;
+            }
+        
+            .delete-post-btn {
+                width: 140px;
+        
+            }
+        }
+    }
+
+}

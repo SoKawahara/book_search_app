@@ -1,19 +1,35 @@
 <section class="view-profile-container">
+    <% if current_user?(@user) %>
+      <%= link_to image_tag("edit.svg") , "/users/profile_edit/#{@user.id}" , class: "edit-profile-btn" %>
+    <% end %>
     <%= image_tag gravatar_for(@user), class: "profile-img" %>
     <div class="profile-container">
-        <% if current_user?(@user) %>
-          <%= link_to image_tag("edit.svg") , "/users/profile_edit/#{@user.id}" , class: "edit-profile-btn" %>
-        <% end %>
         <h3><%= @user.name %></h3>
-        <% if @year == 0 %>
-          <p>読書歴: <%= "#{@month}か月" %> | 好きなジャンル: <%= @favorite_genre %></p>
-        <% else %>
-          <p>読書歴: <%= "#{@year}年#{@month}か月" %> | 好きなジャンル: <%= @favorite_genre %></p>
-        <% end %>
-        <p>個人的おすすめTop3の本:</p>
+        <div class="user-info">
+            <h4>◇ユーザ情報◇</h4>
+            <p>年齢: <%= @age %>歳 | 性別: <%= @gender %> | 職業: <%= @occupations %></p>
+            <% if @year == 0 %>
+              <p>読書歴: <%= "#{@month}か月" %> | 好きなジャンル: <%= @favorite_genre %></p>
+            <% else %>
+              <p>読書歴: <%= "#{@year}年#{@month}か月" %> | 好きなジャンル: <%= @favorite_genre %></p>
+            <% end %>
+        </div>
+        <div class="episode">
+          <h4>□本を読み始めたきっかけ□</h4>
+          <div class="episode-container">
+            <p><%= @user.episode %></p>
+          </div>
+          
+        </div>
+        
+        
+        <p class = "favorite-p">📖個人的おすすめTop3の本:</p>
         <div class="top3">
             <section class="profile-view-container">
                 <% if @top3["top_1"] != "未設定" %>
+                  <div class="top3_number">
+                    <p>1</p>
+                  </div>
                   <% post = @user.goods.find(@top3["top_1"]) %>
                   <%= image_tag(eval(post.book_data)["imageLink"]) %>
                   <div class="content">
@@ -29,6 +45,9 @@
             </section>
             <section class="profile-view-container">
                 <% if @top3["top_2"] != "未設定" %>
+                  <div class="top3_number">
+                    <p>2</p>
+                  </div>
                   <% post = @user.goods.find(@top3["top_2"]) %>
                   <%= image_tag(eval(post.book_data)["imageLink"]) %>
                   <div class="content">
@@ -44,6 +63,9 @@
             </section>
             <section class="profile-view-container">
                 <% if @top3["top_3"] != "未設定"%>
+                  <div class="top3_number">
+                    <p>3</p>
+                  </div>
                   <% post = @user.goods.find(@top3["top_3"]) %>
                   <%= image_tag(eval(post.book_data)["imageLink"]) %>
                   <div class="content">
@@ -60,3 +82,4 @@
         </div>
     </div>
 </section>
+<%= link_to "ユーザ画面に戻る" , "/users/#{@user.id}/1" , class: "back-btn" %>

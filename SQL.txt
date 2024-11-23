@@ -1,0 +1,280 @@
+問題5-1
+(1)
+カラムの値を直接採用する方法もあるがカラムの値が更新された際には正しく動作しなくなるのでこれはよくない
+(A)UPDATE 試験結果
+      SET 午後1 = 平均点 * 4 - 午前 - 午後2 - 論述
+    WHERE 受験者ID = 'SW1046'
+(B) UPDATE 試験結果 
+      SET 論述 = 平均点 * 4 - 午前 - 午後1 - 午後2
+   WHERE 受験者ID = 'SW1350'
+(C) UPDATE 試験結果
+      SET 午前 = 平均点 * 午後1 - 午後2 - 論述
+    WHERE 受験者ID = 'SW1877'
+
+2. SELECT 受験者ID AS 合格者ID
+     FROM 試験結果
+    WHERE 午前 >= 60 AND (午前1 + 午前2) >= 120 AND 論述 >= (午前 + 午後1 + 午後2) * 0.3 
+
+問題5-2
+1. UPDATE 回答者
+      SET 国名 = CASE SUBSTRING(メールアドレス , -1 , 2)
+                 WHEN 'jp' THEN '日本'
+                 WHEN 'uk' THEN 'イギリス'
+                 WHEN 'cn' THEN '中国'
+                 WHEN 'fr' THEN 'フランス'
+                 ELSE 'ベトナム'
+   WHERE 国名 IS NULL
+
+2. SELECT TRIM(メールアドレス), 
+          CONCAT(CASE 年齢 
+                 WHEN BETWEEN 20 AND 29 THEN 20
+                 WHEN BETWEEN 30 AND 39 THEN 30
+                 WHEN BETWEEN 40 AND 49 THEN 40
+                 ELSE 50 END
+                 || '代' || ':' ||
+                 CASE 住居
+                 WHEN 'D' THEN '戸建て'
+                 ELSE '集合住宅' END) AS 属性
+     FROM 回答者
+
+-----------------------------------問題5-2の回答--------------------------------------------
+UPDATE 回答者 
+   SET 国名 = CASE SUBSTRING(TRIM(メールアドレス),
+                             LENGTH(TRIM(メールアドレス))-1 , 2)
+              WHEN 'jp' THEN '日本'
+              WHEN 'uk' THEN 'イギリス'
+              WHEN 'cn' THEN '中国'
+              WHEN 'fr' THEN 'フランス'
+              WHEN 'vn' THEN 'ベトナム' END
+*データ型がCHAR型だと前後に余計な空白が入っている可能性があるのでTRIM関数を用いて空白を削除した状態でないと正しく文字列の長さを取得できない
+
+SELECT TRIM(メールアドレス) AS メールアドレス,
+  CASE WHEN 年齢 >= 20 AND 年齢 <= 29 THEN '20代'
+       WHEN 年齢 >= 30 AND 年齢 <= 39 THEN '30代'
+       WHEN 年齢 >= 40 AND 年齢 <= 49 THEN '40代'
+       ELSE '50代' END 
+       || ':' || 
+  CASE WHEN 'D' THEN '戸建て'
+       WHEN 'C' THEN '集合住宅' AS 属性
+       FROM 回答者
+*CASE文の中のWHNE句にはBETWEENを使用するよりもANDを用いて範囲を用いて指定した方がいい
+*文字列の結合を行うには+ , || , CONCATの3種類が存在する
+
+問題5-3
+1. UPDATE 受注
+      SET = LENGTH(REPLACE(文字 , ' ' , ''))
+    WHERE 文字数 IS NULL
+
+2. SELECT 受注日, 受注ID, 文字数, 
+   CASE 書体コード WHEN (1 OR 書体コード IS NULL) THEN 'ブロック体'
+                  WHEN 2 THEN '筆記体'
+                  ELSE '草書体' END AS 書体名,
+   CASE 書体コード WHEN (1 OR 書体コード IS NULL) THEN 100
+                  WHEN 2 THEN 150
+                  ELSE 200 END AS 単価, 
+   CASE WHEN 文字数 > 10 THEN 500
+        ELSE 0 END AS 特別加工料
+    FROM 受注
+   ORDER BY 受注日 , 受注ID
+
+3. UPDATE 受注 
+      SET 文字 = REPLACE(文字, ' ' , '★')
+    WHERE 受注ID = '113'
+
+---------------------------------問題5-3の正答-------------------------------------------
+SELECT 受注日, 受注ID, 文字数,
+       CASE COALESCE(書体コード, '1')
+         WHEN '1' THEN 'ブロック体'
+         WHEN '2' THEN '筆記体'
+         WHEN '3' THEN '草書体' END AS 書体名,
+       CASE COALESCE(書体コード, '1')
+         WHEN '1' THEN 100
+         WHEN '2' THEN 150
+         WHEN '3' THEN 200 END AS 単価
+       CASE WHEN 文字数 > 10 THEN 500
+          ELSE 0 END AS 特別加工料
+  FROM 受注 ORDER BY 受注日, 受注ID
+*カラムの中にNULLを含むデータが存在する時にはCOALESCEを使用することで効率的にかけるかもしれない
+
+問題6-1
+1. SELECT SUM(降水量) AS 年間降水量の合計 , AVG(最高気温) AS 年間の最高気温の平均 , AVG(最低気温 AS) 年間の最低気温の平均
+     FROM 都市別気象観測
+2. SELECT 月, SUM(降水量) , AVG(最高気温) , AVG(最低気温)
+     FROM 都市別気象観測
+    WHERE 都市名 = '東京'
+    GROUP BY 月 
+3. SELECT 都市名 , AVG(降水量) , MIN(最高気温) , MAX(最低気温)
+     FROM 都市別気象観測
+   GROUP BY 都市名
+4. SELECT 月 , AVG(降水量) , AVG(最高気温) , AVG(最低気温)
+     FROM 都市別気象観測
+   GROUP BY 月
+5. SELECT 月, 都市名, 気温
+     FROM 都市別気象観測
+   GROUP BY 月, 都市名, 気温
+   HAVING MAX(最高気温) >= 38
+6. SELECT 月, 都市名, 気温
+     FROM 都市別気象観測
+   GROUP BY 月, 都市名, 気温
+   HAVING MIN(最低気温) <= -10 
+
+----------------------------------------問題6-1の正答------------------------------------------------
+2. SELECT SUM(降水量) , AVG(最高気温) , AVG(最低気温)
+     FROM 都市別気象観測
+    WHERE 都市名 = '東京'
+東京で絞込を行ったら東京の各月のデータのみが残るのでそれに対して集計関数を使用すれば自動的に月ごとの平均を取得することができる
+
+5. SELECT 都市名, MAX(最高気温)
+     FROM 都市別気象観測
+    GROUP BY 都市名←これを行うことで各都市の最高気温の最大値を取得できる
+    HAVING MAX(最高気温) >= 38
+6. SELECT 都市名, MIN(最低気温)
+     FROM 都市別気象観測
+  GROUP BY 都市名
+  HAVING MIN(最低気温) <= -10
+
+問題6-2
+1. SELECT COUNT(*)
+     FROM 入退室管理
+    WHERE 退室 IS NULL
+2. SELECT COUNT(*)
+     FROM 入退室管理
+    GROUP BY 社員名
+    ORDER BY 
+3. SELECT CASE 事由区別 WHERE '1' THEN 'メンテナンス'
+                       WHERE '2' THEN 'リリース作業'
+                       WHERE '3' THEN '障害対応'
+                       ELSE 'その他' END , COUNT(*)
+     FROM 入退室管理
+    GROUP BY 事由区別
+4. SELECT 社員名, COUNT(*)
+     FROM 入退室管理
+  GROUP BY 社員名
+  HAVING COUNT(*) > 10
+5. SELECT 日付 , COUNT(*)
+     FROM 入退室管理
+    WHERE 事由区別 = '3'
+  GROUP BY 日付
+
+----------------------------------------問題6-2の正答--------------------------------------------
+2. SELECT 社員名, COUNT(*) AS 入室回数
+     FROM 入退室管理
+    GROUP BY 社員名
+    ORDER BY 2 DESC←ここで指定されている2という数字はSELECTで選択されているCOUNT(*) AS 入室回数を表している
+
+SELECT 社員名, COUNT(*) AS 入室回数
+  FROM 入退室管理
+  GROUP BY 社員名
+  ORDER BY 入室回数 DESCでも同じ意味を表すSQLになっている
+
+問題6-3
+3. SELECT COUNT(*) FROM 販売履歴 GROUP BY 商品名
+   →SELECT COUNT(商品名) FROM 販売履歴 GROUP BY 商品名
+    SELECT 商品名, COUNT(*) FROM 販売履歴 GROUP BY 商品名
+5. SELECT 商品区分, 商品名, COUNT(*) FROM 販売履歴 GROUP BY 商品名
+6. SELECT 商品区分, 商品名, COUNT(*) FROM 販売履歴
+  GROUP BY 商品区分, 商品名
+  HAVING AVG(価格) >= 1000
+
+-----------------------------------------問題6-3-----------------------------------------
+2. SELECT 商品名, COUNT(*) FROM 販売履歴
+→GROUP BYによる商品名の指定が無いので作成される表がでこぼこになる。
+6. SELECT 商品区分, 商品名, COUNT(*) FROM 販売履歴
+  GROUP BY 商品区分, 商品名
+  HAVING AVG(価格) >= 1000←ここで実行されるHAVINGの内容は集約関数を実行した後に絞り込みとして使用される
+
+
+問題5-1
+1. (A) UPDATE 試験結果
+          SET 午後1 = 平均点 * 4 - 午前 - 午後2 - 論述
+        WHERE 受験者ID = 'SW1046'
+   (B) UPDATE 試験結果
+          SET 論述 = 平均点 * 4 - 午前 - 午後1 - 午後2
+        WHERE 受験者ID = 'SW1350'
+   (C) UPDATE 試験結果
+          SET 論述 = 平均点 * 4 - 午後1 - 午後2 - 論述
+2. SELECT 受験者ID AS 合格者ID
+     FROM 試験結果
+    WHERE 午前 >= 60 AND (午後1 + 午後2) >= 120 AND 論述 >= (午前 + 午後1 + 午後2) * 0.3
+
+問題5-2
+1. UPDATE 回答者
+      SET 国名 = CASE SUBSTRING(TRIM(メールアドレス , LENGTH(TRIM(メールアドレス)) - 1) , 2)
+                 WHERE 'jp' THEN '日本'
+                 WHERE 'uk' THEN 'イギリス'
+                 WHERE 'cn' THEN '中国'
+                 WHERE 'fr' THEN 'フランス'
+                 ELSE 'ベトナム' END 
+2. SELECT TRIM(メールアドレス) AS メールアドレス,
+          CASE WHEN 20 <= 年齢 AND 年齢 < 30 THEN '20代'
+               WHEN 30 <= 年齢 AND 年齢 < 40 THEN '30代'
+               WHEN 40 <= 年齢 AND 年齢 < 50 THEN '40代'
+               WHEN 50 <= 年齢 AND 年齢 < 60 THEN '50代' END
+                 || ':' ||
+          CASE WHEN 住居 WHEN 'D' THEN '戸建て'
+               ELSE '集合住宅' END AS 属性
+    FROM 回答者
+
+問題5-3
+1. UPDATE 受注
+     SET 文字数 = LENGTH(REPLACE(文字, " ", ""))
+2. SELECT 受注日, 受注ID, 文字数,
+          CASE COALESCE(書体コード , '1') WHEN '1' THEN 'ブロック体'
+                                         WHEN '2' THEN '筆記体'
+                                         WHEN '3' THEN '草書体' END AS 書体名,
+          CASE COALESCE(書体コード , '2') WHEN '1' THEN 100
+                                         WHEN '2' THEN 150
+                                         WHEN '3' THEN 200 END AS 単価,
+          CASE WHEN LENGTH(文字数) > 10 THEN 500
+               ELSE 0 END AS 特別加工料
+     FROM 受注
+3. UPDATE 受注  
+      SET 文字 = REPLACE(文字, " " , "★") 
+    WHERE 受注ID = '113'
+
+
+問題6-1
+1. SELECT SUM(降水量) AS 年間降水量 , AVG(最高気温) AS 最高気温の平均 , AV(最低気温) AS 最低気温の平均
+     FROM 都市別気象観測
+2. SELECT SUM(降水量) AS 東京の年間降水量 , AVG(最高気温) AS 最高気温の平均 , AV(最低気温) AS 最低気温の平均
+     FROM 都市別気象観測
+    WHERE 都市名 = '東京'  
+3. SELECT 都市名, AVG(降水量) , MIN(最高気温) , MAX(最低気温)
+     FROM 都市別気象観測
+   GROUP BY 都市名
+4. SELECT 月, AVG(降水量) , AVG(最高気温) , AVG(最低気温)
+     FROM 都市別気象観測
+   GROUP BY 月
+5. SELECT 都市名, MAX(最高気温)
+     FROM 都市別気象観測
+　 GROUP BY 都市名
+  HAVING MAX(最高気温) >= 38
+6. SELECT 都市名, MIN(最低気温)
+     FROM 都市別気象観測
+   GROUP BY 都市名
+   HAVING MIN(最低気温) <= -10
+
+問題6-2
+1. SELECT COUNT(*)
+     FROM 入退室管理
+    WHERE 退室 IS NULL
+2. SELECT 社員名, COUNT(*) AS 入室回数
+     FROM 入退室管理
+   GROUP BY 社員名
+   ORDER BY 入室回数 DESC
+3. SELECT CASE 事由区別 WHEN '1' THEN 'メンテナンス'
+                       WHEN '2' THEN 'リリース作業'
+                       WHEN '3' THEN '障害対応'
+                       WHEN '9' THEN 'その他' END AS 事由区別 , COUNT(*)
+     FROM 入退室管理
+    GROUP BY 事由区別
+4. SELETC 社員名 , COUNT(*) AS 入室回数
+     FROM 入退室管理
+   GROUP BY 社員名
+   HAVING COUNT(*) > 10
+5. SELECT 日付, COUNT(*)
+     FROM 入退室管理
+    WHERE 事由区別 = '3'
+   GROUP BY 日付
+
+ 

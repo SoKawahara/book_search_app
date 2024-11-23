@@ -1,0 +1,86 @@
+<% provide(:title, "エピソード一覧") %>
+<h1 class = "new-title">エピソード一覧</h1>
+<section class="view-episode-container">
+  <section class="episodes-container" id = "episodes-container">
+    <% if !@users.nil? %>
+      <% @users.each do |user| %>
+        <div class="episode-container">
+          <div class="episode-info">
+            <%= image_tag gravatar_for(user) , class: "episode-icon" %>
+            <p>
+                <% if @order_info == "空白です" %>
+                  <%= "作成日順" %>:<br>
+                <% else %>
+                  <%= @order_info %>:<br>
+                <% end %>
+                <% if @order_info == "作成日時" || "空白です" %>
+                  <%= user.episode_updated_time.to_s.gsub("+0900" , "") %>
+                <% elsif @order_info == "読書歴" %>
+                  <% differences = (Date.today - Date.parse(user.reading_history + "-01")).to_i %>
+                  <% year = differences / 365 %>
+                  <% month = (differences % 365) / 31 %>
+                  <% if year == 0 %>
+                    <%= "#{month}か月" %>
+                  <% else %>
+                    <%= "#{year}年#{month}か月" %>
+                  <% end %>
+                <% else %>
+                  <%= "#{(Date.today - Date.parse(user.birthday)).to_i / 365}歳" %>  
+                <% end %>
+            </p>
+            <p style = "font-size: 18px; font-weight: 600; text-shadow: -4px 5px 3px grey; font-family: Caveat, cursive;"><%= user.name %></p>
+            <%= link_to "プロフィールへ" , "/users/#{user.id}/1" , class: "to-profile" %>
+          </div>
+          <div class="episode-content">
+            <p><%= user.episode %></p>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p style = "text-align: center;">絞り込みに一致する検索結果がありません</p>
+    <% end %>
+  </section>
+  <section class="info-container">
+    <h3>絞込検索</h3>
+    <%= form_with url: "/posts/sort_episodes" , scope: :sort_info , method: :get, data: { turbo: false } do |f| %>
+      <%= f.label :age , "年齢:" %>
+      <div id="sort-info-age">
+        <%= f.number_field :lower_age , class: "age-field" %>
+        <p style = "display: inline;">～</p>
+        <%= f.number_field :upper_age , class: "age-field" %>
+      </div>
+      <div class = "gender">
+        <%= f.label :gender, "性別:" , style: "display: block; text-align: start" %>
+        <%= f.select :gender, 
+                        [["男性", "男性"], 
+                         ["女性", "女性"], 
+                         ["ノンバイナリー", "ノンバイナリー"], 
+                         ["その他", "その他"], 
+                         ["回答しない", "回答しない"],
+                         ["指定しない" , "指定しない"]], 
+                        { prompt: "性別"}, 
+                        { id: "gender" } %>
+      </div>
+      <%= f.label :order, "表示順:" , style: "display: block; text-align: start" %>
+      <%= f.select :order, 
+                        [["作成日時", "作成日時"], 
+                         ["読書歴", "読書歴"], 
+                         ["年齢", "年齢"],
+                         ["指定しない" , "指定しない"]], 
+                        { prompt: "表示順"}, 
+                        { id: "order" } %>
+      <%= f.label :sort, "ソート順:" , style: "display: block; text-align: start" %>
+      <%= f.select :sort, 
+                      [["降順", "降順"], 
+                       ["昇順", "昇順"],
+                       ["指定しない" , "指定しない"]], 
+                      { prompt: "ソート順"}, 
+                      { id: "sort" } %>
+      <%= f.submit "変更" %>                  
+    <% end %>
+  </section>
+</section>
+
+<% if !@users.nil? %>
+  <%= paginate @users , theme: "bootstrap-5" %>
+<% end %>

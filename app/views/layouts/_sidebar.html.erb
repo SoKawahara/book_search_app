@@ -1,13 +1,14 @@
 <aside class="sidebar">
     <ul>
-        <li><%= link_to "検索" , '#' %></li>
-        <li><%= link_to "新規投稿" , '#' %></li>
-        <li><%= link_to "いいね一覧" , '#' %></li>
-        <% if current_user %>
-          <li><%= link_to "プロフィール" , user_path(current_user) %></li>
+        <li><%= link_to "検索" , '/searches' %></li>
+        <li><%= link_to "エピソード一覧" , "/users/view_episodes/1" %></li>
+        <% if !current_user.nil? %>
+          <li><%= link_to "いいね一覧" , posts_my_goods_path(id: current_user.id) %></li>
+          <li><%= link_to "プロフィール" , "/users/#{current_user.id}/1" %></li>
         <% else %>
           <li><%= link_to "ログイン" , login_path %></li>
         <% end %>
+        <li><%= link_to "タイムライン" , "/posts/feed/1" %></li>
         <li><%= image_tag("close-btn.svg" , class: "close-icon") %></li>
     </ul>
 </aside>

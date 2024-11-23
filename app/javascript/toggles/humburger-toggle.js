@@ -13,7 +13,7 @@ document.addEventListener("turbo:load", () => {
                 translate: ["100vw", 0]
             },
             {
-                duration: 1000,
+                duration: 1180,
                 easing: "ease-out",
                 fill: "forwards"
             }

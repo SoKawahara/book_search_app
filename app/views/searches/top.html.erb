@@ -1,15 +1,20 @@
 <% provide(:title, "検索" ) %>
-<div id="result"></div>
 <section class="app_header">
-    <%= form_with url: "/searches/index", scope: :search , method: :get do |f| %>
-      <%= f.select :condition, 
-            options_for_select([["検索条件", ""], ["タイトル", "タイトル"], ["著者", "著者"], ["出版社", "出版社"]]), 
-            { include_blank: false }, 
-            { id: "searchCondition" } %>
-      <%= f.text_field :number , class: "search-number" , placeholder: "件数" %>
-      <%= f.search_field :content , class: "search-word" , placeholder: "検索ワードを入力してください" %>
-      <%= f.submit "検索" , class: "search-btn" %>
-    <% end %>
+    <div class="header_form_container">
+      <%= form_with url: "/searches/index", scope: :search , method: :get do |f| %>
+        <div style = "margin-right: 2rem;">
+          <%= f.select :condition, 
+              options_for_select([["検索条件", ""], ["タイトル", "タイトル"], ["著者", "著者"], ["出版社", "出版社"]]), 
+              { include_blank: false }, 
+              { id: "searchCondition" } %>
+          <%= f.text_field :number , class: "search-number" , placeholder: "件数" %>
+        </div>
+        <div>
+          <%= f.search_field :content , class: "search-word" , placeholder: "検索ワードを入力してください" %>
+          <%= f.submit "検索" , class: "search-btn" %>
+        </div>
+      <% end %>
+    </div>
 </section>
 
 <main>
@@ -43,6 +48,7 @@
       <button id="decision-btn">変更を確定</button>
     </div>
   </div>
+  <p id="result"></p>
   <p class="change-result"></p>
   <section class="result-container">
   </section>
