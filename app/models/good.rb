@@ -5,7 +5,7 @@ class Good < ApplicationRecord
   has_many :likes , dependent: :destroy
   has_many :who_goods , through: :likes , source: :user
 
-  #デフォルトスコープを作成して、新しく作成した順にレコードを取得できるようにする
+  #スコープを作成して発行したクエリの結果を取得する順番を指定する
   scope :created_at_desc, -> { order(created_at: :desc) }
   scope :created_at_asc , -> { order(created_at: :asc) }
   scope :good_desc , -> { order(good_count: :desc) }
@@ -13,7 +13,6 @@ class Good < ApplicationRecord
   #以下ではモデルに対してバリデーションを行う
   validates :book_data , presence: true
   validates :good_count, presence: true
-  validates :evaluation_count , presence: true , length: { maximum: 5 }
   validates :content , presence: true
   validates :genre , presence: true
   validates :readability, presence: true

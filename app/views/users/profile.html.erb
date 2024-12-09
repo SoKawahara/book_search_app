@@ -1,9 +1,12 @@
 <% provide(:title, "プロフィール") %>
 <% if !@user.profile_completed && current_user?(@user)%>
-  <p>プロフィールが未設定です。以下のボタンからプロフィールの設定を行ってください</p>
-  <p>プロフィールを表示するにはすべての設定を完了する必要があります</p>
-  <p>その際におすすめの本を3冊紹介する必要があります。最低でも3冊本の感想を紹介してください</p>
-  <%= link_to "プロフィール設定" , "/users/profile_new/#{@user.id}" , class: "account-profile" %>
+  <div class="no_profile">
+    <div>
+      <p>*プロフィールが未設定です。以下のボタンからプロフィールの設定を行ってください</p>
+      <p>*その際におすすめの本を3冊紹介する必要があります。最低でも3冊本の感想を紹介してください</p>
+      <%= link_to "プロフィール設定" , "/users/profile_new/#{@user.id}" , class: "account-profile" %>
+    </div>
+  </div>
 <% else %>
   <%= render 'view_profile' %>
 <% end %>

@@ -15,14 +15,12 @@ document.addEventListener("turbo:load", () => {
                     const order = document.querySelector("input[name='view-order']:checked").value;
                     module.views(api_result_array, style, condition, order);
 
-                    module.getBookInfo().then(index => {
-                        //本の情報を受け取ったらposts/newに対して本の情報と共にPOSTメソッドを送信する
-                        module.post(api_result_array[index], style.value, condition.value, order.value);
+                    module.add_myshelf().then(index => {
+                        //これでインデックスを取得できたので必要な情報をbodyタグの中に含めてPOSTメソッドを送信する
+                        module.post_my_shelf(api_result_array[index]);
+                        //これは明確なリクエストを送信するわけではなく、現在のページを再読み込みするだけなのでPOSTした結果が表示されている場合ではPOSTメソッドが送信されている可能性もある
+                        location.reload();
                     })
-                        .catch(error => {
-                            console.log("本の情報を取得できませんでした");
-                        })
-
                 }
             }
             const condition = document.querySelector("#searchCondition");
@@ -87,15 +85,11 @@ document.addEventListener("turbo:load", () => {
                                 module.views(api_result_array, style.value, condition.value, order.value);
                             }
 
-                            //感想を投稿するという文字をクリックした際にそのクリックされた要素に対応する本の情報を取得する
-                            //addEventListenerは非同期処理を行うので非同期的に結果を受け取る
-                            module.getBookInfo().then(index => {
-                                //本の情報を受け取ったらposts/newに対して本の情報と共にPOSTメソッドを送信する
-                                module.post(api_result_array[index], style.value, condition.value, order.value);
-                            })
-                                .catch(error => {
-                                    console.log("本の情報を取得できませんでした");
-                                })
+                            module.add_myshelf().then(index => {
+                                //これでインデックスを取得できたので必要な情報をbodyタグの中に含めてPOSTメソッドを送信する
+                                module.post_my_shelf(api_result_array[index]);
+                                location.reload();//loacation.reloadを使用すると現在のリクエスト先に対して再リクエストを送信できる
+                            });
                         })
                     //検索結果を表示している場所までスクロールする
                     document.querySelector(".result-h1").scrollIntoView({

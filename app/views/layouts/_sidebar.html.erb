@@ -3,7 +3,7 @@
         <li><%= link_to "検索" , '/searches' %></li>
         <li><%= link_to "エピソード一覧" , "/users/view_episodes/1" %></li>
         <% if !current_user.nil? %>
-          <li><%= link_to "いいね一覧" , posts_my_goods_path(id: current_user.id) %></li>
+          <li><%= link_to "いいね一覧" , "/posts/#{current_user.id}/my_goods/1"   %></li>
           <li><%= link_to "プロフィール" , "/users/#{current_user.id}/1" %></li>
         <% else %>
           <li><%= link_to "ログイン" , login_path %></li>

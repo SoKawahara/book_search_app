@@ -1,14 +1,14 @@
 <header class="common-header">
     <div class="logo">
-        <%= link_to "Search Books" , root_path , class: "logo-title" %>
+        <%= link_to "Boopple" , root_path , class: "logo-title" %>
     </div>
     <nav class = "header-nav">
         <%= link_to image_tag("search-logo.svg" , class: "logo-image") , '/searches' %>
         <%= link_to image_tag("text.svg" , class: "logo-image") , "/users/view_episodes/1" %>
         <% if current_user.nil? %>
-          <%= link_to image_tag("hearts.svg" , class: "logo-image") , posts_my_goods_path(id: 0)  %>
+          <%= link_to image_tag("hearts.svg" , class: "logo-image") , "/posts/0/my_goods/1"    %>
         <% else %>
-          <%= link_to image_tag("hearts.svg" , class: "logo-image") ,  posts_my_goods_path(id: current_user.id) %>
+          <%= link_to image_tag("hearts.svg" , class: "logo-image") ,  "/posts/#{current_user.id}/my_goods/1"   %>
         <% end %>
         <%= link_to image_tag("home.svg" , class: "logo-image") , "/posts/feed/1" %>
         <!-- ユーザがログイン中ならユーザのアイコンを表示する -->

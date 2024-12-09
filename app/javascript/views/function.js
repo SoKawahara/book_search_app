@@ -90,7 +90,7 @@ export async function get_book_data({ type, number, content }, array = []) {
             //購入リンク取得のエラーハンドリング
             try {
                 const buyLink = item.saleInfo.buyLink;
-                tmp.buyLink= buyLink === undefined ? "不明" : buyLink
+                tmp.buyLink = buyLink === undefined ? "不明" : buyLink
             } catch {
                 console.log("購入リンクの取得に失敗しました");
                 tmp.buyLink = "不明";
@@ -107,7 +107,7 @@ export async function get_book_data({ type, number, content }, array = []) {
         });
 
         //本のデータを取得出来たら一時的にブラウザのsessionStorageに保存する。これはセッションごとにデータを管理する
-        localStorage.setItem("book_data" , JSON.stringify(array));
+        localStorage.setItem("book_data", JSON.stringify(array));
         return array;
     } catch (e) {
         return [];
@@ -118,11 +118,48 @@ export function getBookInfo() {
     const resultContainers = document.querySelectorAll(".result-container .result-item");
     return new Promise((resolve) => {
         resultContainers.forEach((item, index) => {
-            item.addEventListener("click", () => {
+            const post = item.querySelector(".post");
+            post.addEventListener("click", () => {
                 resolve(index)
             })
         })
     })
+}
+
+//マイ本棚へ追加するが押された際の処理を書く
+export function add_myshelf() {
+    const resultContainers = document.querySelectorAll(".result-container .result-item");
+    return new Promise((resolve) => {
+        resultContainers.forEach((item, index) => {
+            item.querySelector(".my-shelf").addEventListener("click", (e) => {
+                e.preventDefault();
+                resolve(index);
+            });
+        });
+    });
+}
+
+//マイ本棚へ追加を押された際に実際に本棚に本を追加するリクエストを送信する
+export function post_my_shelf(book_info) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    try {
+        fetch("/shelfs/create" , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({ bookInfo: book_info })
+        }).then(response => {
+            if (response.ok) {
+                alert("マイ本棚への追加が完了しました!");
+            } else {
+                alert("マイ本棚へ追加できませんでした");
+            }
+        });
+    } catch (e) {
+        console.error(e);
+    }
 
 
 }
@@ -183,6 +220,7 @@ export function views(api_result_array, style, condition, order) {
             template.querySelector(".publish-day").textContent = `出版日: ${item.publishedDate}`;
             template.querySelector(".publish-day-img").src = `${item.imageLink}`;
             template.querySelector(".publish-day-description").textContent = `${item.description}`;
+
 
             container.append(template);
         });
@@ -330,24 +368,27 @@ export function makeDate(array) {
         const match = item.publishedDate.match(regExp);
         //それぞれの要素に対して分割代入を行い,マッチしなかった箇所を年、月、日の順に取得する
         //第１引数は使用しないので_とする
-        const [_, year, month, day] = match;
-        //欠損部分を格納するためのオブジェクトを作成する
-        const missingParts = {
-            year: year ? null : "year",
-            month: month ? null : "month",
-            day: day ? null : "day"
-        };
+        if (Array.isArray(match)) {
+            const [_, year, month, day] = match;
+            //欠損部分を格納するためのオブジェクトを作成する
+            const missingParts = {
+                year: year ? null : "year",
+                month: month ? null : "month",
+                day: day ? null : "day"
+            };
 
-        //filterメソッドを用いて欠損部分だけを格納した新しい配列を作成する
-        const obj = Object.keys(missingParts).filter(key => missingParts[key] !== null);
-        if (obj.length === 1) {
-            //日が不足している
-            item.publishedDate += "-01";
-        } else if (obj.length === 2) {
-            item.publishedDate += "-01-01";
-        } else {
-            item.publishedDate = item.publishedDate;
+            //filterメソッドを用いて欠損部分だけを格納した新しい配列を作成する
+            const obj = Object.keys(missingParts).filter(key => missingParts[key] !== null);
+            if (obj.length === 1) {
+                //日が不足している
+                item.publishedDate += "-01";
+            } else if (obj.length === 2) {
+                item.publishedDate += "-01-01";
+            } else {
+                item.publishedDate = item.publishedDate;
+            }
         }
+
     }
     return array;
 }

@@ -1,22 +1,23 @@
 <%= provide(:title, "新規投稿作成") %>
 <h1 class="new-title">新規投稿作成</h1>
-<% if defined?(book_info) %>
+<% if !@item.nil? %>
   <section class="post-item">
       <section class="book-info">
-          <% if book_info[:imageLink] === "不明" %>
+          <% if eval(@item.book_info)["imageLink"] === "不明" %>
             <%= image_tag "error.jpg" , class: "publish-day-img" %>
           <% else %>
-            <%= image_tag book_info[:imageLink] , class: "publish-day-img" %>
+            <%= image_tag eval(@item.book_info)["imageLink"] , class: "publish-day-img" %>
           <% end %>
           <div class="content">
-            <p class="title">～<%= book_info[:title] %>～</p>
-            <p class="author"><%= book_info[:author].to_s.gsub(/[\[\]"]/ , "") %></p>
+            <p class="title">～<%= eval(@item.book_info)["title"] %>～</p>
+            <p class="author"><%= eval(@item.book_info)["author"].to_s.gsub(/[\[\]"]/ , "") %></p>
           </div>
       </section>
       <section class="post-form">
-          <%= form_with url: "/posts/create" , scope: :info do |f| %>
+          <%= form_with url: "/posts/create" , scope: :info , data: { turbo_stream: false } do |f| %>
             <!-- 隠しフィールドを用いて本のデータを送信 -->
-            <%= hidden_field_tag :book_data, book_info %>
+            <%= hidden_field_tag :book_data, @item.book_info %>
+            <%= hidden_field_tag :shelf_id , @id %>
             <%= f.label :post_name , "投稿名" , class: "content" %>
             <%= f.text_field :post_name , placeholder: "投稿のキャッチコピーを一言で入力してください", class: "post-name" %>
             <%= f.label :content , "感想:" , class: "content" %>
@@ -63,7 +64,7 @@
           <% end %>
       </section>
   </section>
-  <%= link_to "検索結果に戻る" , "/searches" , class: "back-btn" , id: "back-btn-id" %>
+  <%= link_to "マイ本棚に戻る" , "/shelfs/0" , class: "back-btn" , id: "back-btn-id" %>
 <% else %>
   <section>
     <p>要素が存在しません</p>

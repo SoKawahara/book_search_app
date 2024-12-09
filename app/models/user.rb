@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+    has_many :shelfs , dependent: :destroy
     has_many :goods , dependent: :destroy
 
     #ここで設定している外部キーはフォローしているユーザを取得するためのもの
@@ -49,7 +50,8 @@ class User < ApplicationRecord
 
     #ユーザのステータスフィードを返す
     def feed
-        #サブセレクトを用いることで効率的にユーザがフォローしているユーザを取得できる
+        #ユーザがフォローしているユーザのidを配列にして返すfollowing_idsではデータベースからメモリに値が読み込まれて配列が作成される
+        #→これでは効率が悪い。必要なのはIN句の中に比較するためのidの集まりを持ってくるだけでいい
         #includesを用いることでeager loadingをできる
         #これを行うのはN+1クエリ問題を解決するため
         following_ids = "SELECT followed_id FROM relationships WHERE follower_id = :user_id"
@@ -113,11 +115,13 @@ class User < ApplicationRecord
     end
 
     #ユーザをフォローする
+    #ユーザがフォローしているユーザをまとめた配列のようなものの末尾に対してユーザを加える
     def follow(other_user)
         following << other_user unless self == other_user
     end
 
     #ユーザをフォーロー解除する
+    #ユーザがフォローしているユーザをまとめた配列の中からユーザを削除する
     def unfollow(other_user)
         following.delete(other_user)
     end

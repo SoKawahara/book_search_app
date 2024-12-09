@@ -23,9 +23,11 @@
         <%= f.month_field :reading_history , class: "year-month", value: @year_month %>
         <%= f.label :favorite_genre , "好きな本のジャンルを入力してください:" , class: "content"  %>
         <%= f.text_field :favorite_genre , placeholder: "複数入力する際は半角スペースで区切ってください" , class: "favorite-genre" , value: @favorite_genre%>
-        <%= f.label :episode , "本の読み始めたきっかけを入力してください(1000文字以内でより具体的に記述してください)" , class: "content"  %><span id = "word-counter"></span>
-        <%= f.text_area :episode , class: "episode" , value: @episode%>
-        <p class = "profile-save-btn">上記の設定を適用する</p>
+        <%= f.label :episode , "本を読み始めたきっかけを入力してください(1000文字以内でより具体的に記述してください)" , class: "content"  %><span id = "word-counter"></span>
+        <%= f.text_area :episode , class: "episode" , value: @episode , placeholder: "*エピソードを入力する際にはすべての項目を選択した後で入力してください" %>
+        <div class="save-btn-container">
+          <p class = "profile-save-btn">読書開始年月と好きなジャンルを適用する</p>
+        </div>
         <%= f.label :recommendation_3 , "これまで読んだおすすめの本TOP3" , class: "content" %>
         <div id="recommendation_3">
           <div class = "top1">

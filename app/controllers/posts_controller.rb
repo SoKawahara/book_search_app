@@ -1,36 +1,43 @@
 class PostsController < ApplicationController
-    before_action :logged_in_user , only: [:new , :create, :edit, :update , :good_counter , :feed]
+    before_action :logged_in_user , only: [:new , :create, :edit, :update , :good_counter , :turbo_stream_good_counter , :turbo_stream_good_remover , :feed]
 
     require "uri"
     require "date"
-    #ここに対して本の情報とセットでPOSTメソッドが送信されてくる
+
+    #こっちのnewアクションは読了ページから取得された
     def new
-        #画面が再レンダリングされた際に@bookInfoがないことでエラーが発生するのを防ぐ
-        @bookInfo = params[:bookInfo]
-        render 'new' , locals: {book_info: @bookInfo}
+        @id = params[:id]
+        @item = current_user.shelfs.find_by(id: @id)
     end
 
     def create
         user = current_user
         #画像のURLが正規のものではない時エラー用の画像を指定する
         book_data = eval(params[:book_data])
+
         new_book_data = {}
+        id = params[:shelf_id]#これから感想を作成する本のマイ本棚でのIDを取得している
+
+        #ストロングパラメータで取得してきたハッシュに対して本の情報と本棚に入れてある本のIDを付加してデータの登録を行う
         begin
             uri = URI.parse(book_data["imageLink"])
-            @good = user.goods.build(info_params.merge("book_data" => params[:book_data]))
+            @good = user.goods.build(info_params.merge("book_data" => params[:book_data]).merge("shelf_id" => id))
         rescue URI::InvalidURIError => e
             book_data["imageLink"] = "error.jpg"
             new_book_data = book_data.to_s
-            @good = user.goods.build(info_params.merge("book_data" => new_book_data))
+            @good = user.goods.build(info_params.merge("book_data" => new_book_data).merge("shelf_id" => id))
         end
     
 
         if @good.save 
+            #投稿を作成したかどうかのフラグを更新
+            Shelf.find(id).update_attribute(:created_post , 1)
+            
             flash[:success] = "投稿を作成しました"
             redirect_to "/users/#{current_user.id}/1"
         else
             flash[:danger] = "投稿を作成できませんでした"
-            redirect_to "/searches"
+            redirect_to "/shelf/1"
         end
 
     end
@@ -68,7 +75,7 @@ class PostsController < ApplicationController
     #投稿を削除する際に削除する投稿がプロフィールに登録されているモノだったらプロフィールからも削除する
     def destroy
         @user = current_user
-        if @user && (post = @user.goods.find(params[:id])) && valid_user(@user)
+        if @user && (post = @user.goods.find(params[:id])) && current_user?(@user)
             #ユーザがプロフィールに登録している投稿の中に削除する投稿も含まれていればそれを変更する
             recommendation_books = (@user.recommendation_books)
             recommendation_books.each do |key , value|
@@ -77,6 +84,12 @@ class PostsController < ApplicationController
                     @user.update(recommendation_books: recommendation_books)
                 end
             end
+            
+            #shelf_idからもとになった本棚にある本を取得する
+            shelf = Shelf.find(post.shelf_id)
+            shelf.created_post = 0
+            shelf.save
+
             post.destroy
             flash[:success] = "投稿を削除しました!"
 
@@ -97,16 +110,21 @@ class PostsController < ApplicationController
             #page = 2をたたいた後になぞにpage = 1というリクエストに上書きされている
             session.delete(:original_url_my_goods) if session[:original_url_my_goods]
 
-            page = request.query_parameters["page"]
-            session[:original_url_my_goods] = page
-
-            puts "---------------------------------------"
-            puts page
-            puts "---------------------------------------"
+            #リクエストが送信された際にクエリパラメータのページの値を取得する
+            @page = request.query_parameters["page"]
 
             @user = User.find(params[:id])
+            @type = params[:type]
             #goods.user_idとしているのはambiguous columnエラーに対処するために明示的に
-            @posts = @user.what_goods.where("goods.user_id != ?" , current_user.id).page(page).per(9)
+            @posts = 
+              if @type== "1"
+                @user.what_goods.where("goods.user_id != ?" , current_user.id).created_at_desc
+              elsif @type == "2"
+                @user.what_goods.where("goods.user_id != ?" , current_user.id).created_at_asc
+              else
+                @user.what_goods.where("goods.user_id != ?" , current_user.id).good_desc
+              end&.page(@page).per(9)
+            
         end
     end
 
@@ -139,8 +157,7 @@ class PostsController < ApplicationController
         if post = Good.find(params[:id])
             #過去にこの投稿にいいねしたことがあるユーザは繰り返しいいねすることができないようにする
             if !(post.who_goods.include?(@user))
-                good_count = post.good_count + 1
-                post.update_attribute(:good_count  , good_count)
+                post.update_attribute(:good_count  , post.good_count + 1)
                 post.who_goods << @user
                 flash[:success] = "いいねしました!!!"
             else 
@@ -159,6 +176,30 @@ class PostsController < ApplicationController
         end
     end
 
+    #すでにいいねされた投稿のいいねを再び押すといいねが解除される
+    def turbo_stream_good_remover
+        @user = current_user#ログインを強制するのでこれは必ず存在する
+        if (@post = Good.find(params[:post_id])) && @post.who_goods.include?(@user)
+            @post.update_attribute(:good_count , @post.good_count - 1)
+            @post.who_goods.delete(@user)#いいね数を一つ減らしていいねしたユーザを格納する配列から削除する
+        end
+        #いいね数を更新した後にビューファイルに対していいね数を送信する
+        @good_count = @post.who_goods.count
+    end
+
+    #いいねが押された際に画面遷移を行わずにいいねボタンだけいいねしたことが分かる画像に変更する
+    #具体的にはTurboStreamを用いて非同期で画面遷移を行う
+    def turbo_stream_good_counter
+        @user = current_user#ログインを必須にしているのでこれは確実に取得できる
+        if (@post = Good.find(params[:post_id])) && !(@post.who_goods.include?(@user))
+            @post.update_attribute(:good_count , @post.good_count + 1)
+            @post.who_goods << @user
+        end
+        #いいね数を更新した後にビューに対していいね数を送る,いいね数の更新が行われなくてもいいね数をビューに返す
+        @good_count = @post.who_goods.count 
+    end
+
+
     #この本の詳細ページへが押された場合に実行される処理
     def view_about
         @user = User.find(params[:user_id])
@@ -170,12 +211,8 @@ class PostsController < ApplicationController
     def feed
         session.delete(:original_url_feed) if session[:original_url_feed]
 
-        page = request.query_parameters["page"]
-        session[:original_url_feed] = page
-
-        puts "---------------------------------------"
-        puts page
-        puts "---------------------------------------"
+        #現在リクエストが送信されているURLの中のクエリパラメータを取得する
+        @page = request.query_parameters["page"]
 
         @type = params[:type]
         @posts = 
@@ -185,27 +222,7 @@ class PostsController < ApplicationController
             current_user.feed.created_at_asc
         else
             current_user.feed.good_desc
-        end&.page(page).per(9)
-    end
-
-    #ここでは投稿一覧画面に対して表示方式が変更されてもTurbo Streamを用いてページの一部分だけをレンダリングする
-    def turbo_stream_feed
-        @type = params[:type]
-
-        page = session[:original_url_feed] || nil
-        @posts = 
-        if @type== "1"
-            current_user.feed.created_at_desc
-        elsif @type == "2"
-            current_user.feed.created_at_asc
-        else
-            current_user.feed.good_desc
-        end&.page(page).per(9)
-
-        respond_to do |format|
-            format.turbo_stream
-            format.html { redirect_to "/posts/feed/#{@type}" }
-        end
+        end&.page(@page).per(9)
     end
 
     #投稿一覧で「詳細を見る」ボタンが押された際に投稿を表示する
@@ -273,20 +290,6 @@ class PostsController < ApplicationController
             tmp.order(episode_updated_time: :asc)
           end&.page(params[:page])&.per(10)
         # @users = User.where("gender == ? AND id != ?" , @gender , current_user.id).order(episode_updated_time: :asc).page(params[:page]).per(10)
-
-
-        #取得してきた年齢の条件から発行するクエリを決める
-        
-        age = 
-          if lower_age != nil && upper_age != nil
-            (lower_age..upper_age)
-          elsif lower_age != nil
-            (lower_age..)
-          elsif upper_age != nil
-            (..upper_age)
-          else#年齢に関する条件が何も指定されなかった時にはnilを指定する
-            nil
-          end
     end
 
     private

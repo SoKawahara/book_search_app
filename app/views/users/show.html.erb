@@ -17,11 +17,16 @@
             </li>
             <li>
                 <p>投稿</p>
-                <p><%= @user.goods.count %></p>
+                <p><%= @user.what_goods.count %></p>
             </li>
             <li><%= image_tag("setting.svg" , class: "setting-icon" , style: "margin-left: 1rem") if current_user == @user %></li>
         </ul>
-        <%= link_to "プロフィール" , "/users/profile/#{@user.id}" , class: "account-profile" %>
+        <div class="user-menu">
+            <%= link_to "プロフィール" , "/users/profile/#{@user.id}" , class: "account-profile" %>
+            <% if current_user?(@user) %>
+              <%= link_to "マイ本棚" , "/shelfs/1", class: "account-profile" %>
+            <% end %>
+        </div>
     </div>
         
         
@@ -42,45 +47,61 @@
 </section>
 <div class = "border"></div>
 <!-- ここにユーザの投稿一覧を表示する -->
-<h1 class = "new-title">投稿一覧</h1>
-<div class="btn-group dropup">
-    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id = "view-style-btn">
+<% if !@posts.empty? %>
+  <section class="parent">
+    <h1 class = "new-title">投稿一覧</h1>
+    <div class="btn-group dropup">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id = "view-style-btn">
         <% if @type == "1" %>
-            作成日順(降順)
+            新しい順
         <% elsif @type == "2" %>
-            作成日順(昇順)
+            古い順
         <% else %>
             いいね順
         <% end %>
-    </button>
-    <!-- この部分はTurbo Streamを用いてページ全体のリロードを避ける -->
-    <ul class="dropdown-menu" id = "view-style">
-        <li><%= link_to "作成日順(昇順)" , "/users/#{@user.id}/turbo_stream_show/2" , data: {turbo_stream: true } , class: "dropdown-item" %></li>
-        <li><%= link_to "作成日順(降順)" , "/users/#{@user.id}/turbo_stream_show/1" , data: {turbo_stream: true } , class: "dropdown-item" %></li>
-        <li><%= link_to "いいね順" , "/users/#{@user.id}/turbo_stream_show/3" , data: {turbo_stream: true } , class: "dropdown-item" %></li>
-    </ul>
-</div>
-<section class = "posts-container" id = "posts-container">
-    <% if @posts %>
+      </button>
+      <!-- この部分はTurbo Streamを用いてページ全体のリロードを避ける -->
+      <ul class="dropdown-menu" id = "view-style">
+        <li><%= link_to "古い順" , "/users/#{@user.id}/turbo_stream_show/2?page=#{@page}" , data: {turbo_stream: true } , class: "dropdown-item" %></li>
+        <li><%= link_to "新しい順" , "/users/#{@user.id}/turbo_stream_show/1?page=#{@page}" , data: {turbo_stream: true } , class: "dropdown-item" %></li>
+        <li><%= link_to "いいね順" , "/users/#{@user.id}/turbo_stream_show/3?page=#{@page}" , data: {turbo_stream: true } , class: "dropdown-item" %></li>
+      </ul>
+    </div>
+    <section class = "posts-container" id = "posts-container">
         <% @posts.each do |item| %>
-            <section class="post-container">
-            <%= image_tag(eval(item.book_data)["imageLink"]) %>
+          <section class="post-container">
+            <%= image_tag eval(item.book_data)["imageLink"] %>
             <div class="content">
-                <!-- 感想をdata属性としてタグの中に含ませておく -->
-                <p class = "post-name" data-post-content = <%= item.content %> data-post-id = <%= item.id %> data-user-id = <%= item.user_id %>><%= item.post_name %></p>
-                <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
-                <p>作成日時:<%= (item.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
+              <!-- 感想をdata属性としてタグの中に含ませておく -->
+              <p class = "post-name"><%= item.post_name %></p>
+              <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
+              <p>作成日時:<%= (item.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
             </div>
-            <p class = "good-content"><%= link_to image_tag("good.svg" , class: "good-img") , "/posts/good_counter/#{item.user_id}/#{item.id}" %><%= item.who_goods.count %></p>
+
+            <% if logged_in? %>
+              <% if item.who_goods.include?(current_user) %>
+                <p class = "good-content" id = "good-content-<%= item.id %>"><%= link_to image_tag("good.png" , class: "good-img") , "/posts/turbo_stream_good_remover/#{item.id}" , data: { turbo_stream: true } %><%= item.who_goods.count %></p>
+              <% else %>
+                <p class = "good-content" id = "good-content-<%= item.id %>"><%= link_to image_tag("hearts.svg" , class: "good-img") , "/posts/turbo_stream_my_goods/#{item.id}" , data: { turbo_stream: true } %><%= item.who_goods.count %></p>
+              <% end %>
+            <% end %>
+            
             <% if current_user?(@user) %>
-                <%= link_to image_tag("edit.svg") , "/posts/edit/#{item.id}" , class: "edit-btn" %>
+              <%= link_to image_tag("edit.svg") , "/posts/edit/#{item.id}" , class: "edit-btn" %>
             <% end %>
             <%= link_to "詳細を見る" , "/posts/#{item.user_id}/#{item.id}" , class: "view-post-btn"%>
-            </section>
+            
+          </section>
         <% end %>
-    <% end %>
-</section>
-<%= paginate @posts, theme: "bootstrap-5" %>
+    </section>
+    <%= paginate @posts, theme: "bootstrap-5" %>
+  </section>
+<% else %>
+<div class = "no_goods">
+    <p>*投稿はありません</p>
+</div>
+<% end %>
+
 
       
 

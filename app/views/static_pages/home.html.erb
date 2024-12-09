@@ -1,49 +1,129 @@
-<header class="app-header">
-    <nav>
-        <ul class="header-nav">
-            <li><%= link_to "About"  , '#'%></li>
-            <li><%= link_to "Feature" , '#' %></li>
-        </ul>
-    </nav>
-    <h1 class="header-h1">Search Books</h1>
-    <div class="sub-title">
-        <h2 id="header-h2">飛び出そう</h2>
-        <h2 id="header-h2">本の世界へ</h2>
+<header class="intro-header">
+    <section class="intro-nav">
+        <h1>Boopple</h1>
+        <nav>
+          <ul>
+            <li><p id = "scroll-about">About</p></li>
+            <li><p id = "scroll-feature">Feature</p></li>
+            <li><p id = "scroll-function">Function</p></li>
+            <li><%= link_to "新規会員登録/ログイン" , new_user_path , class: "new_create" %></li>
+          </ul>
+        </nav>
+    </section>
+
+    <div id = "catchphrase">
+      <p id = "text-1"><span>飛</span><span>び</span><span>出</span><span>そ</span><span>う</span></p>
+      <p id = "text-2"><span>本</span><span>の</span><span>世</span><span>界</span><span>へ</span></p>
     </div>
 </header>
 
 <main>
-    <section class="about-container" id="about">
-        <div class="about-text">
-            <h1 class="about-title">～Search Booksとは～</h1>
-            <p class="about-content">
-                Google Books APIを用いた本の検索サイト
-                です。あなたの読書ライフをサポートする
-                機能を提供します。
-            </p>
-        </div>
-        <div class="about-picture">
-            <%= image_tag "search.jpeg" , alt: "" , class: "about-img" %>
-        </div>
-    </section>
+  <div class="about-title">
+    <h1>About</h1>
+    <div></div>
+  </div>
+  <section class="about-container" id = "about-container">
+    <div class="about-content">
+      <h3>～Booppleとは～</h3>
+      <p>　読書初心者の方が最高の読書ライフをスタートする為<br>の機能を盛り込んだ本の情報共有SNSです。一人でも<br>
+           多くの方が本に触れ合い、その良さを実感してほしいと<br>いう思いから制作されました。<br>
+           　アプリ名のBooppleとは英語で本を意味するBookと<br>波紋を意味するRippleが掛け合わされた造語になっていて<br>
+           本を通して人と人とのつながりが波紋のように広がって<br>ほしいという願いが込められています。。</p>
+    </div>
+    <%= image_tag("search.jpg",  class: "about-image") %>
+  </section>
 
-    <section class="feature-container" id="feature">
-        <h1 class="feature-h1">Feature</h1>
-        <%= image_tag "search.png" , alt: "" , class: "feature-img" %>
-        <div class="response">高速な<br>Response</div>
-        <div class="information">豊富な情報量</div>
-        <div class="custom">カスタマイズ性</div>
-        <div class="intuitiveness">直観的に使える</div>
-    </section>
+  <section class="feature-container" id = "feature-container">
+    <div class="feature-title">
+      <h1>Feature</h1>
+      <div></div>
+    </div>
+    <div class="feature1">
+      <h4 class = "feature-h4">～feature1～</h4>
+      <div>
+        <p>　自分以外の読書家たちの<br>プロフィール(年齢, 職業)や<br>その人たちが本を読み始めた<br>きっかけとなるエピソードから<br>自分に近しい人を探すこと<br>ができます</p>
+        <%= image_tag("episode.png") %>
+      </div>
+    </div>
+    <div class="feature2">
+      <h4 class = "feature-h4">～feature2～</h4>
+      <div>
+        <p>　自分が読んだ本の感想を投稿して<br>その時に得られた感動を他者と共有<br>することができます</p>
+        <%= image_tag("post.png" , class: "post-image") %>
+      </div>
+    </div>
+    <div class="feature3">
+      <h4 class = "feature-h4">～feature3～</h4>
+      <div class = "feature3-container">
+        <p>　GoogleBooksAPIを用いた本の検索を行うことができます。<br>更に表示方法を変更することで<br>より効率的に本の検索を行うことができます</p>
+        <div class = "image-container">
+          <%= image_tag("search-grid.png" , class: "grid-image") %>
+          <%= image_tag("search-modal.png" , class: "modal-image") %>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section class="appStart-container">
-        <p class="appStart-p">サービスを開始するにはこちらをクリック</p>
-        <p class="arrow-p">↓</p>
-        <%= link_to image_tag("start-button.png" , alt: "" , class: "appStart-img") , new_user_path %>
-    </section>
+  <div class="function-title" id = "function-title">
+    <h1>Function</h1>
+    <div></div>
+  </div>
+  <section class="function-container">
+    <div class="left-container">
+      <div id = "episode">
+        <%= image_tag "function-episode.png" , class: "function-image" %>
+        <h4>エピソード閲覧</h4>
+        <p style = "display: none;">　自分以外のユーザが本を読み始めたきっかけになったエピソードを閲覧することができます。
+          また、年齢や性別での絞り込みや、表示順の変更も行えるのでより効率的に検索を行うことができます。
+        </p>
+        <div class="item-click add-item-click" style = "display: block;">
+          <p>選択中</p>
+        </div>
+      </div>
+      <div id = "my_shelf">
+        <%= image_tag "function-shelf" , class: "function-image" %>
+        <h4>マイ本棚</h4>
+        <p style = "display: none;">　本の検索を行う中で自分が気になった本をマイ本棚の中に保存することができます。
+          また、その本をすでに読んでいるのかそうでないのかを分けて管理できるので
+          「気にっててこれから読もうと思っている本を記録する」、「すでに読み終わった本を記録する」など
+          自分に合った使い方ができます。
+        </p>
+        <div class="item-click">
+          <p>選択中</p>
+        </div>
+      </div>
+    </div>
+    <div class = "view-main">
+      <h3>エピソード閲覧</h3>
+      <%= image_tag "function-episode.png" , class: "main-function-image" %>
+      <p>　自分以外のユーザが本を読み始めたきっかけになったエピソードを閲覧することができます。
+        また、年齢や性別での絞り込み、表示順の変更も行えるのでより効率的に検索を行うことができます。</p> 
+    </div>
+    <div class="right-container">
+      <div id = "search">
+        <%= image_tag "function-search1.png" , class: "function-image" %>
+        <h4>本の検索</h4>
+        <p style = "display: none;">　本の検索を行うことができます。<br>検索の際には著者、タイトルや検索件数での絞り込み,更には表示方法を２通りで変更できます。
+          本の詳細を確認しながら気になる本を検索していきたい場合には「縦方向一覧」、気になる本や欲しい本のタイトルや表紙絵を
+          すでに把握している際には「タイル式」といったようにその時の要望に合わせて検索結果の表示方式を変更することができます。
+        </p>
+        <div class="item-click">
+          <p>選択中</p>
+        </div>
+      </div>
+      <div  id = "post">
+        <%= image_tag "function-post.png" , class: "function-image" %>
+        <h4>本の感想の投稿</h4>
+        <p style = "display: none;">　マイ本棚の中の「読了」項目に保存してある本に関しての感想を投稿することができます。「自分の感動を他者に共有したい」、
+          「読んだ本の記録用に取っておきたい」など様々な要望をかなえることができます。また、作成した投稿はおすすめの本として
+          自分のプロフィールを作成する際に登録できるので自分が好きな本を他者に共有したと感じている方はぜひ活用してください
+        </p>
+        <div class="item-click">
+          <p>選択中</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
-<footer>
-    &copy;2024 Kya . All rights reserved.
-</footer>
-
+<%= render 'layouts/footer' %>

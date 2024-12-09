@@ -12,7 +12,7 @@
     .header_form_container {
         width: 100%;
 
-        
+
         form {
             width: 100%;
             display: flex;
@@ -235,7 +235,7 @@
         font-size: 2rem;
         width: 250px;
     }
-    
+
     .view-container {
         width: 90%;
         margin: auto;
@@ -243,21 +243,21 @@
         align-items: center;
         border: 3px groove rgb(184, 181, 181);
     }
-    
+
     #decision-btn {
         color: rgb(98, 98, 98);
         font-weight: bold;
         transition: .7s;
         margin-top: 1.5rem;
     }
-    
-    
+
+
     .change-result {
         text-align: center;
         color: rgba(253, 0, 0, 0.777);
         font-family: "Bodoni Moda SC", serif;
         margin-top: 1rem;
-    
+
     }
 }
 
@@ -271,14 +271,14 @@
     section {
         overflow-y: scroll;
         scrollbar-width: none;
-    
+
         /* Firefox */
         &::-webkit-scrollbar {
             display: none;
         }
 
     }
-   
+
 }
 
 /*ここから下はtemplateタグのスタイル*/
@@ -338,14 +338,40 @@
     margin-left: 2.7rem;
 }
 
-.publish-day-img {
-    width: 260px;
-    height: 360px;
-    border: 3px solid black;
-    margin-left: .6rem;
-    margin-top: 1rem;
-    object-fit: cover;
+.book-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+        padding: .3rem;
+        margin-top: 2rem;
+        width: 160px;
+        height: 28px;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 16px;
+        color: white;
+        background-color: grey;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 18px;
+        &:hover {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    }
+    .publish-day-img {
+        width: 260px;
+        height: 360px;
+        border: 3px solid black;
+        margin-left: .6rem;
+        margin-top: 1rem;
+        object-fit: cover;
+    }
+
 }
+
 
 
 .publish-day-buy {
@@ -387,12 +413,12 @@
         padding: 3rem 0.6rem;
         display: flex;
         flex-direction: column;
-        align-items: center;   
+        align-items: center;
     }
-    
+
     .content {
         position: relative;
-    
+
         .back-btn {
             display: block;
             margin: 3rem auto;
@@ -405,14 +431,14 @@
             color: white;
             text-align: center;
             text-decoration: none;
-    
+
             &:hover {
                 text-decoration: none;
             }
-    
+
         }
     }
-    
+
     .title,
     .author,
     .publisher,
@@ -424,16 +450,18 @@
         font-size: 15px;
     }
 
-    
+
     .publish-day-img {
         width: 200px;
         height: 280px;
     }
+
     .post {
         font-size: 15px;
     }
-    
+
 }
+
 /*ここから下はグリッド式のためのスタイル*/
 
 /*これはグリッドレイアウトの指定をresult-container対して施すためのクラス*/
@@ -510,7 +538,6 @@
 }
 
 .modal-container {
-    overflow-y: scroll;
     padding: 2rem;
     display: flex;
     justify-content: space-around;
@@ -522,12 +549,19 @@
     display: flex;
     flex-direction: column;
     align-items: start;
+    overflow-y: scroll;
+    scrollbar-width: none;
+
+    /* Firefox */
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 
 
 .modal-img {
-    width: 280px;
+    width: 260px;
     height: 380px;
     object-fit: cover;
 }
@@ -567,7 +601,7 @@
         z-index: 100;
         background-color: rgba(78, 77, 77, 0.916);
     }
-    
+
     .add-modal-container {
         position: fixed;
         top: 5rem;
@@ -575,7 +609,7 @@
         width: 90%;
         height: 400px;
     }
-    
+
     .modal-container {
         overflow-y: scroll;
         padding: 2rem;
@@ -583,35 +617,35 @@
         flex-direction: column;
         align-items: center;
     }
-    
+
     .modal-content {
         margin-top: 1.2rem;
         width: 100%;
         padding: 3rem .5rem;
     }
-    
-    
-    
+
+
+
     .modal-img {
         width: 180px;
         height: 260px;
         object-fit: cover;
     }
-    
+
     .modal-publisher,
     .modal-page-count,
     .modal-value,
     .modal-about {
         font-size: 15px;
     }
-    
+
     .modal-description {
         font-size: 13px;
         font-family: "Bodoni Moda SC", serif;
         line-height: 1.5;
         font-weight: lighter;
     }
-    
+
     .modal-close {
         display: block;
         margin: auto;

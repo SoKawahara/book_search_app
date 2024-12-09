@@ -4,7 +4,8 @@
         <%= image_tag eval(@post.book_data)["imageLink"] %>
         <div>
           <p>～<%= eval(@post.book_data)["title"] %>～</p>
-          <p><%= eval(@post.book_data)["author"].to_s.gsub(/[\[\]"]/ , "") %></p>
+          <p>作者: <%= eval(@post.book_data)["author"].to_s.gsub(/[\[\]"]/ , "") %></p>
+          <p>出版社: <%= eval(@post.book_data)["publisher"] %></p>
           <p>ジャンル: <%= @post.genre %></p>
         </div>
 
@@ -13,19 +14,48 @@
         <h2>📖<%= @post.post_name %></h2>
         <div class = "content">
             <p><%= @post.content %></p>
+            <div class="scrollable-hint">
+                <div>
+                    <%= image_tag "finger.png" %>
+                </div>
+            </div>
         </div>
         <div class="evaluations">
             <div>
-                <label for="readability">読みやすさ(1～5)</label>
-                <p id = "readability"><%= @post.readability %></p>
+                <label for="readability">読みやすさ(5段階)</label>
+                <p id = "readability">
+                    <% 5.times do |n| %>
+                      <% if n <= @post.readability.to_i - 1 %>
+                        <%= image_tag "yellow-star.svg" , class: "star-image" %>
+                      <% else %>
+                        <%= image_tag "black-star.svg" , class: "star-image" %>
+                      <% end %>
+                    <% end %>
+                </p>
             </div>
             <div>
-                <label for="convenience">手軽さ(1～5)</label>
-                <p id = "convenience"><%= @post.convenience %></p>
+                <label for="convenience">手軽さ(5段階)</label>
+                <p id = "convenience">
+                    <% 5.times do |n| %>
+                      <% if n <= @post.convenience.to_i - 1 %>
+                        <%= image_tag "yellow-star.svg" ,class: "star-image" %>
+                      <% else %>
+                        <%= image_tag "black-star.svg" , class: "star-image" %>
+                      <% end %>
+                    <% end %>
+                </p>
             </div>
             <div>
-                <label for="recommendation">初心者へのおすすめ度(1～5)</label>
-                <p id = "recommendation"><%= @post.recommendation %></p>
+                <label for="recommendation">初心者へのおすすめ度(5段階)</label>
+                <p id = "recommendation">
+                    <% 5.times do |n| %>
+                      <% if n <= @post.recommendation.to_i - 1 %>
+                        <%= image_tag "yellow-star.svg" , class: "star-image" %>
+                      <% else %>
+                        <%= image_tag "black-star.svg" , class: "star-image" %>
+                      <% end %>
+                    <% end %>
+                </p>
             </div>
         </div>
     </div>
@@ -36,3 +66,5 @@
 <% else %>
   <%= link_to "戻る" , redirect_path , class: "back-btn" %>
 <% end %>
+
+

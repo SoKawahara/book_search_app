@@ -5,11 +5,11 @@
         <!-- POSTメソッドの送信先のURLとその際に使用するスコープを宣言する -->
         <%= form_with(url: login_path , scope: :session) do |f| %>
           <%= f.label :email , "メールアドレス:" %>
-          <%= f.email_field :email , placeholder: "email-address" %>
+          <%= f.email_field :email %>
 
           <!-- type = "password"のように指定されるフィールドではセキュリティの観点で入力した内容が・・・に置き換えられる -->
           <%= f.label :password , "パスワード:" %>
-          <%= f.password_field :password , placeholder: "password" %>
+          <%= f.password_field :password %>
 
           <%= f.label :remember_me , "ログインを保持する" , class: "checkbox_label" %>
           <%= f.check_box :remember_me %>

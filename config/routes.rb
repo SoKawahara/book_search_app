@@ -20,12 +20,14 @@ Rails.application.routes.draw do
   get "/users/:id/turbo_stream_show/:type" , to: "users#turbo_stream_show"
   get "/posts/turbo_stream_feed/:type"     , to: "posts#turbo_stream_feed"
   get "/posts/:id/turbo_stream_my_goods/:type" , to: "posts#turbo_stream_my_goods"
+  get "/posts/turbo_stream_my_goods/:post_id"  , to: "posts#turbo_stream_good_counter"
+  get "/posts/turbo_stream_good_remover/:post_id" , to: "posts#turbo_stream_good_remover"
 
 
   
-  get "/posts/:id/my_goods"        , to: "posts#my_goods" , as: :posts_my_goods
+  get "/posts/:id/my_goods/:type"        , to: "posts#my_goods"
   get "/posts/feed/:type"          , to: "posts#feed"
-  post "/posts/new"   ,   to: "posts#new"
+  get "/posts/new/:id"   ,   to: "posts#new"
   post "/posts/create" ,  to: "posts#create"
   get "/posts/good_counter/:user_id/:id"     , to: "posts#good_counter"
   get "/posts/edit/:id"             , to: "posts#edit"
@@ -41,6 +43,11 @@ Rails.application.routes.draw do
   get "/login" ,     to: "sessions#new"
   post "/login" ,    to: "sessions#create"
   delete "/logout" , to: "sessions#destroy"
+
+  post "/shelfs/new"     , to: "shelfs#new"
+  post "/shelfs/create"  , to: "shelfs#create"
+  get "/shelfs/update/:shelf_id" , to: "shelfs#update"
+    get "/shelfs/:type" , to: "shelfs#show"
 
  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -61,6 +68,6 @@ Rails.application.routes.draw do
   resources :password_resets,      only: [:new, :create, :edit, :update]
   resources :relationships,        only: [:create , :destroy]
   resources :posts ,               only: [:destroy]
-
+  resources :shelfs ,              except: [:new , :create , :show , :update]
   get "/users/:id/:type" , to: "users#show"
 end

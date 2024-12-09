@@ -1,0 +1,45 @@
+<% provide(:title , "マイ本棚") %>
+<section class="select-tab" id = "select-tab">
+    <% if @type == 1 %>
+      <div class="unread add-check" id = "unread">
+          <%= link_to "未読"  , "/shelfs/1" %>
+      </div>
+      <div class="read" id = "read">
+        <%= link_to "読了" , "/shelfs/0" %>
+      </div>
+    <% else %>
+      <div class="unread" id = "unread">
+        <%= link_to "未読"  , "/shelfs/1" %>
+      </div>
+      <div class="read add-check" id = "read">
+        <%= link_to "読了" , "/shelfs/0" %>
+      </div>
+    <% end %>    
+</section>
+<section class="my-shelf-container" id = "my_shelf_container">
+    <% if !@my_shelf.nil? %>
+      <% @my_shelf.each do |item| %>
+        <div class="shelf-item">
+          <%= link_to image_tag("trash.svg") , shelf_path(item) , data: { "turbo-method": :delete , turbo_confirm: "本当に削除しますか?" } , class: "trash" %>
+          <% if item.unread_flag == 1 %>
+            <%= link_to(image_tag("check.svg") , "/shelfs/update/#{item.id}" , class: "check-btn") %>
+          <% else %>
+            <% if item.created_post == 0 %>
+              <%= link_to(image_tag("edit.svg") , "/posts/new/#{item.id}" , class: "check-btn") %>
+            <% end %>
+          <% end %>
+          <div>
+            <% if eval(item.book_info)["imageLink"] == "不明" %>
+              <%= image_tag "error.jpg" %>
+            <% else %>
+              <%= image_tag(eval(item.book_info)["imageLink"]) %>
+            <% end %>
+            <p><%= eval(item.book_info)["title"] %></p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+</section>
+<%= paginate @my_shelf , theme: "bootstrap-5" %>
+
+  

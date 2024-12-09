@@ -16,28 +16,33 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     #ユーザに紐づいている投稿を6件分取得して返す
     @type = params[:type]
+    #ここで現在設定されているクエリパラメータを取得する
+    @page = params[:page]
     @posts =  
       if @type == "1"
-        @user.goods.created_at_desc.page(params[:page]).per(6)
+        @user.goods.created_at_desc
       elsif @type == "2"
-        @user.goods.created_at_asc.page(params[:page]).per(6)
+        @user.goods.created_at_asc
       else
-        @user.goods.good_desc.page(params[:page]).per(6)
-      end 
+        @user.goods.good_desc
+      end&.page(@page).per(6)
+
+    @my_shelfs = @user.shelfs.all
   end
 
   #ここではTurboStreamを用いて各ユーザの投稿一覧の画面のリロードを行うための処理を書く
   def turbo_stream_show
     @user = User.find(params[:id])
     @type = params[:type]
+    @page = params[:page]
     @posts = 
       if @type == "1"
-        @user.goods.created_at_desc.page(params[:page]).per(6)
+        @user.goods.created_at_desc
       elsif @type == "2"
-        @user.goods.created_at_asc.page(params[:page]).per(6)
+        @user.goods.created_at_asc
       else
-        @user.goods.good_desc.page(params[:page]).per(6)
-      end 
+        @user.goods.good_desc
+      end&.page(@page).per(6) 
 
     respond_to do |format|
       format.turbo_stream
@@ -331,17 +336,12 @@ class UsersController < ApplicationController
   def view_episodes
     #where句で指定を加えることでカラムに対して条件を設定するクエリを作成することができる
     #クエリの?の部分にそれぞれ"未設定" , current_user.idが対応している
-    if !current_user.nil?
-      @users = User.where("episode != ? AND id != ? " , "未設定" , current_user.id).page(params[:page]).per(10)
-    else
-      #ログインしていない状態では登録しているユーザの中でエピソードを投稿している人のみ表示する
-      @users = User.where("episode != ?" , "未設定").page(params[:page]).per(10)
-    end
-  end
-
-  #ここではDOM操作をTurbo Streamを用いて行うための処理を書く
-  def turbo_stream_view_episodes
-
+    @users = 
+      if !current_user.nil?
+        User.where("episode != ? AND id != ?" , "未設定" , current_user.id)
+      else
+        User.where("episode != ? AND id != ?" , "未設定" , current_user.id)
+      end&.page(params[:page]).per(10)
   end
 
   private 

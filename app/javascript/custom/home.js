@@ -1,136 +1,286 @@
-//aboutがクリックされたらその場所まで遷移する
 document.addEventListener("turbo:load", () => {
-    document.querySelector(".header-nav li:nth-child(1)").addEventListener("click", (e) => {
-        e.preventDefault();
-        document.querySelector("#about").scrollIntoView({
-            behavior: 'smooth', // スムーズにスクロール
-            block: 'center' // 要素がビューポートの上端に合わせてスクロール
-        });
-    });
-    //featureがクリックされたらその場所まで遷移する
-    document.querySelector(".header-nav li:nth-child(2)").addEventListener("click", (e) => {
-        e.preventDefault();
-        document.querySelector("#feature").scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    });
-    //ここから下は表示でanimationを適応させる場所
+    const catchphrase = document.querySelector("#catchphrase");
+    const text1 = document.querySelector("#text-1");
+    const text2 = document.querySelector("#text-2");
 
-    /*サブタイトルに対してアニメーションを加える*/
-    const subTitle = document.querySelector(".sub-title");
-    const headerH2 = document.querySelectorAll("#header-h2");
-    function showsubTitle(entries, obs) {
+    function showcatchphrase(entries, obs) {
         if (entries[0].isIntersecting) {
-            for (let i = 0; i < headerH2.length; ++i) {
-                headerH2[i].animate(
+            text1.querySelectorAll("span").forEach((item, index) => {
+                item.animate(
                     {
                         opacity: [0, 1],
-                        scale: [0.5, 2.0]
                     },
                     {
-                        duration: 2000,
-                        delay: i * 300,
-                        easing: "ease",
+                        duration: 1000,
+                        delay: index * 300,
                         fill: "forwards"
                     }
                 )
-            }
+            });
+            text2.querySelectorAll("span").forEach((item, index) => {
+                item.animate(
+                    {
+                        opacity: [0, 1],
+                    },
+                    {
+                        duration: 1000,
+                        delay: 1200 + index * 300,
+                        fill: "forwards"
+                    }
+                )
+            });
+
             obs.unobserve(entries[0].target);
         }
     }
 
-    const subTitleObserver = new IntersectionObserver(showsubTitle);
-    subTitleObserver.observe(subTitle);
+    const catchphraseObserver = new IntersectionObserver(showcatchphrase);
+    catchphraseObserver.observe(catchphrase);
+    //Aboutが押されたらAboutまで遷移する
+    //Featureが押されたらFeatureまで遷移する
+    const scrollAbout = document.querySelector("#scroll-about");
+    const title = document.querySelector(".about-title");
+    const aboutContainer = document.querySelector("#about-container");
+    const aboutDiv = document.querySelector(".about-title div");
 
-    /*Search Booksとはについてアニメーションを加える*/
-    const aboutContainer = document.querySelector(".about-container");
-    const aboutText = document.querySelector(".about-text");
-    const aboutPicture = document.querySelector(".about-picture");
+    const options = {
+        duration: 1200,
+        delay: 500,
+        easing: "ease-out",
+        fill: "forwards"
+    }
+    scrollAbout.addEventListener("click", (e) => {
+        e.preventDefault();
+        title.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    })
 
     function showAboutContainer(entries, obs) {
-        const keyframes = {
-            opacity: [0, 1],
-            translate: ["0 10rem", 0],
-            scale: [0.5, 1.0],
-            filter: ["blur(25px)", "blur(0)"]
-        };
-        const options = {
-            duration: 2600,
-            easing: "ease",
-            fill: "forwards"
-        };
-
+        //isIntersecting関数で指定した監視対象の要素が交差しているのか判別できる
         if (entries[0].isIntersecting) {
-            aboutText.animate(keyframes, options);
-            aboutPicture.animate(keyframes, options);
+            //紹介文に対するスタイルを定義している
+            aboutContainer.querySelector("p").animate([
+                {
+                    opacity: 0,
+                    filter: "blur(4px)",
+                    translate: "0 4rem",
+                    fontSize: "18px",
+                    offset: 0
+                },
+                {
+                    opacity: 0.3,
+                    filter: "blur(2px)",
+                    translate: "0 2rem",
+                    fontSize: "19px",
+                    offset: 0.3
+                },
+                {
+                    opacity: 0.8,
+                    filter: "blur(2px)",
+                    translate: "0 .5rem",
+                    fontSize: "20px",
+                    offset: 0.8
+                },
+                {
+                    opacity: 1,
+                    filter: "blur(0)",
+                    translate: "0",
+                    fontSize: "18px",
+                    offset: 1
+                }
+            ],
+                {
+                    duration: 2000,
+                    easing: "ease-out",
+                    fill: "forwards"
+                });
+            //画像に対するスタイルを充てる
+            aboutContainer.querySelector("img").animate([
+                {
+                    opacity: 0,
+                    filter: "blur(6px)",
+                    translate: "0 3.5rem",
+                    boxShadow: '0px 0px 0px rgba(0, 0, 0, 0)',
+                    offset: 0
+                },
+                {
+                    opacity: 0.3,
+                    filter: "blur(4.5px)",
+                    translate: "0 2.8rem",
+                    boxShadow: '-0.3rem 0.3rem 10px grey',
+                    offset: 0.3
+                },
+                {
+                    opacity: 0.7,
+                    filter: "blur(2px)",
+                    translate: "0 1.4rem",
+                    boxShadow: '-0.8rem 0.8rem 7px grey',
+                    offset: 0.7
+                },
+                {
+                    opacity: 1,
+                    filter: "blur(0)",
+                    translate: "0",
+                    boxShadow: '-1.1rem 1.1rem 4px grey',
+                    offset: 1
+                }
+            ],
+                {
+                    duration: 1800,
+                    easing: "ease-out",
+                    fill: "forwards"
+                })
+            //Aboutの下の棒線のアニメーション
+            aboutDiv.animate(
+                {
+                    opacity: [0, 1],
+                    width: [0, '60%']
+                }, options )
             obs.unobserve(entries[0].target);
         }
     }
+
     const aboutContainerObserver = new IntersectionObserver(showAboutContainer);
     aboutContainerObserver.observe(aboutContainer);
 
-    //ここから下には4つの特徴に対してアクションを加える
-    const responseKeyframes = {
-        translate: ["1rem 1rem", 0, "-1rem -1rem", 0, "0.6rem 0.6rem"],
-    }
-    const customKeyframes = {
-        translate: ["-1.2rem 1.2rem", 0, "1.2rem -1.2rem", 0, "-0.8rem 0.8rem"],
-    }
-    const informationKeyframes = {
-        translate: ["-1.1rem -1.1rem", 0, "1.1rem 1.1rem", 0, "-0.9rem -0.9rem"]
-    }
-    const intuitivenessKeyframes = {
-        translate: ["0 0.6rem", 0, "0 -1.1rem", 0, "0 0.3rem"]
-    }
-    const options = {
-        duration: 3000,
-        iterations: "Infinity"
-    };
+    const scrollFeature = document.querySelector("#scroll-feature");
+    const featureContainer = document.querySelector("#feature-container");
+    scrollFeature.addEventListener("click", (e) => {
+        e.preventDefault();
+        featureContainer.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        })
+    })
 
-    const response = document.querySelector(".response");
-    response.animate(responseKeyframes, options);
-
-    const custom = document.querySelector(".custom");
-    custom.animate(customKeyframes, options);
-
-    const information = document.querySelector(".information");
-    information.animate(informationKeyframes, options);
-
-    const intuitiveness = document.querySelector(".intuitiveness");
-    intuitiveness.animate(intuitivenessKeyframes, options);
-
-    //サービス開始ボタンに対してanimationを加える
-    const appStartContainer = document.querySelector(".appStart-container");
-    const appStartImg = document.querySelector(".appStart-img");
-    function showappStart(entries, obs) {
+    //ここから下ではfeature項目に対してのアニメーションを適用する
+    function showFeatureContainer(entries, obj) {
         if (entries[0].isIntersecting) {
-            appStartImg.animate(
+            const target = entries[0].target;
+            const options = {
+                duration: 1500,
+                easing: "ease-out",
+                fill: "forwards"
+            }
+            if (target.className === "feature2") {
+                target.animate(
+                    {
+                        opacity: [0, 1],
+                        translate: ["-5rem 0", 0],
+                        scale: [1.1, 1.0],
+                    }, options
+                )
+            } else {
+                target.animate(
+                    {
+                        opacity: [0, 1],
+                        translate: ["5rem 0", 0],
+                        scale: [1.1, 1.0],
+                    }, options
+                )
+
+            }
+            obj.unobserve(entries[0].target);
+        }
+    }
+
+    //featureContainerObserverはshowFeatureContainerの第２引数に渡される
+    //これは監視対象を監視するロボットを作成したことになる
+    const featureContainerObserver = new IntersectionObserver(showFeatureContainer);
+    const featureContainerItems = featureContainer.querySelectorAll(".feature1 , .feature2 , .feature3");
+    featureContainerItems.forEach(item => {
+        featureContainerObserver.observe(item);
+    });
+
+    //ここではfeature-titleが画面内に入ってきた際にアニメーションする処理を加える
+    const featureTitle = document.querySelector(".feature-title");
+
+    function showFeatureTitle(entries, obs) {
+        if (entries[0].isIntersecting) {
+            featureTitle.querySelector("div").animate(
                 {
                     opacity: [0, 1],
-                    translate: ["100vw 0", 0],
-                    rotate: ["-180deg", 0]
-                },
-                {
-                    duration: 1800,
-                    easing: "ease",
-                    fill: "forwards"
-                }
-            );
+                    width: [0, '60%']
+                }, options )
             obs.unobserve(entries[0].target);
         }
     }
-    const appStartContainerObserver = new IntersectionObserver(showappStart);
-    appStartContainerObserver.observe(appStartContainer);
 
-    //この下では紹介ページからアプリへの遷移を書く
-    const nextPage = document.querySelector("#next-page");
-    nextPage.addEventListener("click", event => {
-        //これでデフォルトのaタグの効果を打ち消す。
-        //addEventListener関数に入ってくるeventオブジェクトのpreventDefaultメソッドではブラウザで指定されたメソッドの効果を打ち消す
-        event.preventDefault();
-        window.open("app-view.html", "_blank");
+    const featureTitleObserver = new IntersectionObserver(showFeatureTitle);
+    featureTitleObserver.observe(featureTitle);
+
+    const scrollFunction = document.querySelector("#scroll-function");
+    const functionTitle = document.querySelector(".function-title");
+
+    scrollFunction.addEventListener("click", () => {
+        functionTitle.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        })
     });
 
+    function showFunctionTitle(entries , obs) {
+        if (entries[0].isIntersecting) {
+            functionTitle.querySelector("div").animate(
+                {
+                    opacity: [0 , 1],
+                    width: [0 , "60%"]
+                }, options )
+            obs.unobserve(entries[0].target);
+        }
+    }
 
-});
+    const functionTitleObserver = new IntersectionObserver(showFunctionTitle);
+    functionTitleObserver.observe(functionTitle);
+
+
+    
+
+    //ここから下では画面が一定以上スクロールされた際にヘッダーを固定するための処理を考える
+    const introNav = document.querySelector(".intro-nav");
+    window.addEventListener("scroll", () => {
+        //スクロール量が100px(ヘッダーの大きさ)を越えた段階でヘッダー固定のスタイルを適用する
+        if (window.scrollY >= 100) {
+            introNav.classList.add("fixed");
+        } else {
+            introNav.classList.remove("fixed");
+        }
+    })
+
+    //ここから下では機能紹介画面で各機能が選択された際に中央で詳細表示する機能を実装する
+    const viewMain = document.querySelector(".view-main");
+    const episode = document.querySelector(".left-container #episode");
+    const myShelf = document.querySelector(".left-container #my_shelf");
+    const search = document.querySelector(".right-container #search");
+    const post = document.querySelector(".right-container #post");
+    
+    viewEachFunction(viewMain , episode);
+    viewEachFunction(viewMain , myShelf);
+    viewEachFunction(viewMain , search);
+    viewEachFunction(viewMain , post);
+
+    //これは各機能が選択された際に中央で詳細表示をするための関数
+    function viewEachFunction(viewMain , item) {
+        //クリックされた際に中央で詳細表示する
+        item.addEventListener("click" , () => {
+            //現在選択されている要素を取得する
+            const target = document.querySelector(".function-container #episode .add-item-click, .function-container #my_shelf .add-item-click , .function-container #search .add-item-click , .function-container #post .add-item-click");
+            if (target) {
+                target.classList.remove("add-item-click");
+                target.style.display = "none";
+            } 
+
+            viewMain.querySelector("h3").textContent = item.querySelector("h4").textContent;
+            viewMain.querySelector("img").src = item.querySelector("img").src;
+            viewMain.querySelector("p").textContent = item.querySelector("p").textContent;
+
+            const itemClick = item.querySelector(".item-click");
+            itemClick.style.display = "block";
+            itemClick.classList.add("add-item-click");
+        });
+    }
+})
+
+

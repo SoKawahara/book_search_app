@@ -1,0 +1,12 @@
+<%= turbo_stream.update "my_shelf_container" do %>
+  <%= render "shelfs/turbo_stream_partial/show" %>
+<% end %>
+<% if @type == 1 %>
+  <%= turbo_stream.update "select-tab" do %>
+    <%= render "shelfs/turbo_stream_partial/select_tab_1" %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.update "select-tab" do %>
+    <%= render "shelfs/turbo_stream_partial/select_tab_0" %>
+  <% end %>
+<% end %>

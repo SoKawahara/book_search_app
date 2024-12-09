@@ -302,8 +302,8 @@
         align-items: center;
 
         .publish-day-img {
-            width: 260px;
-            height: 360px;
+            width: 200px;
+            height: 280px;
             border: 3px solid black;
             margin-left: .6rem;
             margin-top: 1rem;
@@ -318,6 +318,12 @@
         width: 60%;
         position: relative;
         overflow-y: scroll;
+        scrollbar-width: none;
+
+        /* Firefox */
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         input {
             font-family: "Bodoni Moda SC", serif;
