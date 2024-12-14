@@ -80,9 +80,9 @@
         height: 30px;
         text-align: center;
         border-radius: 20px;
-        background-color: #8daac7;
+        background-color: rgb(173, 172, 172);
         border: 2px solid #cdcfd2;
-        box-shadow: 0 5px 7px rgb(152, 171, 171);
+        box-shadow: 0 6px 8px rgb(91, 92, 92);
         color: white;
         font-family: "Bodoni Moda SC", serif;
         font-size: 18px;
@@ -231,7 +231,7 @@
         }
     }
 
-    
+
 
     .post-main-content {
         overflow-y: scroll;
@@ -258,10 +258,11 @@
             inset: 0;
             background-color: rgba(138, 138, 138, 0.406);
             z-index: 9999;
+
             div {
                 position: absolute;
                 top: 16rem;
-                right: 3rem;
+                left: 3rem;
                 width: 70px;
                 height: 70px;
                 display: flex;
@@ -280,7 +281,7 @@
         /* ホバーした際に上のクラスを付加する要素に付いたクラス名。デフォルトでは要素を表示しないようにする */
         .scrollable-hint {
             display: none;
-            
+
         }
 
         .content {
@@ -443,6 +444,294 @@
 
 }
 
+/* ここから下のエピソード関連のスタイルを適用する */
+.setting-episode {
+    width: 90%;
+    margin: 3rem auto;
+    padding: 1.5rem;
+    border: 2px solid black;
+    border-radius: 30px;
+    background-color: #d7dde1;
+
+    /* これは入力欄に現在入力されている文字数をカウントする部分のスタイル */
+    .trigger-counter,
+    .changing-counter {
+        width: 80%;
+        margin: auto;
+        display: flex;
+        justify-content: start;
+
+    }
+
+    /* ラベル関連のスタイルを充てる */
+    .content {
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 20px;
+        font-weight: 500;
+        display: block;
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+    }
+
+    .birthday {
+        width: 20%;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+        display: block;
+        margin: 1.5rem auto;
+        border-radius: 18px;
+    }
+
+    .occupations {
+        width: 70%;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+        display: block;
+        margin: 1.5rem auto;
+        padding: 1.5rem;
+        border-radius: 18px;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .episode {
+        width: 80%;
+        height: 300px;
+        display: block;
+        margin: 2rem auto;
+        padding: 1rem;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+        border-radius: 18px;
+        border: 2px inset black;
+        overflow-y: scroll;
+        scrollbar-width: none;
+
+        /* Firefox */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+    }
+
+    .profile-submit-btn {
+        width: 250px;
+        background-color: rgb(87, 202, 252);
+        border-radius: 20px;
+        border: 2px solid rgb(207, 227, 232);
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 20px;
+        color: white;
+        display: block;
+        margin: 5rem auto 2rem auto;
+    }
+}
+
+/* ここでは各ユーザのエピソードを表示する画面を作成する */
+.episode-edit-container {
+    width: 90%;
+    display: flex;
+    justify-content: end;
+    margin: 1rem auto;
+
+    a {
+        padding: .6rem;
+        border-radius: 18px;
+        color: white;
+        background-color: grey;
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none; 
+        &:hover {
+            text-decoration: none;
+            color: white;
+        }
+    }
+
+}
+
+.episode-QA-container {
+    width: 98%;
+    border: 5px ridge rgb(182, 227, 249);
+    margin: 2rem auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .question {
+        margin-bottom: 2rem;
+        width: 100%;
+        display: flex;
+        justify-content: end;
+
+        div {
+            width: 40%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+
+            /* ここでは吹き出しを作成する */
+            .speech-bubble {
+                border: 2px solid black;
+                border-radius: 10px;
+                width: 80%;
+                display: grid;
+                place-items: center;
+                position: relative;
+
+                &:before,
+                &:after {
+                    content: "";
+                    display: block;
+                    width: 15px;
+                    height: 25px;
+                    background-color: black;
+                    position: absolute;
+                    inset: 30% 100% 100% 100%;
+
+                    /* これは多角形を作成するための指定 */
+                    clip-path: polygon(0 0,
+                            100% 50%,
+                            0 100%)
+                }
+
+                &:after {
+                    background-color: white;
+                    translate: -3px 0;
+                }
+
+                h3 {
+                    padding-bottom: 0.5rem;
+                    font-family: "Bodoni Moda SC", serif;
+                    font-size: 18px;
+                    font-weight: 500;
+                    text-align: center;
+
+
+                    &:before {
+                        content: "Q. ";
+                    }
+                }
+            }
+
+
+
+            img {
+                width: 60px;
+                height: 60px;
+                border: 3px outset rgb(155, 174, 241);
+                border-radius: 50%;
+            }
+
+
+        }
+    }
+
+    .answer-reading-history,
+    .answer-trigger {
+        margin-bottom: 2rem;
+        width: 100%;
+        display: flex;
+        justify-content: start;
+
+        .answer-container {
+            width: 60%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+
+            div {
+                padding: 2rem;
+                border: 2px solid black;
+                border-radius: 10px;
+                width: 85%;
+                display: grid;
+                place-items: center;
+                position: relative;
+
+                &:before,
+                &:after {
+                    content: "";
+                    display: block;
+                    width: 15px;
+                    height: 25px;
+                    background-color: black;
+                    position: absolute;
+                    inset: 30% 0 0 0;
+                    translate: -15px 0;
+
+                    /* これは多角形を作成するための指定 */
+                    clip-path: polygon(100% 0,
+                            100% 100%,
+                            0 50%)
+                }
+
+                &:after {
+                    background-color: white;
+                    translate: -12px 0
+                }
+
+                p {
+                    font-family: "Bodoni Moda SC", serif;
+                    font-size: 18px;
+                    font-weight: 500;
+                    border-bottom: 1px solid black;
+                    text-align: center;
+
+                    &::before {
+                        content: "A. ";
+                    }
+                }
+
+                a {
+                    margin-top: 2rem;
+                    width: 95%;
+                    font-family: "Bodoni Moda SC", serif;
+                    font-weight: 500;
+                    font-size: 16px;
+                    color: rgb(121, 120, 120);
+                    text-decoration: none;
+                    text-align: end;
+                    transition: 0.5s;
+
+                    &:hover {
+                        color: rgb(121, 120, 120);
+                        text-decoration: none;
+                        font-size: 17px;
+                    }
+                }
+
+
+
+            }
+
+            img {
+                width: 60px;
+                height: 60px;
+                border: 3px groove rgb(120, 124, 130);
+                border-radius: 50%;
+            }
+        }
+    }
+
+}
+
 
 
 /* 完成したプロフィールを表示する */
@@ -484,56 +773,9 @@
         width: 90%;
         position: relative;
 
-        .episode {
-            width: 90%;
-            height: 350px;
-            margin: 2rem auto;
-            padding: 1.5rem 2rem;
-            border: 6px inset rgb(201, 196, 196);
-            overflow-y: scroll;
-            scrollbar-width: none;
-
-            /* Firefox */
-            &::-webkit-scrollbar {
-                display: none;
-            }
-
-            h4 {
-                font-family: "Bodoni Moda SC", serif;
-                font-size: 25px;
-                font-weight: 500;
-                color: #4b4740;
-                letter-spacing: .5rem;
-                text-align: center;
-                margin-bottom: 2rem;
-            }
-
-            .episode-container {
-                display: grid;
-                place-items: center;
-                width: 100%;
-                height: 70%;
-
-                p {
-                    font-family: "Bodoni Moda SC", serif;
-                    font-size: 18px;
-                    font-weight: 400;
-                    letter-spacing: .13rem;
-                    color: #4b4740;
-                    text-align: center;
-                    line-height: 1.7;
-                    margin-bottom: 2rem;
-
-                }
-
-            }
-
-
-        }
-
         .user-info {
             padding: 1rem;
-            height: 15%;
+            height: 30%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -705,30 +947,6 @@
         }
 
         .profile-container {
-            .episode {
-                width: 100%;
-                height: 300px;
-                padding: 1rem 1.5rem;
-                border: 3.5px inset rgb(201, 196, 196);
-
-                h4 {
-                    font-size: 20px;
-                    color: #4b4740;
-                    letter-spacing: .2rem;
-                    text-align: center;
-                    margin-bottom: 1.6rem;
-                }
-
-                .episode-container {
-                    p {
-                        font-size: 16px;
-                        letter-spacing: .1rem;
-                        line-height: 1.55;
-                        margin-bottom: 1.5rem;
-                    }
-                }
-            }
-
             .user-info {
 
                 p {

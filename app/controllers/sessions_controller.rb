@@ -1,5 +1,10 @@
 class SessionsController < ApplicationController
   def new
+    #すでにアプリに対してログインしているユーザが存在する場合にはログイン画面を表示しないようにする
+    if logged_in?
+      flash[:danger] = "既にログインしています"
+      redirect_to "/users/#{current_user.id}/1"
+    end
   end
 
   def create 

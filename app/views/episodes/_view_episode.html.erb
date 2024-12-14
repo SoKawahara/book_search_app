@@ -1,0 +1,62 @@
+<h1 class="new-title">エピソード</h1>
+<div class="episode-edit-container">
+    <%= link_to "エピソードを編集する" , episode_edit_path %>
+</div>
+<section class="episode-QA-container">
+    <section class="question">
+        <div>
+            <div class = "speech-bubble">
+                <h3>いつ頃から本を読み始めましたか?</h3>
+            </div>
+            <%= image_tag "reporter.png" %>
+        </div>
+    </section>
+    <section class="answer-reading-history">
+        <div class = "answer-container">
+            <%= image_tag gravatar_for(@user) %>
+            <div>
+              <% if @reading_time / 365 > 0 %>
+                <p class = "reading_history"><%= @reading_history %><br><%= "読書歴としては#{@reading_time / 365}年#{@reading_time % 365 / 30}か月くらいですね～" %></p>
+              <% else %>
+                <p class = "reading_history"><%= @reading_history %><br><%= "読書歴としては#{@reading_time % 365 / 30}か月くらいですね～" %></p>
+              <% end %>
+            </div>
+        </div>
+    </section>
+    <section class="question">
+        <div>
+            <div class="speech-bubble">
+                <h3>きっかけは何だったんですか?</h3>
+            </div>
+            <%= image_tag "reporter.png" %>
+        </div>
+    </section>
+    <section class="answer-trigger">
+        <div class = "answer-container">
+            <%= image_tag gravatar_for(@user) %>
+            <div id = "trigger">
+              <p id = "trigger-about-content"><%= @episode.about_trigger %></p>
+              <p id = "trigger-main-content" style = "display: none;"><%= @episode.trigger %></p>
+              <%= link_to "→詳細を見る" %>
+            </div>  
+        </div>
+    </section>
+    <section class="question">
+        <div>
+            <div class="speech-bubble">
+                <h3>本を読み始めて変わったことはありますか?</h3>
+            </div>
+            <%= image_tag "reporter.png" %>
+        </div>
+    </section>
+    <section class="answer-trigger">
+        <div class = "answer-container">
+            <%= image_tag gravatar_for(@user) %>
+            <div id = "changing">
+              <p id = "changing-about-content"><%= @episode.about_changing %></p>
+              <p id = "changing-main-content" style = "display: none;"><%= @episode.changing %></p>
+              <%= link_to "→詳細を見る" %>
+            </div>  
+        </div>
+    </section>
+</section>

@@ -53,8 +53,7 @@ class PostsController < ApplicationController
     end
 
     def update
-        user = current_user
-        if user && post = user.goods.find(params[:id])
+        if user = current_user && post = user.goods.find(params[:id])
             #送信された値が空白であった場合には現在設定されている値を入れることで特定の要素だけ変更可能にする
             #変更が加えられた部分のみを入れたハッシュを作成してそれをupdateメソッドに渡している
             #ハッシュに対してselectメソッドを使用すると条件を満たす要素だけを新たなハッシュとして作成する
@@ -66,7 +65,8 @@ class PostsController < ApplicationController
             redirect_to "/users/#{user.id}/1"
         else
             flash[:danger] = "変更を適用できませんでした"
-            redirect_to "/users/#{user.id}/1"
+            #HTTPステータスコード422とはリクエストの内容は正常だがフォームのバリデーションエラーなどで処理ができなかった際に指定される
+            render 'edit' , status: :unprocessable_entity
         end
 
     end
@@ -74,25 +74,25 @@ class PostsController < ApplicationController
     #この投稿を削除するボタンを押された際に実際に投稿を削除する
     #投稿を削除する際に削除する投稿がプロフィールに登録されているモノだったらプロフィールからも削除する
     def destroy
-        @user = current_user
-        if @user && (post = @user.goods.find(params[:id])) && current_user?(@user)
+        if @user = current_user && (post = @user.goods.find(params[:id])) && current_user?(@user)
             #ユーザがプロフィールに登録している投稿の中に削除する投稿も含まれていればそれを変更する
             recommendation_books = (@user.recommendation_books)
             recommendation_books.each do |key , value|
+                #これから削除する投稿のidがおすすめの中に含まれていた際にそれも併せて削除する
                 if post.id.to_s == value
                     recommendation_books[key] = "未設定"
                     @user.update(recommendation_books: recommendation_books)
                 end
             end
-            
-            #shelf_idからもとになった本棚にある本を取得する
+        
+            #shelf_idからもとになった本棚にある本を取得してその本棚から投稿が作成されていない状態に戻す
             shelf = Shelf.find(post.shelf_id)
-            shelf.created_post = 0
-            shelf.save
+            shelf.update_attribute(:created_post , 0)
 
             post.destroy
             flash[:success] = "投稿を削除しました!"
 
+            #Turboを使用している際や一部のブラウザではGET,POST以外のメソッドでリクエストが送信された際にはリダイレクト先にも同じメソッドでリクエストを送信する可能性がある
             redirect_to "/users/#{@user.id}/1" , status: :see_other
         else
             flash[:danger] = "投稿を削除できませんでした"
@@ -248,12 +248,6 @@ class PostsController < ApplicationController
 
         #--------------------------------ここから下一部コピペ---------------------------------------------
         # 年齢計算用のSQLをDBMSに応じて設定,ここは完全にコピペ
-        age_sql = if ActiveRecord::Base.connection.adapter_name == "PostgreSQL"
-                    "EXTRACT(YEAR FROM age(DATE '#{today}', birthday))"
-                  else # SQLite3
-                    "(strftime('%Y', 'now') - strftime('%Y', birthday)) - (strftime('%m-%d', 'now') < strftime('%m-%d', birthday))"
-                  end
-
         tmp = 
           if @gender != nil 
             User.where("gender == ? AND id != ?" , @gender , current_user)
@@ -263,8 +257,16 @@ class PostsController < ApplicationController
         
         lower_age = episode_params["lower_age"].presence&.to_i
         upper_age = episode_params["upper_age"].presence&.to_i
+
+        age_sql = if ActiveRecord::Base.connection.adapter_name == "PostgreSQL"
+            "EXTRACT(YEAR FROM age(DATE '#{today}', birthday))"
+          else # SQLite3
+            "(strftime('%Y', 'now') - strftime('%Y', birthday)) - (strftime('%m-%d', 'now') < strftime('%m-%d', birthday))"
+          end
+        
         tmp = tmp.select("users.*, #{age_sql} AS age").where("#{age_sql} BETWEEN ? AND ?", lower_age, upper_age) if lower_age != nil && upper_age != nil
 
+        #orderメソッドを指定することで指定したカラムの順番でソートすることができる
         @users = 
           case @order_info
           when "作成日時"
@@ -275,18 +277,6 @@ class PostsController < ApplicationController
             end
           #ここから下２つのカラムについて歴ではなく日付で登録してあるので歴で見たら長くなる
           when "読書歴"
-            if @sort_info == "昇順"
-                tmp.order(reading_history: :desc)
-            else
-                tmp.order(reading_history: :asc)
-            end
-          when "年齢"
-            if @sort_info == "昇順"
-                tmp.order(birthday: :desc)
-            else
-                tmp.order(birthday: :asc)
-            end
-          else
             tmp.order(episode_updated_time: :asc)
           end&.page(params[:page])&.per(10)
         # @users = User.where("gender == ? AND id != ?" , @gender , current_user.id).order(episode_updated_time: :asc).page(params[:page]).per(10)

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   #このルーティングファイルでは１番上にあるものから順番にマッチさせるので優先順位が高いものは上に書く
 
   #memberメソッドを用いることでパスの中にidを含むような名前付きルーティングを作成する
-  #/users/id/following , /users/id/followersのようになる
+  #/users/id/following , /users/id/followersのようになる 
   get "/users/:id/following" , to: "users#following"
   get "/users/:id/followers" , to: "users#followers"
   get "/users/profile/:id"   , to: "users#profile"
@@ -36,6 +36,16 @@ Rails.application.routes.draw do
   get "/posts/sort_episodes"              , to: "posts#sort_episodes"
   get "/posts/:user_id/:post_id" ,  to: "posts#view_post"
 
+  #ここから下ではepisodesコントローラーに対するルーティングを定義する
+  get "/episodes/edit"   , to: "episodes#edit" , as: :episode_edit
+  patch "/episodes/update/:id"  , to: "episodes#update"
+  get "/episodes/new" , to: "episodes#new"
+  post "/episodes/create" , to: "episodes#create"
+  get "/episodes/:user_id" , to: "episodes#show"
+  
+  
+  
+
   get "/searches" ,   to: "searches#top"
   post "/searches/index" , to: "searches#index"
   get "/searches/show" ,  to: "searches#show"
@@ -47,7 +57,7 @@ Rails.application.routes.draw do
   post "/shelfs/new"     , to: "shelfs#new"
   post "/shelfs/create"  , to: "shelfs#create"
   get "/shelfs/update/:shelf_id" , to: "shelfs#update"
-    get "/shelfs/:type" , to: "shelfs#show"
+  get "/shelfs/:type" , to: "shelfs#show"
 
  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

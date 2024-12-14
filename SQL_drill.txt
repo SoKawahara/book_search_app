@@ -655,6 +655,19 @@ chapter2
       JOIN 商品 AS S
         ON T.商品コード = COALESCE(S 
      WHERE T.注文番号 = '202304030010'
+69. SELECT S.商品コード , S.商品名 , S.単価 , T.個数 , T.個数 * S.単価 AS 総売上金額    
+      FROM 商品 AS S 
+      JOIN (SELECT 商品コード , SUM(数量) AS 個数
+              FROM 注文 
+             GROUP BY 商品コード) AS T 
+        ON S.商品コード = T.商品コード 
+     WHERE S.商品コード LIKE 'B%'
+     ORDER BY 商品コード
+70. SELECT S1.商品コード , S1.商品名 , S2.商品コード AS 関連商品コード , S2.商品名 AS S2.関連商品名
+      FROM 商品 AS S1 
+      JOIN 商品 AS S2 
+        ON S1.関連商品コード = S2.商品コード 
+
       
 
 
@@ -732,5 +745,22 @@ chapter2
       LEFT JOIN 廃番商品 AS H 
              ON T.商品コード = H.商品コード 
      WHERE T.注文番号 = '202304030010'
-     
-     
+
+69. SELECT S.商品コード , S.商品名 , S.単価 , COALESCE(T.数量 , 0) AS 売上数量 , S.単価 * COALESCE(T.数量 , 0) AS 総売上金額 
+      FROM 商品 AS S 
+      LEFT JOIN (SELECT 商品コード , SUM(数量) AS 数量 
+                   FROM 注文 
+                  WHERE 商品コード LIKE 'B%'
+                  GROUP BY 商品コード) AS T 
+             ON S.商品コード = T.商品コード 
+     WHERE S.商品コード LIKE 'B%' ORDER BY S.商品コード 
+*注文があったかどうかにかかわらずすべての商品を取得するという設計ならJOINしたレコードのカラムがNULLになる可能性があるのでCOALESCEを用いてNULLの場合に対処する必要がある
+
+
+70. SELECT S1.商品コード , S1.商品名 , S2.商品コード AS 関連商品コード , S2.商品名 AS 関連商品名 
+      FROM 商品 AS S1 
+      JOIN 商品 AS S2 
+        ON S1.商品コード = S2.関連商品コード 
+*この問題ではAに関連している商品があれば(商品Aのレコードの中の関連商品欄に何かが入っているという状況ではなく、Aが関連している商品)
+それを取得するという問題
+

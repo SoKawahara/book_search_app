@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  reading_history: 2024-12-10 19:26:23
+  title: MyString
+  about_trigger: MyString
+  about_changing: MyString
+  changing: MyString
+  episode_update_time: MyString
+  user: one
+
+two:
+  reading_history: 2024-12-10 19:26:23
+  title: MyString
+  about_trigger: MyString
+  about_changing: MyString
+  changing: MyString
+  episode_update_time: MyString
+  user: two

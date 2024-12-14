@@ -1,0 +1,28 @@
+<% provide(:title , "#{@user.name}さんのエピソード作成") %>
+<h1 class = "new-title">エピソードの登録</h1>
+
+<section class="setting-episode"> 
+  <%= form_with url: "/episodes/create" , mathod: :post , scope: :episode_info do |f| %>
+    <%= f.label :reading_history , "・読書を開始した年月:" , class: "content" %>
+    <%= f.month_field :reading_history , class: "birthday" %>
+    <%= f.label :title , "・エピソードのタイトル:" , class: "content" %>
+    <%= f.text_field :title, placeholder: "エピソードを表示する際のタイトルを入力してください(*必須項目です)" , class: "occupations" %>
+    <%= f.label :about_trigger , "・本を読み始めたきっかけ:" , class: "content" %>
+    <%= f.text_field :about_trigger , placeholder: "本を読み始めたきっかけを簡潔に記述してください(*必須項目です)" , class: "occupations" %>
+    <%= f.label :trigger , "・本を読み始めたきっかけ(上の項目よりも詳細に):" , class: "content" %>
+    <div class = "trigger-counter">
+        <p>[現在<span>0</span>文字です]</p>
+    </div>
+    <%= f.text_area :trigger , placeholder: "本を読み始めたきっかけを1000文字以内で上の項目よりも具体的に記述してください(*スキップ可能)" , class: "episode" , id: "trigger-area" %>
+    <%= f.label :about_changing , "・本を読み始めて変わったこと:" , class: "content" %>
+    <%= f.text_field :about_changing , placeholder: "本を読み始めて変わったことを簡潔に記述してください(*必須項目です)" ,class: "occupations" %>
+    <%= f.label :changing , "・本を読み始めて変わったこと(上の項目よりも詳細に):" , class: "content" %>
+    <div class = "changing-counter">
+        <p>[現在<span>0</span>文字です]</p>
+    </div>
+    <%= f.text_area :changing , placeholder: "本を読み始めて変わったことを1000文字以内で上の項目よりも具体的に記述してください(*スキップ可能)" , class: "episode" , id: "changing-area" %>
+
+    <%= f.submit "エピソードを登録する" , class: "profile-submit-btn" %>
+  <% end %>
+</section>
+  

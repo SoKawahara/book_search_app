@@ -7,6 +7,7 @@ document.addEventListener("turbo:load", function () {
     const formBtn = document.querySelector(".new-btn");
 
 
+
     //氏名入力欄へのバリデーション
     userName.addEventListener("input", () => {
         if (userName.value.match(/(\u3000)/)) {
@@ -32,7 +33,6 @@ document.addEventListener("turbo:load", function () {
     userPasswordConfirmation.addEventListener("input", () => {
         userPasswordConfirmation.style.border = ((userPassword.value === userPasswordConfirmation.value) || userPasswordConfirmation.value === "") ? "1px solid black" : "3px solid red";
     });
-
 });
 
 

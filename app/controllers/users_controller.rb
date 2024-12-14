@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     @type = params[:type]
     #ここで現在設定されているクエリパラメータを取得する
     @page = params[:page]
-    @posts =  
+    @goods =  
       if @type == "1"
         @user.goods.created_at_desc
       elsif @type == "2"
@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @type = params[:type]
     @page = params[:page]
-    @posts = 
+    @goods = 
       if @type == "1"
         @user.goods.created_at_desc
       elsif @type == "2"
@@ -151,7 +151,6 @@ class UsersController < ApplicationController
       
       @gender = @user.gender
       @occupations = @user.occupations
-      @episode = @user.episode
     else
       @year = "0"
       @month = "0"
@@ -182,7 +181,6 @@ class UsersController < ApplicationController
     @birthday = session[:birthday] || ""
     @gender = session[:gender] != "" ? session[:gender] : ""
     @occupations = session[:occupations] || ""
-    @episode = session[:episode] || ""
 
     #プロフィール作成を開始してセッションに/users/profile_new/:idがなかったらURLを取得して格納する
     session[:profile_new_url] ||= request.fullpath
@@ -242,7 +240,6 @@ class UsersController < ApplicationController
     session.delete(:birthday) if session[:birthday]
     session.delete(:gender) if session[:gender]
     session.delete(:occupations) if session[:occupations]
-    # session.delete(:episode) if session[:episode]
     session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
     session.delete(:profile_new_url)
 
@@ -259,7 +256,6 @@ class UsersController < ApplicationController
     session[:gender] = params[:gender]
     session[:occupations] = params[:occupations]
     # session[:episode]に対して入力された内容を保存するには容量が足りなくなることがあるので現状では使用しない
-    # session[:episode] = params[:episode]
     head :ok#戻り値としてHTTPステータスコードを返す
   end
   
@@ -284,7 +280,6 @@ class UsersController < ApplicationController
     @genre = session[:genre] || ""
     @gender = session[:gender] || ""
     @occupations  = session[:occupations] || ""
-    @episode = session[:episode] || ""
     #プロフィール変更を開始してセッションに/users/profile_edit/:idがなかったらURLを取得して格納する
     session[:profile_edit_url] ||= request.fullpath
   end
@@ -324,7 +319,6 @@ class UsersController < ApplicationController
     session.delete(:birthday) if session[:birthday]
     session.delete(:gender) if session[:gender]
     session.delete(:occupations) if session[:occupations]
-    # session.delete(:episode) if session[:episode]
     session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
     session.delete(:profile_edit_url)
 
@@ -352,7 +346,7 @@ class UsersController < ApplicationController
     end
 
     def profile_params
-      params.require(:profile_info).permit(:reading_history, :favorite_genre, :occupations , :gender, :birthday, :episode)
+      params.require(:profile_info).permit(:reading_history, :favorite_genre, :occupations , :gender, :birthday)
     end
 
     #beforeフィルタ

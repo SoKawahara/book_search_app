@@ -10,7 +10,8 @@ document.addEventListener("turbo:load", () => {
 
         function showScroll(entries, obs) {
             if (entries[0].isIntersecting) {
-                if (content.textContent.length >= 460) {
+                const maxLength = 460;//maxLengthを越える文字数の感想ではスクロール可能のアニメーションを作成する
+                if (content.textContent.length >= maxLength) {
                     //感想を表示しているコンテナに対してホバーした際の処理
                     scrollableHint.style.display = "block";
                     scrollableHint.classList.add("add-scroll-hint");

@@ -1,0 +1,17 @@
+<% provide(:title , "#{@user.name}さんのプロフィール") %>
+<% if @episode.nil? %>
+  <div class="no_profile">
+    <div>
+      <% if current_user?(@user) %>
+        <p>*エピソードが未設定です。以下のボタンからエピソードの設定を行ってください</p>
+        <%= link_to "エピソード設定" , "/episodes/new" , class: "account-profile" %>
+      <% else %>
+        <p>*エピソードが未設定です</p>
+        <%= link_to "戻る" , "/users/#{@user.id}/1" , class: "account-profile" , style: "margin-top: 5rem" %>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <!-- renderヘルパーでは指定したパスにあるパーシャルをレンダリングする -->
+  <%= render 'episodes/view_episode' %>
+<% end %>

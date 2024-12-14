@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_09_113548) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_12_130526) do
+  create_table "episodes", force: :cascade do |t|
+    t.string "reading_history", null: false
+    t.string "title", null: false
+    t.string "trigger", limit: 1000
+    t.string "about_trigger", null: false
+    t.string "about_changing", null: false
+    t.string "changing", limit: 1000
+    t.datetime "episode_update_time"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "episode_complated", default: 0
+    t.index ["user_id"], name: "index_episodes_on_user_id"
+  end
+
   create_table "goods", force: :cascade do |t|
     t.json "book_data"
     t.integer "good_count", default: 0
@@ -81,10 +96,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_09_113548) do
     t.string "birthday", default: "未設定"
     t.string "occupations", default: "未設定"
     t.string "gender", default: "未設定"
-    t.text "episode", default: "未設定"
-    t.datetime "episode_updated_time", default: "2024-11-15 05:24:39"
   end
 
+  add_foreign_key "episodes", "users"
   add_foreign_key "goods", "shelves"
   add_foreign_key "goods", "users"
   add_foreign_key "likes", "goods"

@@ -4,9 +4,11 @@ import "controllers";
 import "custom/home";
 import "custom/scrollHint";
 import "validates/form";
+import "validates/form_episode";
 import "toggles/setting-toggle";
 import "toggles/humburger-toggle";
 import "views/search";
 import "views/save_profile";
+import "views/episode";
 
 

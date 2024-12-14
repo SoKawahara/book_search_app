@@ -240,9 +240,11 @@ document.addEventListener("turbo:load", () => {
 
     //ここから下では画面が一定以上スクロールされた際にヘッダーを固定するための処理を考える
     const introNav = document.querySelector(".intro-nav");
+    const headerheight = 100;//これはヘッダーのサイズ
+
     window.addEventListener("scroll", () => {
         //スクロール量が100px(ヘッダーの大きさ)を越えた段階でヘッダー固定のスタイルを適用する
-        if (window.scrollY >= 100) {
+        if (window.scrollY >= headerheight) {
             introNav.classList.add("fixed");
         } else {
             introNav.classList.remove("fixed");

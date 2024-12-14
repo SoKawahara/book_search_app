@@ -23,6 +23,7 @@
         </ul>
         <div class="user-menu">
             <%= link_to "プロフィール" , "/users/profile/#{@user.id}" , class: "account-profile" %>
+            <%= link_to 'エピソード' , "/episodes/#{@user.id}"  , class: "account-profile" %>
             <% if current_user?(@user) %>
               <%= link_to "マイ本棚" , "/shelfs/1", class: "account-profile" %>
             <% end %>
@@ -47,7 +48,9 @@
 </section>
 <div class = "border"></div>
 <!-- ここにユーザの投稿一覧を表示する -->
-<% if !@posts.empty? %>
+<% if !@goods.empty? %>
+  <!-- renderとrender partial:ではcollection , localsなどのオプションをつける際に書く必要があるのかどうかだけでさほど違いはない -->
+  <!-- それ以外の違いとしてはパーシャルを明示的に指定しているのかの違い -->
   <section class="parent">
     <h1 class = "new-title">投稿一覧</h1>
     <div class="btn-group dropup">
@@ -68,38 +71,14 @@
       </ul>
     </div>
     <section class = "posts-container" id = "posts-container">
-        <% @posts.each do |item| %>
-          <section class="post-container">
-            <%= image_tag eval(item.book_data)["imageLink"] %>
-            <div class="content">
-              <!-- 感想をdata属性としてタグの中に含ませておく -->
-              <p class = "post-name"><%= item.post_name %></p>
-              <!-- gsubメソッドを用いることで第１引数の値を第２引数の値で置き換えることができる -->
-              <p>作成日時:<%= (item.created_at.getlocal("+09:00")).to_s.gsub("+0900" , "") %></p>
-            </div>
-
-            <% if logged_in? %>
-              <% if item.who_goods.include?(current_user) %>
-                <p class = "good-content" id = "good-content-<%= item.id %>"><%= link_to image_tag("good.png" , class: "good-img") , "/posts/turbo_stream_good_remover/#{item.id}" , data: { turbo_stream: true } %><%= item.who_goods.count %></p>
-              <% else %>
-                <p class = "good-content" id = "good-content-<%= item.id %>"><%= link_to image_tag("hearts.svg" , class: "good-img") , "/posts/turbo_stream_my_goods/#{item.id}" , data: { turbo_stream: true } %><%= item.who_goods.count %></p>
-              <% end %>
-            <% end %>
-            
-            <% if current_user?(@user) %>
-              <%= link_to image_tag("edit.svg") , "/posts/edit/#{item.id}" , class: "edit-btn" %>
-            <% end %>
-            <%= link_to "詳細を見る" , "/posts/#{item.user_id}/#{item.id}" , class: "view-post-btn"%>
-            
-          </section>
-        <% end %>
+        <!-- ここでは_good.html.erbパーシャルファイルに対してGoodモデルで作成された@goodsコレクションを渡している -->
+        <!-- goodパーシャルの中ではパーシャル名と同じgoodというインスタンス変数を通してコレクションの個別の要素にアクセスできる-->
+        <%= render partial: "posts/good" , collection: @goods %>
     </section>
-    <%= paginate @posts, theme: "bootstrap-5" %>
+    <%= paginate @goods, theme: "bootstrap-5" %>
   </section>
 <% else %>
-<div class = "no_goods">
-    <p>*投稿はありません</p>
-</div>
+  <%= render 'posts/no_good' %>
 <% end %>
 
 
