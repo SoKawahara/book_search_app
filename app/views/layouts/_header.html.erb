@@ -4,7 +4,7 @@
     </div>
     <nav class = "header-nav">
         <%= link_to image_tag("search-logo.svg" , class: "logo-image") , '/searches' %>
-        <%= link_to image_tag("text.svg" , class: "logo-image") , "/users/view_episodes/1" %>
+        <%= link_to image_tag("text.svg" , class: "logo-image") , "/episodes/index" %>
         <% if current_user.nil? %>
           <%= link_to image_tag("hearts.svg" , class: "logo-image") , "/posts/0/my_goods/1"    %>
         <% else %>

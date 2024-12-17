@@ -72,7 +72,7 @@
     </div>
     <section class = "posts-container" id = "posts-container">
         <!-- ここでは_good.html.erbパーシャルファイルに対してGoodモデルで作成された@goodsコレクションを渡している -->
-        <!-- goodパーシャルの中ではパーシャル名と同じgoodというインスタンス変数を通してコレクションの個別の要素にアクセスできる-->
+        <!-- goodパーシャルの中ではパーシャル名と同じgoodというインスタンス変数を通してコレクションの個別の要素にアクセスでき-->
         <%= render partial: "posts/good" , collection: @goods %>
     </section>
     <%= paginate @goods, theme: "bootstrap-5" %>

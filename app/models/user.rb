@@ -36,6 +36,10 @@ class User < ApplicationRecord
     validates :gender , presence: true
     validates :episode , presence: true , length: { maximum: 1000 }#保存できる最大の文字数を1000文字に設定する
 
+    #エピソードのソートにおいて年齢のソートをスコープとして切り出す
+    scope :birthday_desc , -> { order(birthday: :desc) }
+    scope :birthday_asc , -> { order(birthday: :asc) }
+
     #渡された文字列のハッシュを返す
     def self.digest(string)
         cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :

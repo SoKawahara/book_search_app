@@ -10,11 +10,12 @@
             </div>
             <% if logged_in? %>
               <% if item.who_goods.include?(current_user) %>
-                <p class = "good-content"><%= image_tag("good.png" , class: "good-img") %><%= item.who_goods.count %></p>
+                <p class = "good-content" id = "good-content-<%= item.id %>"><%= link_to image_tag("good.png" , class: "good-img") , "/posts/turbo_stream_good_remover/#{item.id}" , data: { turbo_stream: true } %><%= item.who_goods.count %></p>
               <% else %>
-                <p class = "good-content" id = "good-content"><%= link_to image_tag("hearts.svg" , class: "good-img") , "/posts/turbo_stream_my_goods/#{item.id}" , data: { turbo_stream: true } %><%= item.who_goods.count %></p>
+                <p class = "good-content" id = "good-content-<%= item.id %>"><%= link_to image_tag("hearts.svg" , class: "good-img") , "/posts/turbo_stream_my_goods/#{item.id}" , data: { turbo_stream: true } %><%= item.who_goods.count %></p>
               <% end %>
             <% end %>
+
             <% if current_user?(@user) %>
                 <%= link_to image_tag("edit.svg") , "/posts/edit/#{item.id}" , class: "edit-btn" %>
             <% end %>

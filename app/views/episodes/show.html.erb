@@ -13,5 +13,10 @@
   </div>
 <% else %>
   <!-- renderヘルパーでは指定したパスにあるパーシャルをレンダリングする -->
-  <%= render 'episodes/view_episode' %>
+  <%= render 'episodes/view_episode' , locals: { redirect_path: @redirect_path } %>
+  <!-- 文字列を比較して単純に一致するかどうかを判定したい場合にはmatch?メソッドの方が高速に動作する -->
+  <!-- &.を用いることで@reditect_pathがnilであった場合でもエラーを発生させずnilを返すことができる -->
+  <% if @redirect_path&.match?('/episodes/index') %>
+    <%= link_to "エピソード一覧に戻る" , @redirect_path , class: "episode-back-btn" %>
+  <% end %>
 <% end %>

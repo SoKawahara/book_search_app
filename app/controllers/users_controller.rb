@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @type = params[:type]
     @page = params[:page]
-    @goods = 
+    @posts = 
       if @type == "1"
         @user.goods.created_at_desc
       elsif @type == "2"
@@ -325,18 +325,7 @@ class UsersController < ApplicationController
     redirect_to "/users/profile/#{user.id}"
   end
 
-  #ここではエピソード画面で使用する処理を書く,この画面は登録しているユーザのエピソード一覧を表示する
-  #その際にログインなどは必要としないがそのほかの機能に写る際にはログインを要求する
-  def view_episodes
-    #where句で指定を加えることでカラムに対して条件を設定するクエリを作成することができる
-    #クエリの?の部分にそれぞれ"未設定" , current_user.idが対応している
-    @users = 
-      if !current_user.nil?
-        User.where("episode != ? AND id != ?" , "未設定" , current_user.id)
-      else
-        User.where("episode != ? AND id != ?" , "未設定" , current_user.id)
-      end&.page(params[:page]).per(10)
-  end
+  
 
   private 
     #このメソッドの戻り値は許可されたパラメータが含まれたハッシュ

@@ -126,10 +126,10 @@ footer {
 
     .episodes-container {
         width: 70%;
-        height: 580px;
         border: 3px outset rgba(100, 96, 96, 0.897);
         background-color: #e2dbd6;
         border-radius: 10px;
+        overflow-x: hidden;
         overflow-y: scroll;
         scrollbar-width: none;
         gap: 1rem;
@@ -139,9 +139,24 @@ footer {
             display: none;
         }
 
+        .no-result {
+            margin: 3rem;
+            width: 100%;
+            display: grid;
+            place-items: center;
+
+            p {
+                font-family: "Bodoni Moda SC", serif;
+                font-size: 18px;
+                font-weight: 500;
+                text-align: center;
+
+            }
+        }
+
         .episode-container {
             width: 95%;
-            height: 300px;
+            height: 250px;
             margin: 1.5rem auto;
             border: 3px dashed rgb(185, 181, 181);
             display: flex;
@@ -195,8 +210,11 @@ footer {
                 border: 5px groove #9c9998;
                 padding: 1.5rem;
                 border-radius: 10px;
-                display: grid;
-                place-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 1.5rem;
+
                 overflow-y: scroll;
                 scrollbar-width: none;
 
@@ -207,9 +225,30 @@ footer {
 
                 p {
                     font-family: "Bodoni Moda SC", serif;
-                    font-size: 14px;
+                    font-size: 16px;
                     font-weight: 500;
                     text-align: center;
+                }
+
+                div {
+                    padding: 0 2rem;
+                    width: 100%;
+                    display: flex;
+                    justify-content: end;
+
+                    a {
+                        font-family: "Bodoni Moda SC", serif;
+                        font-size: 12px;
+                        font-weight: 600;
+                        text-align: center;
+                        color: grey;
+                        text-decoration: none;
+
+                        &:hover {
+                            color: black;
+                            text-decoration: none;
+                        }
+                    }
                 }
             }
         }
@@ -264,6 +303,10 @@ footer {
                 margin: auto;
                 text-align: center;
                 font-family: "Bodoni Moda SC", serif;
+
+                option:first-child {
+                    display: none;
+                }
             }
         }
 
@@ -277,6 +320,10 @@ footer {
             margin: auto;
             text-align: center;
             font-family: "Bodoni Moda SC", serif;
+
+            option:first-child {
+                display: none;
+            }
         }
 
         input[type=submit] {
@@ -289,123 +336,124 @@ footer {
             background-color: grey;
             color: white;
         }
+
     }
-}
 
-/* ここから下には画面幅が900px以下の状態で表示する内容を定義する */
-@media(max-width: 900px) {
-    .view-episode-container {
-        padding: .6rem;
-        flex-direction: column-reverse;//column-reverseを指定することで要素を逆並びに変更できる
+    /* ここから下には画面幅が900px以下の状態で表示する内容を定義する */
+    @media(max-width: 900px) {
+        .view-episode-container {
+            padding: .6rem;
+            flex-direction: column-reverse; //column-reverseを指定することで要素を逆並びに変更できる
 
-        .episodes-container {
-            width: 100%;
-            height: 580px;
-            border: 3px outset rgba(100, 96, 96, 0.897);
-            background-color: #e2dbd6;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            .episode-container {
-                width: 95%;
-                height: 300px;
-                margin: 1.5rem auto;
-                border: 3px dashed rgb(185, 181, 181);
+            .episodes-container {
+                width: 100%;
+                height: 580px;
+                border: 3px outset rgba(100, 96, 96, 0.897);
+                background-color: #e2dbd6;
+                border-radius: 10px;
                 display: flex;
-                justify-content: space-between;
-                padding: 1rem;
+                flex-direction: column;
+                align-items: center;
 
-                .episode-info {
-                    width: 20%;
+                .episode-container {
+                    width: 95%;
+                    height: 300px;
+                    margin: 1.5rem auto;
+                    border: 3px dashed rgb(185, 181, 181);
                     display: flex;
-                    flex-direction: column;
-                    align-items: center;
+                    justify-content: space-between;
+                    padding: 1rem;
 
-                    a {
-                        width: 80px;
-                        font-size: 10px;
-                        margin-bottom: 4rem;
-                        margin-top: 2rem;
+                    .episode-info {
+                        width: 20%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+
+                        a {
+                            width: 80px;
+                            font-size: 10px;
+                            margin-bottom: 4rem;
+                            margin-top: 2rem;
+                        }
+
+                        .episode-icon {
+                            width: 58px;
+                            height: 58px;
+                            border-radius: 50%;
+                            border: 4px groove #9c9998;
+                            margin-bottom: 2.5rem;
+                        }
+
+                        p {
+                            font-family: "Bodoni Moda SC", serif;
+                            font-size: 12px;
+                            font-weight: 500;
+                            text-align: center;
+                        }
                     }
 
-                    .episode-icon {
-                        width: 58px;
-                        height: 58px;
-                        border-radius: 50%;
-                        border: 4px groove #9c9998;
-                        margin-bottom: 2.5rem;
-                    }
+                    .episode-content {
+                        width: 79%;
+                        height: 100%;
+                        border: 5px groove #9c9998;
+                        padding: 1.5rem;
+                        border-radius: 10px;
+                        display: grid;
+                        place-items: center;
+                        overflow-y: scroll;
+                        scrollbar-width: none;
 
-                    p {
-                        font-family: "Bodoni Moda SC", serif;
-                        font-size: 12px;
-                        font-weight: 500;
-                        text-align: center;
-                    }
-                }
+                        /* Firefox */
+                        &::-webkit-scrollbar {
+                            display: none;
+                        }
 
-                .episode-content {
-                    width: 79%;
-                    height: 100%;
-                    border: 5px groove #9c9998;
-                    padding: 1.5rem;
-                    border-radius: 10px;
-                    display: grid;
-                    place-items: center;
-                    overflow-y: scroll;
-                    scrollbar-width: none;
-
-                    /* Firefox */
-                    &::-webkit-scrollbar {
-                        display: none;
-                    }
-
-                    p {
-                        font-family: "Bodoni Moda SC", serif;
-                        font-size: 14px;
-                        font-weight: 500;
-                        text-align: center;
-                    }
-                }
-            }
-        }
-
-        .info-container {
-            width: 80%;
-            margin: 1.5rem auto;
-
-            h3 {
-                font-size: 17px;
-                font-weight: 600;
-            }
-
-            label {
-                font-size: 14px;
-                font-weight: 600;
-            }
-
-            #sort-info-age {
-                display: flex;
-                justify-content: center;
-
-                .age-field {
-                    width: 100px;
-                    height: 25px;
-                    margin-right: 1rem;
-                    margin-left: 1rem;
-                    border: 3px outset rgb(180, 175, 175);
-                    border-radius: 15px;
-
-                    &:focus {
-                        outline: none;
+                        p {
+                            font-family: "Bodoni Moda SC", serif;
+                            font-size: 14px;
+                            font-weight: 500;
+                            text-align: center;
+                        }
                     }
                 }
             }
 
-            .gender {
-                margin:0;
+            .info-container {
+                width: 80%;
+                margin: 1.5rem auto;
+
+                h3 {
+                    font-size: 17px;
+                    font-weight: 600;
+                }
+
+                label {
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+
+                #sort-info-age {
+                    display: flex;
+                    justify-content: center;
+
+                    .age-field {
+                        width: 100px;
+                        height: 25px;
+                        margin-right: 1rem;
+                        margin-left: 1rem;
+                        border: 3px outset rgb(180, 175, 175);
+                        border-radius: 15px;
+
+                        &:focus {
+                            outline: none;
+                        }
+                    }
+                }
+
+                .gender {
+                    margin: 0;
+                }
             }
         }
     }

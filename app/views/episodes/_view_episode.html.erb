@@ -1,7 +1,9 @@
 <h1 class="new-title">エピソード</h1>
-<div class="episode-edit-container">
+<% if current_user?(@user) %>
+  <div class="episode-edit-container">
     <%= link_to "エピソードを編集する" , episode_edit_path %>
-</div>
+  </div>
+<% end %>
 <section class="episode-QA-container">
     <section class="question">
         <div>
@@ -60,3 +62,4 @@
         </div>
     </section>
 </section>
+

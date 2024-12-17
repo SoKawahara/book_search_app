@@ -554,11 +554,32 @@
         font-family: "Bodoni Moda SC", serif;
         font-size: 14px;
         font-weight: 500;
-        text-decoration: none; 
+        text-decoration: none;
+
         &:hover {
             text-decoration: none;
             color: white;
         }
+    }
+}
+
+.episode-back-btn {
+    display: block;
+    width: 180px;
+    padding: 1.2rem;
+    margin: 2rem auto;
+    color: white;
+    background-color: #585a5d;
+    border-radius: 25px;
+    font-family: "Bodoni Moda SC", serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: none;
+        color: white;
     }
 
 }

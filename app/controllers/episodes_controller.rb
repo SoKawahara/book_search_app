@@ -1,6 +1,61 @@
 class EpisodesController < ApplicationController
+    require 'uri'
+    require 'date'
     before_action :logged_in_user , only: [:new , :edit , :update]
     #ここではエピソードを作成するためのフォームを表示する
+
+    #ここではユーザのepisode一覧を表示する
+    #一覧を閲覧するだけならログインは必要としない
+    def index
+      #includesメソッドを用いてN+1クエリ問題を解消している
+      #eager loadingで取得したuserはepisode.userで取得できる
+      @episodes = Episode.where(episode_complated: 1).includes(:user).page(params[:page]).per(10)
+    end
+
+    #ここではエピソードに対して絞込検索を行う処理を実装する
+    #画面の描画にはTurboStreamを使用して１部分のみの変更を加える
+    def turbo_stream_index
+        #ここでは入力された値に対してSQL内で使用できるように値の整形を行う
+        new_params = episode_sort_params.to_h.map do |k , v|
+            if k == "lower_age" || k == "upper_age"
+                [k ,v.to_i]
+            else 
+                [k , v]
+            end
+        end.to_h
+
+        #取得したソートの条件からorderメソッドに格納する条件文字列を作成する
+        order_condition = 
+          if new_params["order"] == "作成日時"
+            new_params["sort"] == "昇順" ? "episode_created_at ASC" : "episode_created_at DESC"
+          elsif new_params["order"] == "読書歴"
+            new_params["sort"] == "昇順" ? "reading_history DESC" : "reading_history ASC"
+          else
+            new_params["sort"] == "昇順" ? "birthday DESC" : "birthday ASC"
+          end
+
+
+        #ここではデータベースに格納してある誕生日から年齢を求めるためのSQLをDBMSごとに発行している
+        age_sql = if ActiveRecord::Base.connection.adapter_name == "PostgreSQL"
+            "EXTRACT(YEAR FROM age(DATE #{Date.today}, birthday))"
+          else # SQLite3
+            "(strftime('%Y', 'now') - strftime('%Y', birthday)) - (strftime('%m-%d', 'now') < strftime('%m-%d', birthday))"
+          end
+
+        #SQLクエリを発行した結果を取得する
+        #絞り込みを行ったUserに対してEpisodeを結合している
+        @users = User.where("gender = ? and #{age_sql} between ? and ?" , new_params["gender"] , new_params["lower_age"] , new_params["upper_age"]).
+                       joins(:episode).
+                       select("episodes.title as title , episodes.created_at as episode_created_at , users.id as user_id , users.email as email , 
+                               users.gender as gender , users.reading_history as reading_history , users.birthday as birthday,
+                               users.id as user_id , users.name as name , users.email as email , users.gender as gender , 
+                               users.birthday as birthday , users.reading_history as reading_history").
+                       order(order_condition).includes(:episode)
+
+        #並べ替えの基準に何が指定されているのか
+        @target = new_params["order"]
+    end
+
     def new
       @user = current_user#ログインしていないユーザはアクセスできないのでこれは保証される
       @episode = @user.build_episode
@@ -40,6 +95,11 @@ class EpisodesController < ApplicationController
         end
         @reading_time = (Date.today - Date.parse(@episode.reading_history + "-01")).to_i#これは読書を始めた日からの現在までの日数を表している
       end
+
+      #戻るボタンの送信先を設定する,request.refererを使用する際にはnilである可能性を考慮する必要がある
+      #request.refererではURLのフルパスが返ってくる
+
+      @redirect_path = request.referer
     end
 
     #ここではエピソードの編集画面を作成する
@@ -65,9 +125,20 @@ class EpisodesController < ApplicationController
         end
     end
 
+    #ここでは絞り込み条件で指定された条件に基づいて絞り込んだ結果を反映する
+    def sort_episodes
+
+    end
+
     private 
+      #これはエピソードを作成する際に使用するストロングパラメータ
       def episode_params
         params.require(:episode_info).permit(:reading_history, :title, :about_trigger, :trigger , :about_changing , :changing)
+      end
+
+      #これはエピソードの絞り込みを行う際のストロングパラメータ
+      def episode_sort_params
+        params.require(:sort_info).permit(:lower_age , :upper_age , :gender , :order , :sort)
       end
 end
 

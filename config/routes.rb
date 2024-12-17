@@ -37,10 +37,12 @@ Rails.application.routes.draw do
   get "/posts/:user_id/:post_id" ,  to: "posts#view_post"
 
   #ここから下ではepisodesコントローラーに対するルーティングを定義する
+  get "/episodes/index"  , to: "episodes#index"
   get "/episodes/edit"   , to: "episodes#edit" , as: :episode_edit
   patch "/episodes/update/:id"  , to: "episodes#update"
   get "/episodes/new" , to: "episodes#new"
   post "/episodes/create" , to: "episodes#create"
+  post "/episodes/turbo_stream_index" , to: "episodes#turbo_stream_index"
   get "/episodes/:user_id" , to: "episodes#show"
   
   

@@ -118,11 +118,11 @@ class PostsController < ApplicationController
             #goods.user_idとしているのはambiguous columnエラーに対処するために明示的に
             @posts = 
               if @type== "1"
-                @user.what_goods.where("goods.user_id != ?" , current_user.id).created_at_desc
+                @user.what_goods.created_at_desc
               elsif @type == "2"
-                @user.what_goods.where("goods.user_id != ?" , current_user.id).created_at_asc
+                @user.what_goods.created_at_asc
               else
-                @user.what_goods.where("goods.user_id != ?" , current_user.id).good_desc
+                @user.what_goods.good_desc
               end&.page(@page).per(9)
             
         end
@@ -232,6 +232,14 @@ class PostsController < ApplicationController
         @post_id = params[:post_id]
         user = User.find(@user_id)
         @post = user.goods.find(@post_id)
+
+        #ここでリダイレクト先を変更する
+        #URIライブラリを用いてrequest.refererからパス部分を取得する,エラーが発生した場合にはユーザページに遷移するようにする
+        begin
+            @redirect_path = URI.parse(request.referer).path
+        rescue URI::InvalidURIError => e
+            @redirect_path = "/users/#{@user_id}/1"
+        end
     end
 
     #絞り検索で取得してきた条件からユーザを取得する
