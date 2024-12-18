@@ -79,9 +79,11 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     #会員登録が成功するとそのままログインする
     if @user.save
-      @user.send_activation_email
-      flash[:info] = "登録されたメールアドレスに有効化メールを送信しました。送信されたメールからアカウントの有効化を行ってください"
-      redirect_to "/users/#{@user.id}/1"
+        forwarding_url = session[:forwarding_url]#これはフレンドリーフォワーディングを実装する為の記述
+        reset_session #これはセッション固定攻撃への対策
+        log_in @user   #ユーザのセッションを作成する
+        flash[:success] = "アカウントを作成、ログインしました！"
+        redirect_to forwarding_url || "/users/#{@user.id}/1"
     else
       render 'new' , status: :unprocessable_entity
     end
@@ -96,7 +98,7 @@ class UsersController < ApplicationController
     #updateメソッドは既存のレコードに対してのみ使用できる
     if @user.update(user_params)
       #更新に成功した場合を扱う
-      flash[:success] = "プロフィールを変更しました"
+      flash[:success] = "アカウント情報を変更しました"
       redirect_to "/users/#{@user.id}/1"
     else
       render 'edit' , status: :unprocessable_entity
@@ -221,15 +223,11 @@ class UsersController < ApplicationController
     #エピソードが入力されたときのみエピソードの作成日時を更新する
     #Time.currentはRailsで提供する機能でアプリケーションで設定されたタイムゾーンをもとに時刻を設定する
     #Time.nowはRubyで提供される機能でサーバーのタイムゾーンに依存する時刻を設定する
-    result = result.merge(episode_updated_time: Time.current) if result[:episode] != ""
 
     if user.update(result)
       flash[:success] = "プロフィールを作成しました!"
       user.update(profile_completed:  true)
     else
-      puts "--------------------------------------------"
-      puts user.errors.full_messages
-      puts "--------------------------------------------"
       flash[:danger] = "プロフィールを作成できませんでした"
     end
 

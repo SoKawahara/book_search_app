@@ -529,11 +529,89 @@ chapter2
 44. SELECT COALESCE(前提イベント番号 , '前提なし') , イベント番号 , COALESCE(後続イベント番号 , '後続なし') 
       FROM イベント
      WHERE イベント番号 
-   
+
+45. SELECT MAX(HP) AS HPの最大 , MAX(MP) AS MPの最大 , MIN(HP) AS HPの最小 , MIN(MP) AS MPの最小 , AVG(HP) AS HPの平均 , AVG(MP) AS MPの平均
+      FROM パーティ 
+46. SELECT CASE タイプ WHEN '1' THEN '強制'
+                       WHEN '2' THEN 'フリー'
+                       WHEN '3' THEN '特殊' END AS タイプ , COUNT(*) AS イベント数
+      FROM イベント 
+    GROUP BY タイプ 
+47. SELECT クリア結果 , COUNT(クリア結果) AS クリアしたイベント数 
+      FROM 経験イベント 
+    GROUP BY クリア結果
+    ORDER BY クリア結果 
+48. SELECT CASE WHEN SUM(MP) < 500 THEN '敵は見とれている'
+                WHEN 500 <= SUM(MP) AND SUM(MP) < 1000 THEN '敵呆然としている'
+                WHNE 1000 <= SUM(MP) THNE '敵はひれ伏している' END '敵の行動'
+      FROM パーティ 
+49. SELECT COUNT(クリア結果) AS クリアした , COUNT(*) - COUNT(クリア結果) AS 参加したがクリアしていない  
+      FROM 経験イベント 
+50. SELECT SUBSTRING(職業コード , 1 , 1) , MAX(HP) , MAX(MP) , MIN(HP) , MIN(MP) , AVG(HP) , AVG(MP)
+      FROM パーティ 
+    GROUP BY SUBSTRING(職業コード , 1 , 1) 
+51. SELECT SUBSTRING(ID , 1 , 1) AS IDによる分類 , AVG(HP) AS HPの平均 , AVG(MP) AS MPの平均
+      FROM パーティ 
+    GROUP BY SUBSTRING(ID , 1 , 1)
+    HAVING AVG(HP) > 100
+52. SELECT SUM(CASE WHEN 100 < HP THEN 1
+                    WHEN 100 <= HP AND HP < 150 THEN 2
+                    WHEN 150 <= HP AND HP < 200 THEN 3
+                    WHEN HP < 200 5 END) AS 明けることができる扉の数 
+      FROM パーティ 
+53. SELECT 名称 AS なまえ , HP AS 現在のHP , ROUND(HP / (SELECT SUM(HP) FROM パーティ) , 2) AS パーティでの割合 
+      FROM パーティ 
+
+54. UPDATE パーティ 
+       SET MP = ROUNS(MP * 1.1 + (SELECT SUM(MP) FROM パーティ) * 0.1, 0)
+     WHERE 職業コード = '20'
+55. SELECT イベント番号 , クリア結果
+      FROM 経験イベント 
+     WHERE イベント番号 IN (SELECT イベント番号 FROM イベント WHERE タイプ = '1') AND クリア結果 IS NOT NULL 
+56. SELECT 名称 , MP  
+      FROM パーティ
+     WHERE MP = (SELECT MAX(MP) FROM パーティ)
+57. SELECT イベント番号 , イベント名称
+      FROM イベント 
+     WHERE イベント番号 NOT IN (SELECT イベント番号 FROM 経験イベント)
+    ORDER BY イベント番号
+58. SELECT COUNT(*) AS 未着手のイベント数
+      FROM イベント 
+     WHERE イベント番号 NOT IN (SELECT イベント番号 FROM 経験イベント) 
+59. SELECT イベント番号 , イベント名称
+      FROM イベント 
+     WHERE イベント番号 < (SELECT イベント番号 FROM 経験イベント WHERE ルート番号 = 5)   
+60. SELECT イベント番号 , イベント名称 , 前提イベント番号 
+      FROM イベント 
+     WHERE 前提イベント番号 IN (SELECT イベント番号 FROM 経験イベント WHERE クリア区分 = '1')
+61. UPDATE 経験イベント 
+       SET クリア区分 = '1' , クリア結果 = 'B' , ルート番号 = 7
+    INSERT INTO 経験イベント
+    (イベント番号 , クリア区分 , クリア結果 , ルート番号) 
+    VALUES(10 , '0' , NULL , NULL )
 
 
----------------------------------------------------------------------------------------------------------------
-商品データベース
+-------------------------------------------------------RPGデータベースの正答------------------------------------
+53. SELECT 名称 AS なまえ , HP AS 現在のHP , ROUND(CAST(HP AS NUMERIC) / (SELECT SUM(HP) FROM パーティ) * 100 , 1) AS パーティでの割合
+      FROM パーティ 
+     WHERE 職業コード = '01'
+55. SELECT イベント番号 , クリア結果
+      FROM 経験イベント 
+     WHERE クリア区分 = '1' AND イベント番号 IN (SELECT イベント番号 FROM イベント WHERE タイプ IN ('1' , '3'))
+     *これはたぶん副問合せの部分に関して問題文を見誤っていた
+58. SELECT COUNT(*) AS 未着手のイベントの数 
+      FROM (SELECT イベント番号 FROM イベント
+            EXCEPT 
+            SELECT イベント番号 FROM 経験イベント) AS SUB 
+      *自分の回答ではWHERE句で経験イベントに含まれていないイベントを取得していたがここではFROMで取得している
+61. UPDATE 経験イベント 
+       SET クリア区分 = '1' , クリア結果 = 'B' ルート番号 = (SELECT MAX(ルート番号) + 1 FROM 経験イベント) , イベント番号 = 9
+       *ルート番号を現在のルート番号の一番大きいものから取得している
+    INSERT INTO 経験イベント
+    VALUES ((SELECT イベント番号 FROM イベント WHERE 前提イベント番号 = 9) , '0' , NULL , NULL)
+    *イベント番号 = 9の後続イベントは前提イベントとしてイベント番号 = 9を持っているはず
+       
+---------------------------------------------------------------------------------------------------------------商品データベース
 1. SELECT 商品コード , 商品名 , 単価 , 商品区分 , 関連商品コード
      FROM 商品 
 2. SELECT 商品名 

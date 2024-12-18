@@ -34,7 +34,7 @@ class User < ApplicationRecord
     validates :birthday, presence: true
     validates :occupations , presence: true
     validates :gender , presence: true
-    validates :episode , presence: true , length: { maximum: 1000 }#保存できる最大の文字数を1000文字に設定する
+   
 
     #エピソードのソートにおいて年齢のソートをスコープとして切り出す
     scope :birthday_desc , -> { order(birthday: :desc) }

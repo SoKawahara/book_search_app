@@ -3,20 +3,35 @@
         <%= link_to "Boopple" , root_path , class: "logo-title" %>
     </div>
     <nav class = "header-nav">
-        <%= link_to image_tag("search-logo.svg" , class: "logo-image") , '/searches' %>
-        <%= link_to image_tag("text.svg" , class: "logo-image") , "/episodes/index" %>
-        <% if current_user.nil? %>
-          <%= link_to image_tag("hearts.svg" , class: "logo-image") , "/posts/0/my_goods/1"    %>
-        <% else %>
-          <%= link_to image_tag("hearts.svg" , class: "logo-image") ,  "/posts/#{current_user.id}/my_goods/1"   %>
-        <% end %>
-        <%= link_to image_tag("home.svg" , class: "logo-image") , "/posts/feed/1" %>
+        <div class = "header-search-div">
+          <%= link_to image_tag("search-logo.svg" , class: "logo-image") , '/searches' , class: "header-search" , style: "margin-bottom: 1rem"%>
+          <p>検索</p>
+        </div>
+        <div class = "header-episode-div"  >
+          <%= link_to image_tag("text.svg" , class: "logo-image") , "/episodes/index" , class: "header-episode" %>
+          <p>エピソード</p>
+        </div>
+        <div class = "header-good-div" >
+          <% if current_user.nil? %>
+            <%= link_to image_tag("hearts.svg" , class: "logo-image") , "/posts/0/my_goods/1" , class: "header-good"   %>
+          <% else %>
+            <%= link_to image_tag("hearts.svg" , class: "logo-image") ,  "/posts/#{current_user.id}/my_goods/1" , class: "header-good"  %>
+          <% end %>
+          <p>いいね</p>
+        </div>
+        <div class = "header-feed-div">
+          <%= link_to image_tag("home.svg" , class: "logo-image") , "/posts/feed/1" ,  class: "header-feed" %>
+          <p>タイムライン</p>
+        </div>
         <!-- ユーザがログイン中ならユーザのアイコンを表示する -->
-        <% if user = current_user %>
-          <%= link_to image_tag(gravatar_for(user) , class: "logo-image" , style: "border-radius: 50%; border: 2px solid black") , "/users/#{user.id}/1" %>
-        <% else %>
-          <%=link_to image_tag("test-account.svg" , class: "logo-image") , login_path %>
-        <% end %>
+        <div class = "header-profile-div">
+          <% if user = current_user %>
+            <%= link_to image_tag(gravatar_for(user) , class: "logo-image" , style: "border-radius: 50%; border: 2px solid black") , "/users/#{user.id}/1" , class: "header-profile" %>
+          <% else %>
+            <%=link_to image_tag("test-account.svg" , class: "logo-image") , login_path , class: "header-profile" %>
+          <% end %>
+          <p>プロフィール</p>
+        </div>
         <%= image_tag "humburger-menu.svg" , class: "humburger-image" , id: "humburger-image"  %>
     </nav>
 </header>

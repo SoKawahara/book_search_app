@@ -1,13 +1,13 @@
 <% provide(:title, "エピソード一覧") %>
 <h1 class = "new-title">エピソード一覧</h1>
 <section class="view-episode-container">
-  <section class="episodes-container" id = "episodes-container">
-  <% if !@episodes.nil? %>
-    <!-- パーシャルを利用して取得できた複数の要素を各パーツごとにパーシャルに当てはめている -->
-    <%= render @episodes %>
-  <% else %>
-    <p>絞込結果に一致する検索結果がありません</p>
-  <% end %>
+  <section class = "episodes-container">
+    <% if !@episodes.nil? %>
+      <!-- パーシャルを利用して取得できた複数の要素を各パーツごとにパーシャルに当てはめている -->
+      <%= render @episodes %>
+    <% else %>
+      <p>絞込結果に一致する検索結果がありません</p>
+    <% end %>
   </section>
   <section class="info-container">
     <h3>絞込検索</h3>

@@ -10,5 +10,8 @@ import "toggles/humburger-toggle";
 import "views/search";
 import "views/save_profile";
 import "views/episode";
+import "views/header";
+import "views/setting-hover";
+import "views/tmp_save_profile";
 
 

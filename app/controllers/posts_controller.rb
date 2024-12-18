@@ -53,7 +53,8 @@ class PostsController < ApplicationController
     end
 
     def update
-        if user = current_user && post = user.goods.find(params[:id])
+        user = current_user
+        if user && post = user.goods.find(params[:id])
             #送信された値が空白であった場合には現在設定されている値を入れることで特定の要素だけ変更可能にする
             #変更が加えられた部分のみを入れたハッシュを作成してそれをupdateメソッドに渡している
             #ハッシュに対してselectメソッドを使用すると条件を満たす要素だけを新たなハッシュとして作成する
@@ -74,7 +75,8 @@ class PostsController < ApplicationController
     #この投稿を削除するボタンを押された際に実際に投稿を削除する
     #投稿を削除する際に削除する投稿がプロフィールに登録されているモノだったらプロフィールからも削除する
     def destroy
-        if @user = current_user && (post = @user.goods.find(params[:id])) && current_user?(@user)
+        @user = current_user
+        if @user && (post = @user.goods.find(params[:id])) && current_user?(@user)
             #ユーザがプロフィールに登録している投稿の中に削除する投稿も含まれていればそれを変更する
             recommendation_books = (@user.recommendation_books)
             recommendation_books.each do |key , value|
@@ -240,54 +242,6 @@ class PostsController < ApplicationController
         rescue URI::InvalidURIError => e
             @redirect_path = "/users/#{@user_id}/1"
         end
-    end
-
-    #絞り検索で取得してきた条件からユーザを取得する
-    def sort_episodes
-        #取得してきた性別の条件から発行するクエリを決定する
-        gender_info = episode_params["gender"]
-        @gender = gender_info != "" ? gender_info : nil 
-        
-        order_info = episode_params["order"]
-        @order_info = order_info != "" ? order_info : "空白です"
-
-        sort_info = episode_params["sort"]
-        @sort_info = sort_info != "" ? sort_info : nil 
-
-        #--------------------------------ここから下一部コピペ---------------------------------------------
-        # 年齢計算用のSQLをDBMSに応じて設定,ここは完全にコピペ
-        tmp = 
-          if @gender != nil 
-            User.where("gender == ? AND id != ?" , @gender , current_user)
-          else
-            User.where("id != ?" , current_user)
-          end
-        
-        lower_age = episode_params["lower_age"].presence&.to_i
-        upper_age = episode_params["upper_age"].presence&.to_i
-
-        age_sql = if ActiveRecord::Base.connection.adapter_name == "PostgreSQL"
-            "EXTRACT(YEAR FROM age(DATE '#{today}', birthday))"
-          else # SQLite3
-            "(strftime('%Y', 'now') - strftime('%Y', birthday)) - (strftime('%m-%d', 'now') < strftime('%m-%d', birthday))"
-          end
-        
-        tmp = tmp.select("users.*, #{age_sql} AS age").where("#{age_sql} BETWEEN ? AND ?", lower_age, upper_age) if lower_age != nil && upper_age != nil
-
-        #orderメソッドを指定することで指定したカラムの順番でソートすることができる
-        @users = 
-          case @order_info
-          when "作成日時"
-            if @sort_info == "昇順"
-                tmp.order(episode_updated_time: :asc)
-            else
-                tmp.order(episode_updated_time: :desc)
-            end
-          #ここから下２つのカラムについて歴ではなく日付で登録してあるので歴で見たら長くなる
-          when "読書歴"
-            tmp.order(episode_updated_time: :asc)
-          end&.page(params[:page])&.per(10)
-        # @users = User.where("gender == ? AND id != ?" , @gender , current_user.id).order(episode_updated_time: :asc).page(params[:page]).per(10)
     end
 
     private

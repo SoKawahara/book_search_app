@@ -19,7 +19,7 @@
                 <p>投稿</p>
                 <p><%= @user.what_goods.count %></p>
             </li>
-            <li><%= image_tag("setting.svg" , class: "setting-icon" , style: "margin-left: 1rem") if current_user == @user %></li>
+            <li><p>設定</p><%= image_tag("setting.svg" , class: "setting-icon" , style: "margin-left: 1rem") if current_user == @user %></li>
         </ul>
         <div class="user-menu">
             <%= link_to "プロフィール" , "/users/profile/#{@user.id}" , class: "account-profile" %>

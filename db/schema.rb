@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_12_130526) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_18_065030) do
   create_table "episodes", force: :cascade do |t|
     t.string "reading_history", null: false
     t.string "title", null: false
@@ -85,7 +85,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_12_130526) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "activation_digest"
-    t.boolean "activated", default: false
+    t.boolean "activated", default: true
     t.datetime "activated_at"
     t.string "reset_digest"
     t.datetime "reset_sent_at"

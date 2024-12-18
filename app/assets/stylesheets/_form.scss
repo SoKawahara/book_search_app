@@ -320,12 +320,7 @@
         width: 60%;
         position: relative;
         overflow-y: scroll;
-        scrollbar-width: none;
-
-        /* Firefox */
-        &::-webkit-scrollbar {
-            display: none;
-        }
+        
 
         input {
             font-family: "Bodoni Moda SC", serif;
@@ -480,10 +475,6 @@
             width: 95%;
             position: relative;
             overflow-y: scroll;
-
-            &::-webkit-scrollbar {
-                display: none;
-            }
 
             .text {
                 width: 85%;

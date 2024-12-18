@@ -48,8 +48,19 @@ class ShelfsController < ApplicationController
     def destroy
       shelf = Shelf.find(params[:id])
       type = shelf.unread_flag#リダイレクトに用いるためのフラグ
+
+      #GoodオブジェクトからShelfオブジェクトに対してshelf_idという外部キーで参照を行っているので先にShelfを削除すると外部キー制約に反する
+      #よってShelfを参照しているGoodを先に削除する
+      post = Good.find_by(shelf_id: shelf.id)
+      if post && type == 0
+        post.destroy
+      end
+
       shelf.destroy
       flash[:success] = "マイ本棚から削除しました"
+
+      redirect_to "/shelfs/turbo_stream_show/#{type}", status: :see_other
+      
       
       #リダイレクト用のパスを取得する
       #request.refererを使用する際にはnilだった時のエラーハンドリングが必要
@@ -57,6 +68,5 @@ class ShelfsController < ApplicationController
       #303ステータスコードはリソースを取得するために指定されたURLに対してGETリクエストを送信することを指示するためのもの
 
       #ここではリクエストがTurboStreamに変換される可能性があるのであらかじめリダイレクト先をTurboStream用に設定しておく
-      redirect_to "/shelfs/turbo_stream_show/#{type}", status: :see_other
     end
 end

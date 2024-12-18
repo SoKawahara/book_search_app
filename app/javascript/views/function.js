@@ -50,10 +50,10 @@ export async function get_book_data({ type, number, content }, array = []) {
             //画像リンク取得のエラーハンドリング
             try {
                 const imageLink = item.volumeInfo.imageLinks.thumbnail.replace("&zoom=1", "&zoom=5");
-                tmp.imageLink = imageLink === undefined ? "error.jpg" : imageLink;
+                tmp.imageLink = imageLink === undefined ? "/assets/error.jpg" : imageLink;
             } catch {
                 console.log("画像リンクの取得に失敗しました");
-                tmp.imageLink = "不明";
+                tmp.imageLink = "/assets/error.jpg";
             }
             //詳細文取得のエラーハンドリング
             try {
