@@ -17,7 +17,7 @@
             </li>
             <li>
                 <p>投稿</p>
-                <p><%= @user.what_goods.count %></p>
+                <p><%= @user.goods.count %></p>
             </li>
             <li><p>設定</p><%= image_tag("setting.svg" , class: "setting-icon" , style: "margin-left: 1rem") if current_user == @user %></li>
         </ul>

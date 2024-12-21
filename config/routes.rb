@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get "/users/:id/following" , to: "users#following"
   get "/users/:id/followers" , to: "users#followers"
   get "/users/profile/:id"   , to: "users#profile"
-  get "/users/profile/:user_id/top/:id" , to: "users#setting_top"
+  get "/users/profile/:id/top/:post_id" , to: "users#setting_top"
   get "/users/profile_new/:id" , to: "users#profile_new"
   get "/users/profile/view_top/:id/:top_id" , to: "users#view_top"
   post "/users/setting_profile/:id" , to: "users#setting_profile"

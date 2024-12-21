@@ -127,15 +127,26 @@ export function getBookInfo() {
 }
 
 //マイ本棚へ追加するが押された際の処理を書く
-export function add_myshelf() {
-    const resultContainers = document.querySelectorAll(".result-container .result-item");
+//引数で指定されているtypeは現在選択されている表示方法(1 => 縦方向一覧 , 0 => タイル式)
+export function add_myshelf(type) {
     return new Promise((resolve) => {
-        resultContainers.forEach((item, index) => {
-            item.querySelector(".my-shelf").addEventListener("click", (e) => {
-                e.preventDefault();
-                resolve(index);
-            });
-        });
+        if (type === 1) {
+            const targets = document.querySelectorAll(".result-container .result-item");
+            targets.forEach((item, index) => {
+                item.querySelector(".my-shelf").addEventListener("click" , (e) => {
+                    e.preventDefault();
+                    resolve(index);
+                });
+            })
+        } else {
+            const targets = document.querySelectorAll(".result-container .grid-container");
+            targets.forEach((item, index) => {
+                item.querySelector(".grid-add").addEventListener("click" , (e) => {
+                    e.preventDefault();
+                    resolve(index);
+                });
+            })
+        }
     });
 }
 
@@ -162,36 +173,6 @@ export function post_my_shelf(book_info) {
     }
 
 
-}
-
-//感想を投稿するを押されたら本の情報と共にPOSTメソッドを送信する処理
-export function post(bookInfo) {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    try {
-        fetch("/posts/new", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken
-            },
-            body: JSON.stringify({ bookInfo: bookInfo })
-        })
-            //レスポンスとして返ってきたHTMLファイルを文字列に変換する
-            .then(response => response.text())
-            .then(html => {
-                //変換されたHTMLファイルを画面に描画する。その際に一度画面の内容をdocument.openでリセットする
-                document.open();
-                document.write(html);
-                document.close();
-
-                //検索結果に戻るが押されたらブラウザのsessionStorageにapi_result_arrayを保存する
-
-
-            })
-            .catch(error => console.error("Error:", error));
-    } catch {
-        console.log("送信に失敗しました");
-    }
 }
 
 //データの配列からビューを構築する
@@ -256,23 +237,15 @@ export function views(api_result_array, style, condition, order) {
                 modalContainer.querySelector(".modal-description").textContent = `${description}`;
                 modalContainer.querySelector(".modal-img").src = `${imageLink}`;
 
+                //この下には「感想を投稿する」を押された際にエンドポイントに対してPOSTメソッドを送信する処理を書く
+
+
 
                 modalContainer.classList.add("add-modal-container");
                 container.append(modalContainer);
 
                 modal.classList.remove("modal");
                 modal.classList.add("add-modal");
-
-                //感想を投稿するボタンが押された際に本の情報と共にPOSTメソッドを送信する
-                const postModal = modalContainer.querySelector(".post");
-                const eventIndex = new Promise((resolve) => {
-                    postModal.addEventListener("click", () => {
-                        resolve(index);
-                    });
-                });
-                eventIndex.then((i) => {
-                    post(api_result_array[i]);
-                });
 
                 const modalClose = modalContainer.querySelector(".modal-close");
                 modalClose.addEventListener("click", () => {
@@ -393,13 +366,6 @@ export function makeDate(array) {
     return array;
 }
 
-
-export function getClickBookInfo() {
-    const targets = document.querySelectorAll(".posts-container .post-container");
-    targets.forEach((item) => {
-        console.log(item);
-    })
-}
 
 
 

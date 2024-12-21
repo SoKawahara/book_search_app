@@ -15,12 +15,16 @@ document.addEventListener("turbo:load", () => {
                     const order = document.querySelector("input[name='view-order']:checked").value;
                     module.views(api_result_array, style, condition, order);
 
-                    module.add_myshelf().then(index => {
+                    //ここで指定しているtypeは現在選択されている表示方法をadd_myshelf関数に知らせるための数
+                    const type = 1;
+                    module.add_myshelf(type).then(index => {
                         //これでインデックスを取得できたので必要な情報をbodyタグの中に含めてPOSTメソッドを送信する
                         module.post_my_shelf(api_result_array[index]);
                         //これは明確なリクエストを送信するわけではなく、現在のページを再読み込みするだけなのでPOSTした結果が表示されている場合ではPOSTメソッドが送信されている可能性もある
                         location.reload();
                     })
+
+
                 }
             }
             const condition = document.querySelector("#searchCondition");
@@ -110,6 +114,15 @@ document.addEventListener("turbo:load", () => {
                 //取得したデータを表示する
                 if (api_result_array.length > 0) {
                     module.views(api_result_array, style.value, condition.value, order.value);
+
+                    //ここで指定するtypeは現在選択されている表示方法をadd_myshelf関数に伝えるための数
+                    const type = style.value === "縦方向一覧" ? 1 : 0;
+                    module.add_myshelf(type).then(index => {
+                        //これでインデックスを取得できたので必要な情報をbodyタグの中に含めてPOSTメソッドを送信する
+                        module.post_my_shelf(api_result_array[index]);
+                        //これは明確なリクエストを送信するわけではなく、現在のページを再読み込みするだけなのでPOSTした結果が表示されている場合ではPOSTメソッドが送信されている可能性もある
+                        location.reload();
+                    })
                 }
             });
 

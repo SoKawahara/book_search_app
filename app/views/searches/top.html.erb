@@ -49,6 +49,7 @@
     </div>
   </div>
   <p class = "caution-hidden">(*それぞれの検索結果で隠れている部分はスクロールすることができます)</p>
+  <p class = "caution-hidden">(*タイル式を選択している際に本棚へ本を追加するには右上の✓ボタンを押してください)</p>
   <p id="result"></p>
   <p class="change-result"></p>
   <section class="result-container">
@@ -94,6 +95,7 @@
 <!--グリッドの一つのよそのためのtemplate-->
 <template id="grid-layout">
   <section class="grid-container">
+      <%= image_tag("/assets/check.svg" , class: "grid-add") %>
       <img class="grid-img" src="" alt="">
       <div class="grid-content">
           <p class="grid-title">僕のヒーローアカデミア</p>

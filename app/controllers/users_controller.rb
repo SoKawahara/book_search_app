@@ -2,11 +2,13 @@
 class UsersController < ApplicationController
   require 'json'
   require "date"
-  #edit,updateアクションが実行される前にlogged_in_userというメソッドを実行する
+
   #ログインしていないユーザはアクセスできないようにする
   before_action :logged_in_user , only: [:index, :edit , :update, :destroy , :following, :profile_new, :setting_top, :view_top , :setting_profile , :profile_tmp_save , :profile_edit_new , :profile_edit , :profile_edit]
   before_action :correct_user   , only: [:edit , :update]
   before_action :admin_user     , only: :destroy
+  before_action :get_user       , only: [:show,:turbo_stream_show,:turbo_stream_my_goods,:edit,:update,:destroy,
+                                         :following,:followers,:profile,:profile_new,:setting_top,:profile_edit_new]
 
   #ページネーションを用いて10件ずつ取得している
   def index
@@ -15,7 +17,6 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
     #ユーザに紐づいている投稿を6件分取得して返す
     @type = params[:type]
     #ここで現在設定されているクエリパラメータを取得する
@@ -34,7 +35,6 @@ class UsersController < ApplicationController
 
   #ここではTurboStreamを用いて各ユーザの投稿一覧の画面のリロードを行うための処理を書く
   def turbo_stream_show
-    @user = User.find(params[:id])
     @type = params[:type]
     @page = params[:page]
     @posts = 
@@ -54,16 +54,15 @@ class UsersController < ApplicationController
 
   #いいね一覧でTurboStreamを用いて１部分だけリロードする
   def turbo_stream_my_goods
-    @user = User.find(params[:id])
     @type = params[:type]
     @posts = 
       if @type == "1"
-        @user.what_goods.created_at_desc.page(params[:page]).per(6)
+        @user.what_goods.created_at_desc
       elsif @type == "2"
-        @user.what_goods.created_at_asc.page(params[:page]).per(6)
+        @user.what_goods.created_at_asc
       else
-        @user.what_goods.good_desc.page(params[:page]).per(6)
-      end 
+        @user.what_goods.good_desc
+      end&.page(params[:page]).per(6)
 
     respond_to do |format|
       format.turbo_stream
@@ -92,11 +91,9 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
   end
 
   def update
-    @user = User.find(params[:id])
     #updateメソッドは既存のレコードに対してのみ使用できる
     if @user.update(user_params)
       #更新に成功した場合を扱う
@@ -108,30 +105,26 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    user = User.find(params[:id])
-    user_name = user.name
-    user.destroy
+    user_name = @user.name
+    @user.destroy
     flash[:success] = "#{user_name}さんを削除しました"
     redirect_to users_url, status: :see_other
   end
 
   def following
     @title = "フォロー"
-    @user = User.find(params[:id])
     @users = @user.following.page(params[:pages]).per(10)
     render 'show_follow'
   end
 
   def followers
     @title = "フォロワー"
-    @user = User.find(params[:id])
     @users = @user.followers.page(params[:pages]).per(10)
     render 'show_follow'
   end
 
   #ユーザのプロフィールを表示する
   def profile 
-    @user = User.find(params[:id])
     #プロフィール設定が終わっている場合にのみ読書歴、好きなジャンル、おすすめtop3の情報をビューファイルに送信する
     if @user.profile_completed
       #読書歴を動的に変更するためにデータを整形している
@@ -165,8 +158,6 @@ class UsersController < ApplicationController
 
   #ユーザのプロフィールを作成する
   def profile_new
-    @user = User.find(params[:id])
-
     if !current_user?(@user)
       flash[:danger] = "この操作は行えません"
       redirect_to "/users/#{@user.id}/1"
@@ -192,8 +183,7 @@ class UsersController < ApplicationController
 
   #プロフィールでおすすめの本を設定する
   def setting_top
-    @user = User.find(params[:user_id])
-    @id = params[:id]
+    @id = params[:post_id]
     @posts = @user.goods.page(params[:page]).per(6)#何も取得するものがなかった際にはからの配列[]が返る
   end
 
@@ -261,8 +251,6 @@ class UsersController < ApplicationController
   
   #プロフィール変更のためのフォームを表示する
   def profile_edit_new
-    @user = User.find(params[:id])
-
     if !current_user?(@user)
       flash[:danger] = "この操作は行えません"
       redirect_to "/users/#{@user.id}/1"
@@ -325,8 +313,7 @@ class UsersController < ApplicationController
     redirect_to "/users/profile/#{user.id}"
   end
 
-  
-
+  #privateメソッドを使用して定義されているので以下のメソッドはこのクラス定義の中でしか参照できない
   private 
     #このメソッドの戻り値は許可されたパラメータが含まれたハッシュ
     #管理者であるのかどうかを確認できるadminカラムを設置したがこれはストロングパラメータには含めてはいけない
@@ -344,6 +331,11 @@ class UsersController < ApplicationController
     def correct_user
       @user = User.find(params[:id])
       redirect_to(root_url, status: :see_other) unless current_user?(@user)
+    end
+
+    #@userに対して指定されたUserオブジェクトを格納する
+    def get_user
+      @user = User.find(params[:id])
     end
 
     #管理者かどうか確認
