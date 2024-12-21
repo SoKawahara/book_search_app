@@ -1,3 +1,4 @@
+#このような記述をしているのでusersControllerクラスはApplicationControllerクラスを継承していることになる
 class UsersController < ApplicationController
   require 'json'
   require "date"
@@ -9,6 +10,7 @@ class UsersController < ApplicationController
 
   #ページネーションを用いて10件ずつ取得している
   def index
+    #ビュー側でアクションで設定していないインスタンス変数に対してアクセスしたときはnilが帰る。これはRubyの言語仕様
     @users = User.all.page(params[:page]).per(10)
   end
 
