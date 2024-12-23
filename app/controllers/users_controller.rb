@@ -9,6 +9,7 @@ class UsersController < ApplicationController
   before_action :admin_user     , only: :destroy
   before_action :get_user       , only: [:show,:turbo_stream_show,:turbo_stream_my_goods,:edit,:update,:destroy,
                                          :following,:followers,:profile,:profile_new,:setting_top,:profile_edit_new]
+  before_action :get_current_user   , only: [:view_top , :setting_profile , :profile_edit]
 
   #ページネーションを用いて10件ずつ取得している
   def index
@@ -119,8 +120,7 @@ class UsersController < ApplicationController
   end
 
   def view_top
-    user = current_user
-    @post = user.goods.find(params[:id])
+    @post = @user.goods.find(params[:id])
     @top_id = params[:top_id]
     #一時的に結果をセッションに加える
     session[:tmp_recommendation_books]["top_#{@top_id}"] = @post.id
@@ -138,33 +138,17 @@ class UsersController < ApplicationController
 
   #送信されたデータをプロフィールに保存してレコードを更新する
   def setting_profile
-    user = current_user
     recommendation_books = { top_1: params[:top_1] , top_2: params[:top_2] , top_3: params[:top_3] }
-    #データベースに保存するハッシュを作成する
-    result = profile_params.merge(recommendation_books: recommendation_books)
 
-    #エピソードが入力されたときのみエピソードの作成日時を更新する
-    #Time.currentはRailsで提供する機能でアプリケーションで設定されたタイムゾーンをもとに時刻を設定する
-    #Time.nowはRubyで提供される機能でサーバーのタイムゾーンに依存する時刻を設定する
-
-    if user.update(result)
+    if @user.update(profile_params.merge(recommendation_books: recommendation_books))
       flash[:success] = "プロフィールを作成しました!"
-      user.update(profile_completed:  true)
+      @user.update(profile_completed:  true)
     else
       flash[:danger] = "プロフィールを作成できませんでした"
     end
 
-
     #投稿内容を保存する一時セッションとして使用した情報をリセットする
-    session.delete(:year_month) if session[:year_month]
-    session.delete(:favorite_genre) if session[:favorite_genre]
-    session.delete(:birthday) if session[:birthday]
-    session.delete(:gender) if session[:gender]
-    session.delete(:occupations) if session[:occupations]
-    session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
-    session.delete(:profile_new_url)
-
-    redirect_to "/users/profile/#{user.id}"
+    init_sessions("new")
   end
 
   #読書開始年月と好きなジャンルが選択された際に一時セッションの保存するための処理
@@ -177,6 +161,7 @@ class UsersController < ApplicationController
     session[:gender] = params[:gender]
     session[:occupations] = params[:occupations]
     # session[:episode]に対して入力された内容を保存するには容量が足りなくなることがあるので現状では使用しない
+
     head :ok#戻り値としてHTTPステータスコードを返す
   end
   
@@ -187,47 +172,28 @@ class UsersController < ApplicationController
 
   #送信されたデータを実際にデータベースに保存する
   def profile_edit
-    user = current_user
     #本のおすすめ３つの投稿の中で変更されたものだけ新しいハッシュにまとめる
-    recommendation_books = { "top_1" => params[:top_1] , "top_2" => params[:top_2] , "top_3" => params[:top_3] }
-    new_recommendation_books = {}#データの整形を行ったハッシュを入れる
-    recommendation_books.each do |key , value|
-      new_recommendation_books[key] = value ==  "未設定" ? user.recommendation_books[key] : value
-    end
+    new_recommendation_books = { "top_1" => params[:top_1] , "top_2" => params[:top_2] , "top_3" => params[:top_3]}.
+                                select { |value , key| value != "" ? true : false }
 
     #ストロングパラメータに関しても上と同様の操作を行う
     new_profile_params = profile_params.select { |key , value| value != "" }
-    #エピソードが再設定されない限り更新日時は更新しない
-    if new_profile_params.has_key?(:episode)
-      #更新された内容にepisodeが含まれていれば更新するハッシュに対してエピソードの更新時間を含める
-      #mergeメソッドはハッシュの結合を行った新しいハッシュをか返すので元のハッシュに対して変更を加えることはできない
-      new_profile_params = new_profile_params.merge(episode_updated_time: Time.current)
-    end
-  
+    
     #データベースに保存するハッシュを作成する
-    result = new_profile_params.merge( recommendation_books: new_recommendation_books )
-    puts result
-    if user.update(result)
+    if @user.update(new_profile_params.merge(recommendation_books: new_recommendation_books))
       flash[:success] = "プロフィールを変更しました!"
-      user.update(profile_completed:  true)
+      @user.update(profile_completed:  true)
     else
       flash[:danger] = "プロフィールを変更できませんでした"
     end
 
     #投稿内容を保存する一時セッションとして使用した情報をリセットする
-    session.delete(:year_month) if session[:year_month]
-    session.delete(:favorite_genre) if session[:favorite_genre]
-    session.delete(:birthday) if session[:birthday]
-    session.delete(:gender) if session[:gender]
-    session.delete(:occupations) if session[:occupations]
-    session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
-    session.delete(:profile_edit_url)
-
-    redirect_to "/users/profile/#{user.id}"
+    init_sessions("edit")
   end
 
   #privateメソッドを使用して定義されているので以下のメソッドはこのクラス定義の中でしか参照できない
-  private 
+  private
+    #------------------------------------ストロングパラメータ------------------------------------------
     #このメソッドの戻り値は許可されたパラメータが含まれたハッシュ
     #管理者であるのかどうかを確認できるadminカラムを設置したがこれはストロングパラメータには含めてはいけない
     def user_params
@@ -237,8 +203,10 @@ class UsersController < ApplicationController
     def profile_params
       params.require(:profile_info).permit(:reading_history, :favorite_genre, :occupations , :gender, :birthday)
     end
+    
+    #--------------------------------ストロングパラメータここまで---------------------------------------
 
-    #beforeフィルタ
+    #---------------------------------------beforeフィルタ--------------------------------------------
 
     #正しいユーザかどうか確認
     def correct_user
@@ -251,10 +219,18 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
+    #userに対して現在ログインしているユーザを格納する
+    #この時インスタンス変数として設定するのはローカル変数とするとメソッドの外では参照できないから
+    def get_current_user
+      @user = current_user
+    end
+
     #管理者かどうか確認
     def admin_user
       redirect_to(root_url , status: :see_other) unless current_user.admin?
     end
+
+    #---------------------------------beforeフィルターここまで-------------------------------------------
 
     #ここではプロフィールを新規作成、編集する際にフォームを表示する際に必要なデータとその処理をひとまとめにする処理を書く
     #引数として新規作成なのか編集なのかを受け取る
@@ -266,7 +242,7 @@ class UsersController < ApplicationController
       
       #tmp_reccomendation_booksというキーをセッションが持たない時にはセッションを新たに作成する
       #このセッションには登録する予定のおすすめの本の情報が格納されている
-      session[:tmp_reccomendation_books] ||= { "top_1" => "未設定" , "top_2" => "未設定" , "top_3" => "未設定" }
+      session[:tmp_recommendation_books] ||= { "top_1" => "未設定" , "top_2" => "未設定" , "top_3" => "未設定" }
   
       @post = session[:tmp_recommendation_books]
       @year_month = session[:year_month] || ""
@@ -278,5 +254,18 @@ class UsersController < ApplicationController
   
       #プロフィール作成を開始してセッションに/users/profile_new/:idがなかったらURLを取得して格納する
       session["profile_#{type}_url".to_sym] ||= request.fullpath
+    end
+
+    #プロフィールの作成画面で使用したsession情報を削除、初期化する
+    def init_sessions(type)
+      session.delete(:year_month) if session[:year_month]
+      session.delete(:favorite_genre) if session[:favorite_genre]
+      session.delete(:birthday) if session[:birthday]
+      session.delete(:gender) if session[:gender]
+      session.delete(:occupations) if session[:occupations]
+      session[:tmp_recommendation_books] = { "top_1" => "未設定" , "top_2" => "未設定" , "top_3" => "未設定" }
+      session.delete("profile_#{type}_url".to_sym) 
+
+      redirect_to "/users/profile/#{@user.id}"
     end
 end
