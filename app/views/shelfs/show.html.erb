@@ -16,6 +16,15 @@
       </div>
     <% end %>    
 </section>
+<div class="shelf-caution">
+  <% if @type == 1 %>
+    <p>*未読の本を読了に変更するには右上の✓ボタンを押してください</p>
+    <p>(感想を投稿するには読了にする必要があります)</p>
+  <% else %>
+    <p>*投稿を作成するには右上の🖋ボタンを押してください</p>
+    <p>(既に投稿を作成済みの本に関しては表示されません)</p>
+  <% end %>
+</div>
 <section class="my-shelf-container" id = "my_shelf_container">
     <% if !@my_shelf.nil? %>
       <% @my_shelf.each do |item| %>

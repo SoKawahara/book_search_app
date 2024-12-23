@@ -44,9 +44,24 @@
     }
 }
 
+.shelf-caution {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    p {
+        font-family: "Bodoni Moda SC", serif;
+        font-size: 18px;
+        font-weight: 500;
+        color: rgb(124, 122, 122);
+        text-align: center;
+    }
+
+}
+
 .my-shelf-container {
     width: 95%;
-    margin: 2rem auto;
+    margin: 0.5rem auto 2rem auto;
     padding: 2rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

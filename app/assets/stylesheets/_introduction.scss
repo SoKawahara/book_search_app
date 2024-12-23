@@ -254,7 +254,7 @@ main {
 
 
     .feature1 {
-      width: 70%;
+      width: 80%;
       margin-top: 12em;
       margin-left: 3rem;
       padding: 2rem;
@@ -269,11 +269,13 @@ main {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 2rem;
 
         p {
           font-family: "Bodoni Moda SC", serif;
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 500;
+          line-height: 1.7;
           text-align: center;
           width: 50%;
 
@@ -327,7 +329,7 @@ main {
       margin-top: 12rem;
       margin-left: 3rem;
       padding: 2rem;
-      width: 95%;
+      width: 96%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -338,12 +340,14 @@ main {
       .feature3-container {
         display: flex;
         gap: 4rem;
+        justify-content: space-around;
         align-items: center;
 
         p {
           font-family: "Bodoni Moda SC", serif;
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 500;
+          line-height: 1.7;
           text-align: center;
           width: 30%;
         }
