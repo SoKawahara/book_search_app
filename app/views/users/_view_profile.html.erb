@@ -6,11 +6,11 @@
     <div class="profile-container">
         <h3><%= @user.name %></h3>
         <div class="user-info">
-            <p>年齢: <%= @age %>歳 | 性別: <%= @gender %> | 職業: <%= @occupations %></p>
+            <p>年齢: <%= @age %>歳 | 性別: <%= @gender %> | 職業: <%= @user.occupations %></p>
             <% if @year == 0 %>
-              <p>読書歴: <%= "#{@month}か月" %> | 好きなジャンル: <%= @favorite_genre %></p>
+              <p>読書歴: <%= "#{@month}か月" %> | 好きなジャンル: <%= @user.favorite_genre %></p>
             <% else %>
-              <p>読書歴: <%= "#{@year}年#{@month}か月" %> | 好きなジャンル: <%= @favorite_genre %></p>
+              <p>読書歴: <%= "#{@year}年#{@month}か月" %> | 好きなジャンル: <%= @user.favorite %></p>
             <% end %>
         </div>
         

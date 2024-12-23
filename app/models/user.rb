@@ -53,6 +53,17 @@ class User < ApplicationRecord
         SecureRandom.urlsafe_base64
     end
 
+    #これはユーザがいいねした投稿を取得する処理を行うインスタンスメソッド
+    def get_posts_my_goods(type , page , num)
+        if type == "1"
+            self.what_goods.created_at_desc
+        elsif type == "2"
+            self.what_goods.created_at_asc
+        else
+            self.what_goods.good_desc
+        end&.page(page).per(num)
+    end
+
     #ユーザのステータスフィードを返す
     def feed
         #ユーザがフォローしているユーザのidを配列にして返すfollowing_idsではデータベースからメモリに値が読み込まれて配列が作成される

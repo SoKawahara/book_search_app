@@ -17,41 +17,23 @@ class UsersController < ApplicationController
   end
 
   def show
-    #ユーザに紐づいている投稿を6件分取得して返す
-    @type = params[:type] 
+    #ユーザに紐づいている投稿を6件分取得して返す 
     @goods = Good.get_posts(@user.id , params[:type] , params[:page] , 6)
   end
 
   #ここではTurboStreamを用いて各ユーザの投稿一覧の画面のリロードを行うための処理を書く
-  def turbo_stream_show
-    @type = params[:type]
-    @good_record = 
-      if @type == "1"
-        @user.goods.created_at_desc
-      elsif @type == "2"
-        @user.goods.created_at_asc
-      else
-        @user.goods.good_desc end 
-    @posts = Good.pagination(@good_record , params[:page] , 6)
+  def turbo_stream_show 
+    @posts = Good.get_posts(@user.id , params[:type] , params[:page] , 6)
 
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to "/users/#{@user.id}/#{@type}" }
+      format.html { redirect_to "/users/#{@user.id}/#{params[:type]}" }
     end
   end
 
   #いいね一覧でTurboStreamを用いて１部分だけリロードする
   def turbo_stream_my_goods
-    @type = params[:type]
-    @good_record = 
-      if @type == "1"
-        @user.what_goods.created_at_desc
-      elsif @type == "2"
-        @user.what_goods.created_at_asc
-      else
-        @user.what_goods.good_desc
-      end
-    @posts = Good.pagination(@good_record , params[:page] , 6)
+    @posts = @user.get_posts_my_goods(params[:type] , params[:page] , 6)
 
     respond_to do |format|
       format.turbo_stream
@@ -117,34 +99,13 @@ class UsersController < ApplicationController
     #プロフィール設定が終わっている場合にのみ読書歴、好きなジャンル、おすすめtop3の情報をビューファイルに送信する
     if @user.profile_completed
       #読書歴を動的に変更するためにデータを整形している
-      if @user.reading_history != "未設定"
-        differences = (Date.today - Date.parse(@user.reading_history + "-01")).to_i 
-        @year = differences / 365
-        @month = (differences % 365) / 30
-      else
-        @year = "0"
-        @month = "0"
-      end
-      
-      @favorite_genre = @user.favorite_genre
+      @differences = @user.reading_history != "未設定" ? (Date.today - Date.parse(@user.reading_history + "-01")).to_i : 0
+      @year = @differences / 365
+      @month = @differences % 365 / 30
+      @age = @user.birthday != "未設定" ? (Date.today - Date.parse(@user.birthday)).to_i / 365 : "0"
       @top3 = @user.recommendation_books
-      #年齢を計算する
-      if @user.birthday != "未設定"
-        @age = (Date.today - Date.parse(@user.birthday)).to_i / 365
-      else
-        @age = "0"
-      end
-      
-      @gender = @user.gender
-      @occupations = @user.occupations
-    else
-      @year = "0"
-      @month = "0"
-      @favorite_genre = "未設定"
-      @top3 = {"top_1" => "未設定" , "top_2" => "未設定" , "top_3" => "未設定" }
     end
   end
-
   #ユーザのプロフィールを作成する
   def profile_new
     if !current_user?(@user)
