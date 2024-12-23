@@ -106,29 +106,10 @@ class UsersController < ApplicationController
       @top3 = @user.recommendation_books
     end
   end
+
   #ユーザのプロフィールを作成する
   def profile_new
-    if !current_user?(@user)
-      flash[:danger] = "この操作は行えません"
-      redirect_to "/users/#{@user.id}/1"
-    end
-    
-    #tmp_reccomendation_booksというキーをセッションが持たない時にはセッションを新たに作成する
-    #session.key?メソッドは引数に指定されたキーを持つセッションが存在するかどうかを調べる
-    if !session.key?(:tmp_recommendation_books)
-      session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
-      @post = session[:tmp_recommendation_books]
-    else
-      @post = session[:tmp_recommendation_books]
-    end
-    @year_month = session[:year_month] || ""
-    @favorite_genre = session[:favorite_genre] || ""
-    @birthday = session[:birthday] || ""
-    @gender = session[:gender] != "" ? session[:gender] : ""
-    @occupations = session[:occupations] || ""
-
-    #プロフィール作成を開始してセッションに/users/profile_new/:idがなかったらURLを取得して格納する
-    session[:profile_new_url] ||= request.fullpath
+    preparation_for_profile(@user , "new")
   end
 
   #プロフィールでおすすめの本を設定する
@@ -201,25 +182,7 @@ class UsersController < ApplicationController
   
   #プロフィール変更のためのフォームを表示する
   def profile_edit_new
-    if !current_user?(@user)
-      flash[:danger] = "この操作は行えません"
-      redirect_to "/users/#{@user.id}/1"
-    end
-    
-    if !session.key?(:tmp_recommendation_books)
-      session[:tmp_recommendation_books] = { "top_1" => "未設定", "top_2" => "未設定", "top_3" => "未設定" }
-      @post = session[:tmp_recommendation_books]  
-    else
-      @post = session[:tmp_recommendation_books] 
-    end
-    @year_month = session[:year_month] || ""
-    @favorite_genre = session[:favorite_genre] || ""
-    @birthday = session[:birthday] || ""
-    @genre = session[:genre] || ""
-    @gender = session[:gender] || ""
-    @occupations  = session[:occupations] || ""
-    #プロフィール変更を開始してセッションに/users/profile_edit/:idがなかったらURLを取得して格納する
-    session[:profile_edit_url] ||= request.fullpath
+    preparation_for_profile(@user , "edit")
   end
 
   #送信されたデータを実際にデータベースに保存する
@@ -291,5 +254,29 @@ class UsersController < ApplicationController
     #管理者かどうか確認
     def admin_user
       redirect_to(root_url , status: :see_other) unless current_user.admin?
+    end
+
+    #ここではプロフィールを新規作成、編集する際にフォームを表示する際に必要なデータとその処理をひとまとめにする処理を書く
+    #引数として新規作成なのか編集なのかを受け取る
+    def preparation_for_profile(user, type)
+      if !current_user?(user)
+        flash[:danger] = "この操作は行えません"
+        redirect_to "/users/#{user.id}/1"
+      end
+      
+      #tmp_reccomendation_booksというキーをセッションが持たない時にはセッションを新たに作成する
+      #このセッションには登録する予定のおすすめの本の情報が格納されている
+      session[:tmp_reccomendation_books] ||= { "top_1" => "未設定" , "top_2" => "未設定" , "top_3" => "未設定" }
+  
+      @post = session[:tmp_recommendation_books]
+      @year_month = session[:year_month] || ""
+      @favorite_genre = session[:favorite_genre] || ""
+      @birthday = session[:birthday] || ""
+      @gender = session[:gender] != "" ? session[:gender] : ""
+      @genre = session[:genre] != "" ? session[:genre] : ""
+      @occupations = session[:occupations] || ""
+  
+      #プロフィール作成を開始してセッションに/users/profile_new/:idがなかったらURLを取得して格納する
+      session["profile_#{type}_url".to_sym] ||= request.fullpath
     end
 end

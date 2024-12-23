@@ -27,6 +27,7 @@ class Good < ApplicationRecord
 
   def self.get_posts(user_id , type , page , num)
     if type == "1"
+      #ここでのselfはクラスメソッドの中なのでGoodクラスを指す
       self.where(user_id: user_id).created_at_desc
     elsif type == "2"
       self.where(user_id: user_id).created_at_asc
