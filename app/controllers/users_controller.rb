@@ -18,33 +18,21 @@ class UsersController < ApplicationController
 
   def show
     #ユーザに紐づいている投稿を6件分取得して返す
-    @type = params[:type]
-    #ここで現在設定されているクエリパラメータを取得する
-    @page = params[:page]
-    @goods =  
-      if @type == "1"
-        @user.goods.created_at_desc
-      elsif @type == "2"
-        @user.goods.created_at_asc
-      else
-        @user.goods.good_desc
-      end&.page(@page).per(6)
-
-    @my_shelfs = @user.shelfs.all
+    @type = params[:type] 
+    @goods = Good.get_posts(@user.id , params[:type] , params[:page] , 6)
   end
 
   #ここではTurboStreamを用いて各ユーザの投稿一覧の画面のリロードを行うための処理を書く
   def turbo_stream_show
     @type = params[:type]
-    @page = params[:page]
-    @posts = 
+    @good_record = 
       if @type == "1"
         @user.goods.created_at_desc
       elsif @type == "2"
         @user.goods.created_at_asc
       else
-        @user.goods.good_desc
-      end&.page(@page).per(6) 
+        @user.goods.good_desc end 
+    @posts = Good.pagination(@good_record , params[:page] , 6)
 
     respond_to do |format|
       format.turbo_stream
@@ -55,14 +43,15 @@ class UsersController < ApplicationController
   #いいね一覧でTurboStreamを用いて１部分だけリロードする
   def turbo_stream_my_goods
     @type = params[:type]
-    @posts = 
+    @good_record = 
       if @type == "1"
         @user.what_goods.created_at_desc
       elsif @type == "2"
         @user.what_goods.created_at_asc
       else
         @user.what_goods.good_desc
-      end&.page(params[:page]).per(6)
+      end
+    @posts = Good.pagination(@good_record , params[:page] , 6)
 
     respond_to do |format|
       format.turbo_stream

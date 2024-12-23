@@ -20,4 +20,18 @@ class Good < ApplicationRecord
   validates :convenience, presence: true
   validates :recommendation, presence: true
 
+  #取得したUser::ActiveRecord_AssociationRelationオブジェクトに対してkaminariを適用するクラスメソッドを定義する
+  def self.pagination(posts , page , num)
+    posts.page(page).per(num)
+  end
+
+  def self.get_posts(user_id , type , page , num)
+    if type == "1"
+      self.where(user_id: user_id).created_at_desc
+    elsif type == "2"
+      self.where(user_id: user_id).created_at_asc
+    else
+      self.where(user_id: user_id).good_desc
+    end&.page(page).per(num)
+  end
 end
