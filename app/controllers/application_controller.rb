@@ -19,4 +19,10 @@ class ApplicationController < ActionController::Base
       redirect_to "/users/#{user.id}/1"
     end
   end
+
+  #userに対して現在ログインしているユーザを格納する
+  #この時インスタンス変数として設定するのはローカル変数とするとメソッドの外では参照できないから
+  def get_current_user
+    @user = current_user
+  end
 end

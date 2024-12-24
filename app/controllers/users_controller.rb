@@ -219,12 +219,6 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
-    #userに対して現在ログインしているユーザを格納する
-    #この時インスタンス変数として設定するのはローカル変数とするとメソッドの外では参照できないから
-    def get_current_user
-      @user = current_user
-    end
-
     #管理者かどうか確認
     def admin_user
       redirect_to(root_url , status: :see_other) unless current_user.admin?

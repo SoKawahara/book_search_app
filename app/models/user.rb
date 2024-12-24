@@ -53,6 +53,22 @@ class User < ApplicationRecord
         SecureRandom.urlsafe_base64
     end
 
+    #指定されたユーザの投稿を取得する
+    def get_my_post(post_id)
+        self.goods.find_by(id: post_id)
+    end
+
+    #ここではフォローしているユーザの投稿を取得する
+    def get_feed_posts(type , page , num)
+        if type == "1"
+            self.feed.created_at_desc
+        elsif type == "2"
+            self.feed.created_at_asc
+        else
+            self.feed.good_desc
+        end&.page(page).per(num)
+    end
+
     #これはユーザがいいねした投稿を取得する処理を行うインスタンスメソッド
     def get_posts_my_goods(type , page , num)
         if type == "1"

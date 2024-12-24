@@ -35,4 +35,14 @@ class Good < ApplicationRecord
       self.where(user_id: user_id).good_desc
     end&.page(page).per(num)
   end
+
+  #ここでは作成されたGoodクラスのオブジェクトを実際にデータベースに追加する処理を行う
+  #もし失敗した場合にはnilを返す
+  def post_save(shelf_id)
+    if self.save
+      Shelf.find(shelf_id).update_attribute(:created_post , 1)
+    else
+      nil
+    end
+  end
 end
