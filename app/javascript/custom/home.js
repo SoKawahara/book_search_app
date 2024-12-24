@@ -267,6 +267,11 @@ document.addEventListener("turbo:load", () => {
     function viewEachFunction(viewMain , item) {
         //クリックされた際に中央で詳細表示する
         item.addEventListener("click" , () => {
+            //現在のコンテナの中に格納されている要素をすべて一度削除する
+            const mainContent = viewMain.querySelector(".main-content");
+            mainContent.querySelectorAll("p").forEach(item => {
+                item.remove();
+            });
             //現在選択されている要素を取得する
             const target = document.querySelector(".function-container #episode .add-item-click, .function-container #my_shelf .add-item-click , .function-container #search .add-item-click , .function-container #post .add-item-click");
             if (target) {
@@ -275,8 +280,14 @@ document.addEventListener("turbo:load", () => {
             } 
 
             viewMain.querySelector("h3").textContent = item.querySelector("h4").textContent;
-            viewMain.querySelector("img").src = item.querySelector("img").src;
-            viewMain.querySelector("p").textContent = item.querySelector("p").textContent;
+            viewMain.querySelector(".main-function-image").src = item.querySelector("img").src;
+
+            //ここから下ではdivタグ内のすべてのpタグを取得する処理を行う
+            item.querySelectorAll("section > p").forEach(item => {
+                const newDiv = document.createElement("p");
+                newDiv.textContent = item.textContent;
+                mainContent.append(newDiv);
+            });
 
             const itemClick = item.querySelector(".item-click");
             itemClick.style.display = "block";
