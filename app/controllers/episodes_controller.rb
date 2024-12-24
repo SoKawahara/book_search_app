@@ -125,11 +125,6 @@ class EpisodesController < ApplicationController
         end
     end
 
-    #ここでは絞り込み条件で指定された条件に基づいて絞り込んだ結果を反映する
-    def sort_episodes
-
-    end
-
     private 
       #これはエピソードを作成する際に使用するストロングパラメータ
       def episode_params

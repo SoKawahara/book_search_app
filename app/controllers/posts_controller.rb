@@ -148,11 +148,12 @@ class PostsController < ApplicationController
 
         #ここでリダイレクト先を変更する
         #URIライブラリを用いてrequest.refererからパス部分を取得する,エラーが発生した場合にはユーザページに遷移するようにする
-        begin
-            @redirect_path = URI.parse(request.referer).path
-        rescue URI::InvalidURIError => e
-            @redirect_path = "/users/#{@user_id}/1"
-        end
+        @redirect_path = 
+          begin
+            URI.parse(request.referer).path
+          rescue URI::InvalidURIError => e#ここではURI::InvalidURIErrorが発生した場合のみ例外を発生させている
+            "/users/#{@user_id}/1"
+          end
     end
 
     private
