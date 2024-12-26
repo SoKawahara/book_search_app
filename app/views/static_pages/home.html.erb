@@ -101,23 +101,6 @@
           <p>選択中</p>
         </div>
       </div>
-    </div>
-    <div class = "view-main">
-      <h3>エピソード閲覧</h3>
-      <section class="image-container">
-        <button class = "before"><%= image_tag "left.svg" %></button>
-        <%= image_tag "function-episode.png" , class: "main-function-image" %>
-        <button class = "after"><%= image_tag "right.svg" %></button> 
-      </section>
-      <div class = "main-content">
-        <h4>～主な機能～</h4>
-        <p>・条件を指定しての絞込検索</p>
-        <p>・「このエピソードを詳しく見る」を押してエピソードの詳細表示</p>
-        <p>・「プロフィールへ」を押してエピソード作成者のプロフィールへの遷移</p>
-      </div>
-      
-    </div>
-    <div class="right-container">
       <div id = "search">
         <%= image_tag "function-search1.png" , class: "function-image" %>
         <h4>本の検索</h4>
@@ -145,6 +128,48 @@
         </div>
       </div>
     </div>
+    <div class = "view-main">
+      <h3>エピソード閲覧</h3>
+      <div class="image-container">
+        <div class="swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="swiper-item">
+                <%= image_tag "left.svg" , class: "main-function-image"%>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="swiper-item">
+                <%= image_tag "right.svg" , class: "main-function-image" %>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="swiper-item">
+                <%= image_tag "function-episode.png" , class: "main-function-image" %>
+              </div> 
+            </div>
+          </div>            
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev">
+            <div class="swiper-button-container">
+              <%= image_tag "left.svg" %>
+            </div>
+          </div>
+          <div class="swiper-button-next">
+            <div class="swiper-button-container">
+              <%= image_tag "right.svg" %>
+            </div>
+          </div>
+          <div class="swiper-scrollbar"></div>
+        </div>   
+      
+        <div class = "main-content">
+          <h4>～主な機能～</h4>
+          <p>・条件を指定しての絞込検索</p>
+          <p>・「このエピソードを詳しく見る」を押してエピソードの詳細表示</p>
+          <p>・「プロフィールへ」を押してエピソード作成者のプロフィールへの遷移</p>
+        </div>
+      </div>
   </section>
 </main>
 <%= render 'layouts/footer' %>

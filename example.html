@@ -1,15 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src = "example.js" defer></script>
+    <title>Swiper Demo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="example_swiper.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
+
 <body>
-    <p class="hello" style = "margin-bottom: 100rem;">
-        こんにちは
-    </p>
-    <p>こんにちは</p>
+    <!-- swiper , swiper-wrapper , swiper-slideは必須の要素になっている -->
+
+    <!-- Slider main container -->
+    <div class="swiper">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <div class="swiper-slide">
+                <div class="swiper-parent">
+                    <img src="app/assets/images/add.svg" alt="">
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="swiper-parent">
+                    <img src="app/assets/images/background-shelf.jpg" alt="" ></div>
+                </div>
+            <div class="swiper-slide">
+                <div class="swiper-parent">
+                    <img src="app/assets/images/bookshelves.jpg" alt="" >
+                </div>
+            </div>
+        </div>
+        <!-- If we need pagination -->
+        <div class="swiper-pagination"></div>
+
+        <!-- If we need navigation buttons -->
+        <div class="swiper-button-prev">
+            <div class="swiper-button-container">
+                <img src="app/assets/images/left.svg" alt="">
+            </div>
+        </div>
+        <div class="swiper-button-next">
+            <div class="swiper-button-container">
+                <img src="app/assets/images/right.svg" alt="">
+            </div>
+        </div>
+
+        <!-- If we need scrollbar -->
+        <div class="swiper-scrollbar"></div>
+    </div>
+    <script src="swiper-examaple.js"></script>
 </body>
+
 </html>

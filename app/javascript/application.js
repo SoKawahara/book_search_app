@@ -3,6 +3,7 @@ import "@hotwired/turbo-rails";
 import "controllers";
 import "custom/home";
 import "custom/scrollHint";
+import "custom/home-swiper";
 import "validates/form";
 import "validates/form_episode";
 import "toggles/setting-toggle";

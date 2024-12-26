@@ -255,8 +255,8 @@ document.addEventListener("turbo:load", () => {
     const viewMain = document.querySelector(".view-main");
     const episode = document.querySelector(".left-container #episode");
     const myShelf = document.querySelector(".left-container #my_shelf");
-    const search = document.querySelector(".right-container #search");
-    const post = document.querySelector(".right-container #post");
+    const search = document.querySelector(".left-container #search");
+    const post = document.querySelector(".left-container #post");
     
     viewEachFunction(viewMain , episode);
     viewEachFunction(viewMain , myShelf);
