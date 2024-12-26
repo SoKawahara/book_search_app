@@ -14,4 +14,10 @@ class Episode < ApplicationRecord
   scope :created_at_asc , -> { order(created_at: :asc) }
   scope :reading_history_desc , -> { order(reading_history: :desc) }
   scope :reading_history_asc , -> { order(reading_history: :asc) }
+
+  #エピソード一覧で表示するための全エピソードを取得するクラスメソッド
+  #eager loadingを用いてN+1クエリ問題を解消している
+  def self.get_episodes(page , num)
+    self.where(episode_complated: 1).includes(:user).page(page).per(num)
+  end
 end

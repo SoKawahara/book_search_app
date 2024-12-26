@@ -10,7 +10,7 @@
             <% if @year == 0 %>
               <p>読書歴: <%= "#{@month}か月" %> | 好きなジャンル: <%= @user.favorite_genre %></p>
             <% else %>
-              <p>読書歴: <%= "#{@year}年#{@month}か月" %> | 好きなジャンル: <%= @user.favorite %></p>
+              <p>読書歴: <%= "#{@year}年#{@month}か月" %> | 好きなジャンル: <%= @user.favorite_genre %></p>
             <% end %>
         </div>
         

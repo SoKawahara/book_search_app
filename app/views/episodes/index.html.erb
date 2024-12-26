@@ -1,12 +1,14 @@
 <% provide(:title, "エピソード一覧") %>
 <h1 class = "new-title">エピソード一覧</h1>
 <section class="view-episode-container">
-  <section class = "episodes-container">
+  <section class = "episodes-container" id = "episodes-container">
     <% if !@episodes.nil? %>
       <!-- パーシャルを利用して取得できた複数の要素を各パーツごとにパーシャルに当てはめている -->
       <%= render @episodes %>
     <% else %>
-      <p>絞込結果に一致する検索結果がありません</p>
+      <div class="no-result">
+        <p>絞込結果に一致する検索結果がありません</p>
+      </div>
     <% end %>
   </section>
   <section class="info-container">
@@ -32,8 +34,8 @@
       <%= f.label :order, "表示順:" , style: "display: block; text-align: start" %>
         <%= f.select :order, 
                         [["作成日時", "作成日時"], 
-                         ["読書歴", "読書歴"], 
-                         ["年齢", "年齢"]], 
+                         ["読書開始年月", "読書歴"], 
+                         ["誕生日", "年齢"]], 
                         { prompt: "表示順" }, 
                         { id: "order" } %>
       <%= f.label :sort, "ソート順:" , style: "display: block; text-align: start"%>

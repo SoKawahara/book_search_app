@@ -2,7 +2,9 @@
     <% user = episode.user %>
     <div class="episode-info">
         <%= image_tag gravatar_for(user) , class: "episode-icon" %>
-        <p>作成日時:<br><%= episode.episode_update_time.to_s.gsub("+0900" , "") %></p>
+        <div id = "sort-condition">
+            <p>作成日時:<br><%= episode.episode_update_time.to_s.gsub("+0900" , "") %></p>
+        </div>
         <p style = "font-size: 18px; font-weight: 600; text-shadow: -4px 5px 3px grey; font-family: Caveat, cursive;"><%= user.name %></p>
         <%= link_to "プロフィールへ" , "/users/#{user.id}/1" , class: "to-profile" %>
     </div>

@@ -793,10 +793,12 @@
         position: absolute;
         top: 1rem;
         right: 6rem;
-        transition: .8s;
 
-        &:hover {
-            scale: 1.25;
+        img {
+            transition: .8s;
+            &:hover {
+                scale: 1.1;
+            }
         }
     }
 

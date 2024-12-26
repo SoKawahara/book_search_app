@@ -2,34 +2,33 @@
   <% if !@users.empty? %>
     <% @users.each do |user| %>
       <div class="episode-container">
+        <% episode = user.episode %>
         <div class="episode-info">
-            <%= image_tag gravatar_for(user) , class: "episode-icon" %>
+          <%= image_tag gravatar_for(user) , class: "episode-icon" %>
+          <div id = "sort-condition">
             <% if @target == "作成日時" %>
-              <p>作成日時: <br><%= user.episode_created_at.split(".").first %></p>
-              <p style = "font-size: 18px; font-weight: 600; text-shadow: -4px 5px 3px grey; font-family: Caveat, cursive;"><%= user.name %></p>
+              <p>作成日時:<br><%= episode.episode_update_time.to_s.gsub("+0900" , "") %></p>
             <% elsif @target == "読書歴" %>
-              <% reading_time = (Date.today - Date.parse(user.reading_history + "-01")).to_i %>
-              <% if reading_time / 365 > 0 %>
-                <p><%= "読書歴: #{reading_time / 365}年#{@reading_time % 365 / 30}か月" %></p>
-              <% else %>
-                <p><%= "読書歴: #{reading_time % 365 / 30}か月" %></p>
-              <% end %>
+              <p>読書歴:<br><%= user.reading_history %></p>
             <% else %>
-              <p>年齢: <%= (Date.today - Date.parse(user.birthday)).to_i / 365 %>歳</p>
+              <p>年齢:<br><%= user.birthday %></p>
             <% end %>
-            <%= link_to "プロフィールへ" , "/users/#{user.user_id}/1" , class: "to-profile" %>
+          </div>
+          <p style = "font-size: 18px; font-weight: 600; text-shadow: -4px 5px 3px grey; font-family: Caveat, cursive;"><%= user.name %></p>
+          <%= link_to "プロフィールへ" , "/users/#{user.id}/1" , class: "to-profile" %>
         </div>
         <div class="episode-content">
-            <p style = "border-bottom: 1px solid black;"><%= user.title %></p>
-            <div>
-                <%= link_to "→このエピソードを詳しくみる" , "/episodes/#{user.user_id}" %>
-            </div>
+          <p style = "border-bottom: 1px solid black;"><%= episode.title %></p>
+          <div>
+            <%= link_to "→このエピソードを詳しくみる" , "/episodes/#{user.id}" %>
+          </div>
         </div>
       </div>
     <% end %>
   <% else %>
-    <div class = "no-result">
-      <p>*検索結果がありません</p>
+    <div class="no-result">
+      <p>絞り込みに一致するエピソードがありません</p>
+      <p>条件を絞り込みなおしてください</p>
     </div>
   <% end %>
 <% end %>

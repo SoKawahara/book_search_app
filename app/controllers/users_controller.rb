@@ -105,6 +105,7 @@ class UsersController < ApplicationController
       @month = @differences % 365 / 30
       @age = @user.birthday != "未設定" ? (Date.today - Date.parse(@user.birthday)).to_i / 365 : "0"
       @top3 = @user.recommendation_books
+      @gender = @user.gender
     end
   end
 
@@ -172,23 +173,28 @@ class UsersController < ApplicationController
 
   #送信されたデータを実際にデータベースに保存する
   def profile_edit
-    #本のおすすめ３つの投稿の中で変更されたものだけ新しいハッシュにまとめる
-    new_recommendation_books = { "top_1" => params[:top_1] , "top_2" => params[:top_2] , "top_3" => params[:top_3]}.
-                                select { |value , key| value != "" ? true : false }
-
+    #post_recommendation_booksはおすすめの本の変更を行うフォームから送信されてきた値
+    post_recommendation_books = { "top_1" => params[:top_1] , "top_2" => params[:top_2] , "top_3" => params[:top_3] }
+    #変更として送信されていない本については既存の本を情報として再度送信する
+    new_recommendation_books = post_recommendation_books.map do |k , v|
+                                 v == "未設定" ? [k , @user.recommendation_books[k]] : [k , v] end.to_h 
+    
     #ストロングパラメータに関しても上と同様の操作を行う
     new_profile_params = profile_params.select { |key , value| value != "" }
+    
     
     #データベースに保存するハッシュを作成する
     if @user.update(new_profile_params.merge(recommendation_books: new_recommendation_books))
       flash[:success] = "プロフィールを変更しました!"
       @user.update(profile_completed:  true)
+      #投稿内容を保存する一時セッションとして使用した情報をリセットする
+      #init_sessionsメソッドではプロフィールへのリダイレクトまでセットで行っている
+      init_sessions("edit")
     else
-      flash[:danger] = "プロフィールを変更できませんでした"
+      flash.now[:danger] = "プロフィールを変更できませんでした"
+      preparation_for_profile(@user , "edit")#プロフィールを表示するために必要なデータの前処理を行う
+      render "profile_edit_new" , status: :unprocessable_entity
     end
-
-    #投稿内容を保存する一時セッションとして使用した情報をリセットする
-    init_sessions("edit")
   end
 
   #privateメソッドを使用して定義されているので以下のメソッドはこのクラス定義の中でしか参照できない
@@ -212,11 +218,6 @@ class UsersController < ApplicationController
     def correct_user
       @user = User.find(params[:id])
       redirect_to(root_url, status: :see_other) unless current_user?(@user)
-    end
-
-    #@userに対して指定されたUserオブジェクトを格納する
-    def get_user
-      @user = User.find(params[:id])
     end
 
     #管理者かどうか確認

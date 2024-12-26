@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   get "/episodes/new" , to: "episodes#new"
   post "/episodes/create" , to: "episodes#create"
   post "/episodes/turbo_stream_index" , to: "episodes#turbo_stream_index"
-  get "/episodes/:user_id" , to: "episodes#show"
+  get "/episodes/:id" , to: "episodes#show"
   
   
   
