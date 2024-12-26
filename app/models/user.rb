@@ -65,6 +65,12 @@ class User < ApplicationRecord
                        order(order_condition).includes(:episode)
     end
 
+    #指定された条件のマイ本棚の本を取得する
+    def get_my_shelfs(type , page , num)
+        #kaminariを適用する際には前半部分の結果が空でないことを保証する必要があるのでボッチ演算子を使用する
+        self.shelfs.where(unread_flag: type).page(page).per(num)
+    end
+
     #指定されたユーザの投稿を取得する
     def get_my_post(post_id)
         self.goods.find_by(id: post_id)

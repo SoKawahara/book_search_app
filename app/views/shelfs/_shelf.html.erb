@@ -1,0 +1,19 @@
+<div class="shelf-item">
+  <%= link_to image_tag("trash.svg") , shelf_path(shelf) , data: { "turbo-method": :delete , turbo_confirm: "本当に削除しますか?" } , class: "trash" %>
+  <% if shelf.unread_flag == 1 %>
+    <%= link_to(image_tag("check.svg") , "/shelfs/update/#{shelf.id}" , class: "check-btn") %>
+  <% else %>
+    <%= link_to(image_tag("back.svg") , "/shelfs/update/#{shelf.id}" , class: "shelf-back-btn") %>
+    <% if shelf.created_post == 0 %>
+      <%= link_to(image_tag("edit.svg") , "/posts/new/#{shelf.id}" , class: "check-btn") %>
+    <% end %>
+  <% end %>
+  <div>
+    <% if eval(shelf.book_info)["imageLink"] == "不明" %>
+      <%= image_tag "error.jpg" %>
+    <% else %>
+      <%= image_tag(eval(shelf.book_info)["imageLink"]) %>
+    <% end %>
+    <p><%= eval(shelf.book_info)["title"] %></p>
+  </div>
+</div>

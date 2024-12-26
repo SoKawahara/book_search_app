@@ -18,35 +18,16 @@
 </section>
 <div class="shelf-caution">
   <% if @type == 1 %>
-    <p>*未読の本を読了に変更するには右上の✓ボタンを押してください</p>
-    <p>(感想を投稿するには読了にする必要があります)</p>
+    <p>*未読の本を読了に変更するには右上の✓ボタンを押してください(感想を投稿するには読了にする必要があります)</p>
   <% else %>
-    <p>*投稿を作成するには右上の🖋ボタンを押してください</p>
-    <p>(既に投稿を作成済みの本に関しては表示されません)</p>
+    <p>*投稿を作成するには右上の🖋ボタンを押してください(既に投稿を作成済みの本に関しては表示されません)</p>
+    <p>*「未読」に戻すには左下の←ボタンを押してください</p>
   <% end %>
 </div>
 <section class="my-shelf-container" id = "my_shelf_container">
-    <% if !@my_shelf.nil? %>
-      <% @my_shelf.each do |item| %>
-        <div class="shelf-item">
-          <%= link_to image_tag("trash.svg") , shelf_path(item) , data: { "turbo-method": :delete , turbo_confirm: "本当に削除しますか?" } , class: "trash" %>
-          <% if item.unread_flag == 1 %>
-            <%= link_to(image_tag("check.svg") , "/shelfs/update/#{item.id}" , class: "check-btn") %>
-          <% else %>
-            <% if item.created_post == 0 %>
-              <%= link_to(image_tag("edit.svg") , "/posts/new/#{item.id}" , class: "check-btn") %>
-            <% end %>
-          <% end %>
-          <div>
-            <% if eval(item.book_info)["imageLink"] == "不明" %>
-              <%= image_tag "error.jpg" %>
-            <% else %>
-              <%= image_tag(eval(item.book_info)["imageLink"]) %>
-            <% end %>
-            <p><%= eval(item.book_info)["title"] %></p>
-          </div>
-        </div>
-      <% end %>
+    <% if !@my_shelf.empty? %>
+      <!-- この部分ではコレクションをパーシャルに渡すことでコレクションの各要素に対してパーシャル内でshelfという変数を用いてアクセスできることを利用している -->
+      <%= render partial: "shelfs/shelf" , collection: @my_shelf %>
     <% end %>
 </section>
 <%= paginate @my_shelf , theme: "bootstrap-5" %>
