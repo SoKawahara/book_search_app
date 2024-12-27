@@ -2,7 +2,7 @@ class ShelfsController < ApplicationController
     #ログインしていないユーザにはアクセスを認めない
     before_action :logged_in_user , only: [:create , :show , :update , :turbo_stream_show]
     before_action :get_book_info  , only: [:new , :create]
-    before_action :get_current_user , only: [:show , :create]
+    before_action :get_current_user , only: [:show , :create , :destroy]
 
     def new
       #このアクションの中で必要な処理はすべてbefore_actionで完結する
@@ -41,8 +41,17 @@ class ShelfsController < ApplicationController
       #GoodオブジェクトからShelfオブジェクトに対してshelf_idという外部キーで参照を行っているので先にShelfを削除すると外部キー制約に反する
       #よってShelfを参照しているGoodを先に削除する
       post = Good.find_by(shelf_id: shelf.id)
-      if post && type == 0
-        post.destroy
+
+      if post 
+        #ここでは削除する本がプロフィールに使用されていた場合にそれも削除しないといけない
+        reco_books = @user.recommendation_books#これは現在のおすすめの本の情報が入っている
+        reco_books.each do |k , v|
+          if post.id == v.to_i 
+            reco_books[k] = "未設定"
+          end
+        end
+        @user.save if @user.changed?#もしrecommendation_booksに対して何らかの変更が加えられていたらそれを保存する
+        post.destroy#ここで削除する対象の本の投稿を削除する
       end
 
       shelf.destroy

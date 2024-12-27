@@ -1,6 +1,5 @@
 document.addEventListener("turbo:load", () => {
     const mySwiper = new Swiper('.swiper', {
-        loop: true,
         centeredSlides: true ,
         effect: 'slide',
         // If we need pagination

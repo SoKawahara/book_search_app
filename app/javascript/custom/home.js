@@ -137,7 +137,7 @@ document.addEventListener("turbo:load", () => {
                 {
                     opacity: [0, 1],
                     width: [0, '60%']
-                }, options )
+                }, options)
             obs.unobserve(entries[0].target);
         }
     }
@@ -203,7 +203,7 @@ document.addEventListener("turbo:load", () => {
                 {
                     opacity: [0, 1],
                     width: [0, '60%']
-                }, options )
+                }, options)
             obs.unobserve(entries[0].target);
         }
     }
@@ -221,13 +221,13 @@ document.addEventListener("turbo:load", () => {
         })
     });
 
-    function showFunctionTitle(entries , obs) {
+    function showFunctionTitle(entries, obs) {
         if (entries[0].isIntersecting) {
             functionTitle.querySelector("div").animate(
                 {
-                    opacity: [0 , 1],
-                    width: [0 , "60%"]
-                }, options )
+                    opacity: [0, 1],
+                    width: [0, "60%"]
+                }, options)
             obs.unobserve(entries[0].target);
         }
     }
@@ -236,7 +236,7 @@ document.addEventListener("turbo:load", () => {
     functionTitleObserver.observe(functionTitle);
 
 
-    
+
 
     //ここから下では画面が一定以上スクロールされた際にヘッダーを固定するための処理を考える
     const introNav = document.querySelector(".intro-nav");
@@ -257,16 +257,22 @@ document.addEventListener("turbo:load", () => {
     const myShelf = document.querySelector(".left-container #my_shelf");
     const search = document.querySelector(".left-container #search");
     const post = document.querySelector(".left-container #post");
-    
-    viewEachFunction(viewMain , episode);
-    viewEachFunction(viewMain , myShelf);
-    viewEachFunction(viewMain , search);
-    viewEachFunction(viewMain , post);
+
+    //ここでは各機能のスライダーで表示するための画像のURLを保存する配列を容易する
+    const episodeImages = ["/assets/function-episode.png", "/assets/function-episode3.png", "/assets/function-episode3.png"];
+    const shelfImages = ["/assets/function-shelf.png" , "/assets/function-shelf1.png", "/assets/function-shelf2.png", "/assets/function-shelf3.png"];
+    const searchImages = ["/assets/function-search-1.png" , "/assets/function-search-2.png" , "/assets/function-search-3.png" , "/assets/function-search-4.png"];
+    const postImages = ["/assets/function-post.png" , "/assets/function-post1.png" , "/assets/function-post2.png"];
+
+    viewEachFunction(viewMain, episode, episodeImages);
+    viewEachFunction(viewMain, myShelf, shelfImages);
+    viewEachFunction(viewMain, search, searchImages);
+    viewEachFunction(viewMain, post, postImages);
 
     //これは各機能が選択された際に中央で詳細表示をするための関数
-    function viewEachFunction(viewMain , item) {
+    function viewEachFunction(viewMain, item, images) {
         //クリックされた際に中央で詳細表示する
-        item.addEventListener("click" , () => {
+        item.addEventListener("click", () => {
             //現在のコンテナの中に格納されている要素をすべて一度削除する
             const mainContent = viewMain.querySelector(".main-content");
             mainContent.querySelectorAll("p").forEach(item => {
@@ -277,15 +283,26 @@ document.addEventListener("turbo:load", () => {
             if (target) {
                 target.classList.remove("add-item-click");
                 target.style.display = "none";
-            } 
+            }
 
             viewMain.querySelector("h3").textContent = item.querySelector("h4").textContent;
-        
+
             //ここでは現状スライダーに表示されている画像を一括で削除する
             const swiperItems = document.querySelectorAll(".swiper-wrapper .swiper-slide")
             swiperItems.forEach(item => {
                 item.remove();
             });
+
+            const swiperWrapper = document.querySelector(".swiper-wrapper");//これはswiper-slideを入れるためのコンテナ
+            images.forEach(item => {
+                //この下では引数で渡されてきた画像の配列の長さ文のswiper-slideをtemplateタグから取得する
+                const targetNewElement = document.querySelector("#swiper-template").content.cloneNode(true);
+                const newElement = targetNewElement.querySelector(".main-function-image");
+                newElement.src = item;
+                swiperWrapper.append(targetNewElement);
+
+            })
+
 
 
 
