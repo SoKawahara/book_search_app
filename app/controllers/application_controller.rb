@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
   #ログインに関するヘルパーメソッドを全てのコントローラーで使用できるようにするにはここでmoduleをincludeすればいい
-  include SessionsHelper
+  include SessionsHelper#これはモジュールのミックスインを使用している
 
   #ログイン済みユーザかどうかを確認
   def logged_in_user
