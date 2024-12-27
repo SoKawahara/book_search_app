@@ -235,9 +235,6 @@ document.addEventListener("turbo:load", () => {
     const functionTitleObserver = new IntersectionObserver(showFunctionTitle);
     functionTitleObserver.observe(functionTitle);
 
-
-
-
     //ここから下では画面が一定以上スクロールされた際にヘッダーを固定するための処理を考える
     const introNav = document.querySelector(".intro-nav");
     const headerheight = 100;//これはヘッダーのサイズ
@@ -259,9 +256,9 @@ document.addEventListener("turbo:load", () => {
     const post = document.querySelector(".left-container #post");
 
     //ここでは各機能のスライダーで表示するための画像のURLを保存する配列を容易する
-    const episodeImages = ["/assets/function-episode.png", "/assets/function-episode3.png", "/assets/function-episode3.png"];
-    const shelfImages = ["/assets/function-shelf.png" , "/assets/function-shelf1.png", "/assets/function-shelf2.png", "/assets/function-shelf3.png"];
-    const searchImages = ["/assets/function-search-1.png" , "/assets/function-search-2.png" , "/assets/function-search-3.png" , "/assets/function-search-4.png"];
+    const episodeImages = ["/assets/function-episode.png", "/assets/function-episode2.png", "/assets/function-episode3.png"];
+    const shelfImages = ["/assets/function-shelf1.png", "/assets/function-shelf2.png", "/assets/function-shelf3.png"];
+    const searchImages = ["/assets/function-search-2.png" , "/assets/function-search-3.png" , "/assets/function-search-4.png"];
     const postImages = ["/assets/function-post.png" , "/assets/function-post1.png" , "/assets/function-post2.png"];
 
     viewEachFunction(viewMain, episode, episodeImages);
@@ -300,11 +297,15 @@ document.addEventListener("turbo:load", () => {
                 const newElement = targetNewElement.querySelector(".main-function-image");
                 newElement.src = item;
                 swiperWrapper.append(targetNewElement);
+            });
 
+            //要素がクリックされた際にswiperモジュールを動的インポートする
+            import("./home-swiper").then(module => {
+                module.mySwiper.update();
+                module.mySwiper.pagination.update();
+                module.mySwiper.navigation.update();
+                module.mySwiper.scrollBar.update();
             })
-
-
-
 
             //ここから下ではdivタグ内のすべてのpタグを取得する処理を行う
             item.querySelectorAll("section > p").forEach(item => {
