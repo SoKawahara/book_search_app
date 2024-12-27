@@ -404,7 +404,7 @@ main {
   /* ここから下では本の機能紹介を行うページを作成する */
   .function-container {
     width: 98%;
-    height: 650px;
+    height: 700px;
     margin: 2rem auto;
     padding: 1.5rem;
     display: flex;
@@ -424,7 +424,7 @@ main {
 
     .view-main {
       width: 70%;
-      height: 600px;
+      height: 650px;
       padding: 1.5rem;
       border: 6px groove rgba(201, 225, 239, 0.858);
       display: flex;
@@ -433,7 +433,7 @@ main {
       justify-content: space-around;
 
       .image-container {
-        width: 90%;
+        width: 80%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -441,7 +441,7 @@ main {
         .swiper {
           width: 654px!important;
           height: 350px!important;
-          border: 2px solid black;
+          
 
           .swiper-item {
             display: grid;

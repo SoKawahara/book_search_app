@@ -1,9 +1,8 @@
 document.addEventListener("turbo:load", () => {
     const mySwiper = new Swiper('.swiper', {
         loop: true,
-        centeredSlides: true,
-        slidesPerView: 'auto',
-        effect: 'cube',
+        centeredSlides: true ,
+        effect: 'slide',
         // If we need pagination
         pagination: {
             el: '.swiper-pagination',

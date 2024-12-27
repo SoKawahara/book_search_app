@@ -280,7 +280,14 @@ document.addEventListener("turbo:load", () => {
             } 
 
             viewMain.querySelector("h3").textContent = item.querySelector("h4").textContent;
-            viewMain.querySelector(".main-function-image").src = item.querySelector("img").src;
+        
+            //ここでは現状スライダーに表示されている画像を一括で削除する
+            const swiperItems = document.querySelectorAll(".swiper-wrapper .swiper-slide")
+            swiperItems.forEach(item => {
+                item.remove();
+            });
+
+
 
             //ここから下ではdivタグ内のすべてのpタグを取得する処理を行う
             item.querySelectorAll("section > p").forEach(item => {
