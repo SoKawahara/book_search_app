@@ -101,6 +101,7 @@ class PostsController < ApplicationController
             flash[:danger]= 'ログインしてください'
             redirect_to login_path
         else
+            @type = params[:type]#この@typeはビューで使用するので消さない
             session.delete(:original_url_my_goods) if session[:original_url_my_goods]
             @posts = User.find(params[:id]).get_posts_my_goods(params[:type] , request.query_parameters["page"] , 9)
         end
@@ -136,6 +137,7 @@ class PostsController < ApplicationController
 
     #ユーザがフォローしているユーザの投稿一覧を取得する
     def feed
+        @type = params[:type]#この@typeはビューで使用するので消さない
         @posts = @user.get_feed_posts(params[:type] , request.query_parameters["page"] , 9)
     end
 

@@ -24,6 +24,7 @@ class UsersController < ApplicationController
 
   #ここではTurboStreamを用いて各ユーザの投稿一覧の画面のリロードを行うための処理を書く
   def turbo_stream_show 
+    @type = params[:type]#この@type変数はビューで使用するので消さない
     @posts = Good.get_posts(@user.id , params[:type] , params[:page] , 6)
 
     respond_to do |format|
