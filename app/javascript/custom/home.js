@@ -258,13 +258,21 @@ document.addEventListener("turbo:load", () => {
     //ここでは各機能のスライダーで表示するための画像のURLを保存する配列を容易する
     const episodeImages = ["/assets/function-episode.png", "/assets/function-episode2.png", "/assets/function-episode3.png"];
     const shelfImages = ["/assets/function-shelf1.png", "/assets/function-shelf2.png", "/assets/function-shelf3.png"];
-    const searchImages = ["/assets/function-search-2.png" , "/assets/function-search-3.png" , "/assets/function-search-4.png"];
-    const postImages = ["/assets/function-post.png" , "/assets/function-post1.png" , "/assets/function-post2.png"];
+    const searchImages = ["/assets/function-search-2.png", "/assets/function-search-3.png", "/assets/function-search-4.png"];
+    const postImages = ["/assets/function-post.png", "/assets/function-post1.png", "/assets/function-post2.png"];
 
     viewEachFunction(viewMain, episode, episodeImages);
     viewEachFunction(viewMain, myShelf, shelfImages);
     viewEachFunction(viewMain, search, searchImages);
     viewEachFunction(viewMain, post, postImages);
+
+    //要素がクリックされた際にも関数内で動的インポートを行うがTurboを用いた画面遷移が起こった際にも動的インポートを行う
+    import("./home-swiper").then((module) => {
+        module.getMySwiper().then(result => {
+            //mySwiperが使用できればいいのでmySwiperに対してなにか処理を行う必要はない
+            console.log(`${result}がインポートされました!`);
+        })
+    })
 
     //これは各機能が選択された際に中央で詳細表示をするための関数
     function viewEachFunction(viewMain, item, images) {
@@ -300,11 +308,11 @@ document.addEventListener("turbo:load", () => {
             });
 
             //要素がクリックされた際にswiperモジュールを動的インポートする
-            import("./home-swiper").then(module => {
-                module.mySwiper.update();
-                module.mySwiper.pagination.update();
-                module.mySwiper.navigation.update();
-                module.mySwiper.scrollBar.update();
+            //これだと処理効率が悪いのでメモ化を行った方がいいのでは?
+            import("./home-swiper").then((module) => {
+                module.getMySwiper().then(result => {
+                    console.log(result);
+                })
             })
 
             //ここから下ではdivタグ内のすべてのpタグを取得する処理を行う
