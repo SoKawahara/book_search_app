@@ -9,7 +9,7 @@
     position: absolute;
     top: 30rem;
     right: 10rem;
-    width: 400px;
+    width: 450px;
     height: 180px;
     display: grid;
     place-items: center;
@@ -180,6 +180,7 @@ main {
         font-size: 18px;
         font-weight: 500;
         line-height: 1.6;
+        text-align: center;
         opacity: 0;
         filter: blur(4px);
         translate: 0 4rem;
@@ -422,6 +423,17 @@ main {
       z-index: -1;
     }
 
+    .function-container-caution {
+      position: absolute;
+      top: 3rem;
+      left: 4rem;
+      font-family: "Bodoni Moda SC", serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: white;
+
+    }
+
     .view-main {
       width: 70%;
       height: 650px;
@@ -439,13 +451,14 @@ main {
         align-items: center;
 
         .swiper {
-          width: 654px!important;
-          height: 350px!important;
-          
+          width: 654px !important;
+          height: 350px !important;
+
 
           .swiper-item {
             display: grid;
             place-items: center;
+
             img {
               width: 650px;
               height: 350px;
@@ -460,6 +473,7 @@ main {
           &::after {
             content: "";
           }
+
           width: 40px;
           height: 40px;
 

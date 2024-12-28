@@ -66,28 +66,24 @@ document.addEventListener("turbo:load", () => {
                     opacity: 0,
                     filter: "blur(4px)",
                     translate: "0 4rem",
-                    fontSize: "18px",
                     offset: 0
                 },
                 {
                     opacity: 0.3,
                     filter: "blur(2px)",
                     translate: "0 2rem",
-                    fontSize: "19px",
                     offset: 0.3
                 },
                 {
                     opacity: 0.8,
                     filter: "blur(2px)",
                     translate: "0 .5rem",
-                    fontSize: "20px",
                     offset: 0.8
                 },
                 {
                     opacity: 1,
                     filter: "blur(0)",
                     translate: "0",
-                    fontSize: "18px",
                     offset: 1
                 }
             ],
