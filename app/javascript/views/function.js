@@ -135,7 +135,6 @@ export function add_myshelf(type) {
             targets.forEach((item, index) => {
                 item.querySelector(".my-shelf").addEventListener("click" , (e) => {
                     e.preventDefault();
-                    console.log("読み込まれています");
                     resolve(index);
                 });
             })

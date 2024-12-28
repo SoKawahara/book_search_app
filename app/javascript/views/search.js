@@ -5,7 +5,6 @@ document.addEventListener("turbo:load", () => {
     //Turboを用いて画面遷移が行われるたびにモジュールを動的インポートする
     import("./function.js")
         .then(module => {
-            console.log("モジュールをimportしました!");
             // /searches/topに対してリクエストが飛んでいてかつ、api_result_arrayが空でない時にはviews関数を実行する
             if (window.location.pathname === "/searches") {
                 //もしセッションストレージに本のデータが格納されていたら取得してviewsメソッドを実行する
@@ -89,7 +88,8 @@ document.addEventListener("turbo:load", () => {
                                 module.views(api_result_array, style.value, condition.value, order.value);
                             }
 
-                            module.add_myshelf().then(index => {
+                            const type = 1;
+                            module.add_myshelf(type).then(index => {
                                 //これでインデックスを取得できたので必要な情報をbodyタグの中に含めてPOSTメソッドを送信する
                                 module.post_my_shelf(api_result_array[index]);
                                 location.reload();//loacation.reloadを使用すると現在のリクエスト先に対して再リクエストを送信できる
