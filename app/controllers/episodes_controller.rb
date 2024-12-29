@@ -29,7 +29,7 @@ class EpisodesController < ApplicationController
 
         #ここではデータベースに格納してある誕生日から年齢を求めるためのSQL文を作成している
         age_sql = if ActiveRecord::Base.connection.adapter_name == "PostgreSQL"
-            "EXTRACT(YEAR FROM age(DATE #{Date.today}, birthday))"
+            "EXTRACT(YEAR FROM age(DATE #{Date.today}, CAST(birthday AS DATE)))"
           else # SQLite3
             "(strftime('%Y', 'now') - strftime('%Y', birthday)) - (strftime('%m-%d', 'now') < strftime('%m-%d', birthday))"
           end
