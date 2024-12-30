@@ -56,13 +56,14 @@ class User < ApplicationRecord
     #エピソード一覧の絞り込みの結果に一致するUserオブジェクトの集合を取得する
     #結合処理をしているので結果的に取得できるのはUserオブジェクトになるのでUserに関連付けられたEpisodeオブジェクトはeager loadingを用いて一緒に取得する
     def self.get_filtered_users(gender , age_sql , lower_age , upper_age , order_condition)
-        self.where("gender = ? and #{age_sql} between ? and ?" , gender , lower_age , upper_age).
-                       joins(:episode).
-                       select("episodes.title as title , episodes.created_at as episode_created_at , users.id as user_id , users.email as email , 
-                               users.gender as gender , users.reading_history as reading_history , users.birthday as birthday,
-                               users.id as user_id , users.name as name , users.email as email , users.gender as gender , 
-                               users.birthday as birthday , users.reading_history as reading_history").
-                       order(order_condition).includes(:episode)
+        self.where("gender = :gender and #{age_sql} between :lower_age and :upper_age", 
+                    gender: gender , lower_age: lower_age , upper_age: upper_age).
+                    joins(:episode).
+                    select("episodes.title as title , episodes.created_at as episode_created_at , users.id as user_id , users.email as email , 
+                            users.gender as gender , users.reading_history as reading_history , users.birthday as birthday,
+                            users.id as user_id , users.name as name , users.email as email , users.gender as gender , 
+                            users.birthday as birthday , users.reading_history as reading_history").
+                    order(order_condition).includes(:episode)
     end
 
     #指定された条件のマイ本棚の本を取得する

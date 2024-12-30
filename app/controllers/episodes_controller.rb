@@ -31,14 +31,18 @@ class EpisodesController < ApplicationController
         age_sql = if ActiveRecord::Base.connection.adapter_name == "PostgreSQL"
             "CAST(EXTRACT(YEAR FROM age(current_timestamp , CAST(birthday AS timestamp))) AS INTEGER)"
           else # SQLite3
-            "(strftime('%Y', 'now') - strftime('%Y', birthday)) - (strftime('%m-%d', 'now') < strftime('%m-%d', birthday))"
+            "CAST(EXTRACT(YEAR FROM age(current_timestamp , CAST(birthday AS timestamp))) AS INTEGER)"
+            # "(strftime('%Y', 'now') - strftime('%Y', birthday)) - (strftime('%m-%d', 'now') < strftime('%m-%d', birthday))""CAST(EXTRACT(YEAR FROM age(current_timestamp , CAST(birthday AS timestamp))) AS INTEGER)"
           end
 
         #SQLクエリを発行した結果を取得する
         #絞り込みを行ったUserに対してEpisodeを結合している
         #get_filterd_userはUserクラスのクラスメソッド
-        @users = User.get_filtered_users(episode_sort_params["gender"] , episode_sort_params["lower_age"].to_i , 
-                                         age_sql , episode_sort_params["upper_age"].to_i , order_condition)
+        puts "-------------------------------------------------------------------"
+        puts "age_sql: #{age_sql}"
+        puts "-------------------------------------------------------------------"
+        @users = User.get_filtered_users(episode_sort_params["gender"] , age_sql , episode_sort_params["lower_age"].to_i , 
+                                         episode_sort_params["upper_age"].to_i , order_condition)
         #並べ替えの基準に何が指定されているのか
         @target =  episode_sort_params["order"]
     end
